@@ -1,0 +1,56 @@
+# === Secrets and environment files ===
+# Real environment files must never be committed. Only .env.example is allowed.
+.env
+.env.*
+!.env.example
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# === Node / frontend ===
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Databases and backups (local data must stay local) ===
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.bak
+*.dump
+data/
+backups/
+
+# === Certificates and private keys (defense in depth) ===
+*.pem
+*.key
+*.pfx
+*.p12
+*.crt
+*.cer
+
+# === OS and editor noise ===
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.idea/
+.vscode/

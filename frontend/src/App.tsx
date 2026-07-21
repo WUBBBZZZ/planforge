@@ -5,13 +5,14 @@ import { EmptyState } from "./components/EmptyState";
 import { LoadingIndicator } from "./components/LoadingIndicator";
 import { fetchHealth } from "./lib/api";
 import { applyTheme, getStoredThemePreference } from "./lib/theme";
+import { DevComponentsPage } from "./pages/DevComponentsPage";
 
 type HealthState =
   | { kind: "loading" }
   | { kind: "ok"; status: string }
   | { kind: "error"; message: string };
 
-function App() {
+function StatusPage() {
   const [health, setHealth] = useState<HealthState>({ kind: "loading" });
 
   useEffect(() => {
@@ -52,9 +53,12 @@ function App() {
           <nav aria-label="Primary">
             <ul className="pf-nav">
               <li>
-                <a href="#status" aria-current="page">
+                <a href="/" aria-current="page">
                   Status
                 </a>
+              </li>
+              <li>
+                <a href="/dev/components">Components</a>
               </li>
               <li>
                 <span aria-disabled="true">Today</span>
@@ -71,11 +75,11 @@ function App() {
       </header>
 
       <main id="main-content" className="pf-main">
-        <section id="status" className="pf-panel" aria-labelledby="status-title">
+        <section className="pf-panel" aria-labelledby="status-title">
           <h1 id="status-title">Development status</h1>
           <p>
-            Planforge infrastructure is online. Planner features are planned and not yet
-            implemented.
+            Planforge infrastructure is online. Product requirements are drafted in{" "}
+            <code>docs/requirements/</code>. Planner features are not yet implemented.
           </p>
 
           <div className="pf-status-card" aria-live="polite">
@@ -95,7 +99,7 @@ function App() {
 
           <EmptyState
             title="Planner views are not available yet"
-            description="Today, Week, Month, and backlog screens will appear here after product requirements and vertical feature slices are implemented."
+            description="Start with Slice 1 (one-time tasks + Today) after ADR 0006 date/time decisions are accepted."
             action={<Button disabled>Coming soon</Button>}
           />
         </section>
@@ -106,6 +110,16 @@ function App() {
       </footer>
     </div>
   );
+}
+
+function App() {
+  const path = window.location.pathname.replace(/\/$/, "") || "/";
+
+  if (path === "/dev/components") {
+    return <DevComponentsPage />;
+  }
+
+  return <StatusPage />;
 }
 
 export default App;

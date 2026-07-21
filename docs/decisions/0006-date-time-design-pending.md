@@ -2,7 +2,9 @@
 
 ## Status
 
-Proposed — requires dedicated requirements phase
+**Proposed** — draft requirements in
+[`docs/requirements/date-time-design.md`](../requirements/date-time-design.md)
+for discussion. Not accepted until `DECISION NEEDED` items are resolved.
 
 ## Context
 

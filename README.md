@@ -22,8 +22,9 @@ by user-configurable behavior rather than hard-coded rules.
 
 ## In progress
 
-- Public GitHub repository publication and CI verification
-- Product requirements and domain discovery (next approved phase)
+- Product requirements and domain discovery ([`docs/requirements/`](docs/requirements/))
+- ADR 0006 date/time design — draft for discussion ([`docs/requirements/date-time-design.md`](docs/requirements/date-time-design.md))
+- Expanded UI primitives and dev component gallery (`/dev/components`)
 
 ## Planned
 
@@ -67,7 +68,8 @@ npm install
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173` for the development status screen.
+Open `http://127.0.0.1:5173` for the development status screen, or
+`http://127.0.0.1:5173/dev/components` for the UI primitive gallery.
 
 See [docs/development-setup.md](docs/development-setup.md) for full details.
 

@@ -1,0 +1,31 @@
+# See docs/tooling.md for hook descriptions, install instructions, and debugging.
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # Auto-fix: removes trailing whitespace from text files.
+      - id: trailing-whitespace
+      # Auto-fix: ensures files end with a single newline.
+      - id: end-of-file-fixer
+      # Report-only: validates JSON syntax.
+      - id: check-json
+      # Report-only: validates YAML syntax.
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      # Report-only: validates TOML syntax.
+      - id: check-toml
+      # Report-only: detects unresolved merge conflict markers.
+      - id: check-merge-conflict
+      # Report-only: rejects files larger than 500 KB.
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      # Report-only: detects private key material in staged files.
+      - id: detect-private-key
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.22.1
+    hooks:
+      # Report-only: scans staged changes for secrets and credentials.
+      - id: gitleaks

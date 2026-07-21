@@ -2,49 +2,80 @@
 
 Planforge is a modular, self-hosted personal planning platform. It acts as a
 configurable planning engine rather than a rigid planner: routines,
-maintenance schedules, backlogs, appointments, and daily checklists are all
-driven by user-configurable behavior rather than hard-coded rules.
+maintenance schedules, backlogs, appointments, and daily checklists are driven
+by user-configurable behavior rather than hard-coded rules.
 
-> **Status: early development.** The repository currently contains project
-> scaffolding only. Application code will arrive in small, reviewed phases.
+> **Status:** infrastructure scaffolding is implemented. Planner features are
+> planned and not yet available.
 
-## Planned capabilities
+## Implemented
 
-- One-time tasks, backlog items, and appointments
-- Recurring routines with generated occurrences
-- Long-term maintenance definitions and rescheduling
-- Weekly targets, monthly and weekly planning views
-- Lightweight daily checklists with completion history
-- Configurable missed-item and rollover behavior
-- Custom visibility in Today, Week, and Month views
-- Themes, layout settings, and user preferences
-- Data export, backup, and completion-history analytics
-- Installable Progressive Web App (desktop and phone)
+- Monorepo layout with `backend/` and `frontend/`
+- FastAPI backend skeleton with `/api/health`, settings, logging, SQLAlchemy,
+  and Alembic scaffolding (SQLite, loopback-only defaults)
+- React + TypeScript frontend skeleton with accessible shell, theme foundations,
+  generic UI primitives, and backend health display
+- Web app manifest and installability metadata (**no service worker yet**)
+- Pre-commit hooks with secret scanning (gitleaks)
+- GitHub Actions CI and Dependabot configuration
+- Documentation and architecture decision records (ADRs)
+
+## In progress
+
+- Public GitHub repository publication and CI verification
+- Product requirements and domain discovery (next approved phase)
+
+## Planned
+
+- Planner entities, workflows, and configurable policies
+- Authentication (security gate; architecture not yet chosen)
+- Service workers, offline behavior, and browser storage (security gate)
+- Deployment packaging and optional Tailscale Serve access (security gates)
+- Data export/import UI, analytics, and backup restore UI
 
 ## Architecture
 
-- **Monorepo** with a Python backend and a TypeScript frontend
-- **Backend:** FastAPI, SQLAlchemy, SQLite during development with a clear
-  migration path to PostgreSQL
-- **Frontend:** React + TypeScript, installable PWA, typed against the
-  backend's OpenAPI schema
-- **Local-first and self-hosted:** no cloud service; each installation is
-  fully independent. Development services bind to `127.0.0.1` by default.
-- **Single-user first**, with data structures designed to be multi-user-ready
+- **Monorepo:** Python backend + TypeScript frontend
+- **Backend:** FastAPI, SQLAlchemy, SQLite (default supported database)
+- **Frontend:** React, Vite, installable PWA metadata (offline deferred)
+- **Local-first:** each installation is independent; dev services bind to
+  `127.0.0.1` by default
 
 ```
 planforge/
-├── backend/    # FastAPI application (Python)
-├── frontend/   # React + TypeScript PWA
-└── docs/       # Architecture notes and decision records
+├── backend/    # FastAPI application (Python 3.14)
+├── frontend/   # React + TypeScript UI
+└── docs/       # Setup, security, testing, ADRs
 ```
+
+## Quick start (Windows / PowerShell)
+
+### Backend
+
+```powershell
+cd backend
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\uvicorn.exe planforge.main:app --host 127.0.0.1 --port 8000
+```
+
+### Frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://127.0.0.1:5173` for the development status screen.
+
+See [docs/development-setup.md](docs/development-setup.md) for full details.
 
 ## Configuration
 
-Planner behavior is configured through the application UI. Environment
-variables are used only for developer, deployment, and secret configuration;
-see `.env.example` for the template. Real `.env` files, databases, and
-backups are never committed to this repository.
+Planner behavior will be configured through the application UI. Environment
+variables are for developer/deployment concerns only; see `.env.example`.
+Real `.env` files, databases, and backups are never committed.
 
 ## License
 

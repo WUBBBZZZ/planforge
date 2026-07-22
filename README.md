@@ -23,7 +23,7 @@ by user-configurable behavior rather than hard-coded rules.
 ## In progress
 
 - Product requirements and domain discovery ([`docs/requirements/`](docs/requirements/))
-- ADR 0006 date/time design — draft for discussion ([`docs/requirements/date-time-design.md`](docs/requirements/date-time-design.md))
+- ADR 0006 date/time design — **accepted** ([`docs/decisions/0006-date-time-design.md`](docs/decisions/0006-date-time-design.md))
 - Expanded UI primitives and dev component gallery (`/dev/components`)
 
 ## Planned

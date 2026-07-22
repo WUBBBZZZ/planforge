@@ -99,7 +99,7 @@ function StatusPage() {
 
           <EmptyState
             title="Planner views are not available yet"
-            description="Start with Slice 1 (one-time tasks + Today) after ADR 0006 date/time decisions are accepted."
+            description="Start with Slice 1 (one-time tasks + Today). See docs/requirements/mvp-feature-set.md."
             action={<Button disabled>Coming soon</Button>}
           />
         </section>

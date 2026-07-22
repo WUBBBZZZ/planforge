@@ -21,8 +21,8 @@ handling, etc.) is implemented by the project owner against these specs.
 
 ## Status
 
-**Draft for review.** Open decisions are marked with `DECISION NEEDED`. ADR 0006
-remains **Proposed** until date/time choices are accepted.
+**Accepted** for ADR 0006 (2026-07-21). Remaining open items in other docs (e.g.
+default landing view) are noted inline as `DECISION NEEDED`.
 
 ## Fabricated data
 

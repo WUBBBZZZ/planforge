@@ -3,13 +3,12 @@
 The smallest set of **vertical slices** that prove the planning engine end-to-end.
 Each slice ships domain logic (user-implemented) + persistence + API + UI.
 
-Order is recommended, not mandatory. Slices depend on ADR 0006 for date fields
-before routines/maintenance.
+ADR 0006 is **accepted** — date/time rules are locked for implementation.
 
 ## Slice 0 — Foundation (done)
 
 - Health check, config, DB scaffolding, UI shell, generic primitives
-- Requirements documents (this folder)
+- Requirements documents and ADR 0006
 
 ## Slice 1 — One-time tasks + Today view
 
@@ -19,6 +18,7 @@ before routines/maintenance.
 - Today view assembly (hard-coded policy defaults first, then settings UI)
 - Complete / cancel task
 - Completion record append
+- Task `due_date` as **local date** per ADR 0006
 
 **Excludes:** rollover policies, backlog, routines
 
@@ -34,28 +34,25 @@ before routines/maintenance.
 
 **Exit:** AC-CAP-1, AC-PLW-1
 
-## Slice 3 — Appointments (manual entry)
-
-**Includes:**
-
-- Create/edit appointment with start/end
-- Show in Today and Week
-- Depends on ADR 0006 timestamp fields
-
-**Exit:** AC-APT-1, AC-APT-2
-
-## Slice 4 — Routine definition + occurrences
+## Slice 3 — Routine definition + occurrences
 
 **Includes:**
 
 - Routine CRUD, pause/archive
-- Occurrence generation (user-written engine)
+- Occurrence generation (user-written engine; DST defaults in ADR 0006)
 - Complete / skip occurrence
 - Week view shows occurrences
 
 **Exit:** AC-ROU-1, AC-ROU-2, AC-ROU-3
 
-**Blocked until:** ADR 0006 accepted
+## Slice 4 — Appointments (manual entry)
+
+**Includes:**
+
+- Create/edit appointment with UTC `starts_at` / `ends_at`
+- Show in Today and Week
+
+**Exit:** AC-APT-1, AC-APT-2
 
 ## Slice 5 — Policies UI
 
@@ -86,8 +83,6 @@ before routines/maintenance.
 
 **Exit:** AC-MNT-1, AC-MNT-2
 
-**Blocked until:** ADR 0006 accepted
-
 ## Post-MVP (explicitly not in MVP)
 
 - Authentication
@@ -97,8 +92,8 @@ before routines/maintenance.
 - Export / import UI
 - Tailscale / phone access
 - PostgreSQL option
+- Custom day-boundary hour
 
-## DECISION NEEDED
+## Slice order (accepted)
 
-- Confirm slice order: is appointments before routines acceptable for your
-  personal workflow, or do you want routines earlier?
+Tasks → Backlog → **Routines** → **Appointments** → Policies → Weekly targets → Maintenance

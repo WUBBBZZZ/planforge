@@ -64,6 +64,13 @@ once features exist. Wording uses fabricated examples only.
 - **AC-NF-3:** Keyboard users can complete primary actions on each screen
   (Tab, Enter, visible focus).
 
+## Landing and capture (preferences)
+
+- **AC-PRF-1:** On app open, default landing is **Week** view when
+  `app.default_landing_view` is `week` (factory default).
+- **AC-PRF-2:** Capture opens as a **modal** without full-page navigation when
+  `capture.entry_style` is `modal` (factory default).
+
 ## Definition of done
 
 A feature implementing these criteria also passes lint, tests, pre-commit, and CI

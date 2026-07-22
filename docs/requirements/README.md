@@ -17,12 +17,13 @@ handling, etc.) is implemented by the project owner against these specs.
 | [configurable-policies.md](configurable-policies.md) | Named policy options (UI-configured) |
 | [acceptance-criteria.md](acceptance-criteria.md) | Testable criteria per workflow |
 | [mvp-feature-set.md](mvp-feature-set.md) | First shippable vertical slices |
-| [date-time-design.md](date-time-design.md) | Draft input for ADR 0006 (discussion) |
+| [preferences.md](preferences.md) | Display and UX defaults (landing view, capture) |
+| [date-time-design.md](date-time-design.md) | ADR 0006 date/time reference |
 
 ## Status
 
-**Accepted** for ADR 0006 (2026-07-21). Remaining open items in other docs (e.g.
-default landing view) are noted inline as `DECISION NEEDED`.
+**Accepted** for ADR 0006 and UX/policy defaults (2026-07-22). Minor lifecycle
+questions may remain inline as `DECISION NEEDED`.
 
 ## Fabricated data
 

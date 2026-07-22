@@ -18,6 +18,7 @@ handling, etc.) is implemented by the project owner against these specs.
 | [acceptance-criteria.md](acceptance-criteria.md) | Testable criteria per workflow |
 | [mvp-feature-set.md](mvp-feature-set.md) | First shippable vertical slices |
 | [preferences.md](preferences.md) | Display and UX defaults (landing view, capture) |
+| [slices/0001-tasks-today.md](slices/0001-tasks-today.md) | **Slice 1 implementation spec** (tasks, Today, Week) |
 | [date-time-design.md](date-time-design.md) | ADR 0006 date/time reference |
 
 ## Status

@@ -10,12 +10,15 @@ ADR 0006 is **accepted** — date/time rules are locked for implementation.
 - Health check, config, DB scaffolding, UI shell, generic primitives
 - Requirements documents and ADR 0006
 
-## Slice 1 — One-time tasks + Today view
+## Slice 1 — One-time tasks + Today view + Week shell
+
+**Spec:** [slices/0001-tasks-today.md](slices/0001-tasks-today.md) — ready for your implementation.
 
 **Includes:**
 
 - Task CRUD (fabricated demo data)
-- Today view assembly (hard-coded policy defaults first, then settings UI)
+- Week view shell as **default landing** (pending tasks grouped by due date)
+- Today view assembly (hard-coded policy defaults)
 - Complete / cancel task
 - Completion record append
 - Task `due_date` as **local date** per ADR 0006

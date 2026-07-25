@@ -3,6 +3,7 @@
 from logging.config import fileConfig
 
 from alembic import context
+import planforge.models  # noqa: F401 — register ORM models with metadata
 from planforge.core.config import get_settings
 from planforge.db.base import Base
 from sqlalchemy import engine_from_config, pool

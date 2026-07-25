@@ -1,0 +1,105 @@
+"""Tests for Today view assembly."""
+
+from dataclasses import replace
+
+from planforge.core.owner import LOCAL_OWNER_ID
+from planforge.core.policy_defaults import PolicySnapshot
+from planforge.domain.enums import TaskStatus
+from planforge.domain.local_date import LocalDate
+from planforge.models.task import Task
+from planforge.services.today_view import assemble_today_view
+
+
+def _add_task(
+    session,
+    *,
+    title: str,
+    due_date: LocalDate | None,
+    status: TaskStatus = TaskStatus.PENDING,
+) -> Task:
+    task = Task(
+        owner_id=LOCAL_OWNER_ID,
+        title=title,
+        due_date=due_date.to_date() if due_date else None,
+        status=status.value,
+    )
+    session.add(task)
+    session.flush()
+    return task
+
+
+def test_due_today_included(db_session) -> None:
+    ref = LocalDate.from_iso("2026-07-21")
+    _add_task(db_session, title="Today task", due_date=ref)
+    view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=ref,
+        policies=PolicySnapshot(),
+    )
+    assert len(view.tasks) == 1
+    assert view.tasks[0].title == "Today task"
+    assert view.tasks[0].is_overdue is False
+
+
+def test_overdue_included_when_policy_true(db_session) -> None:
+    ref = LocalDate.from_iso("2026-07-21")
+    _add_task(
+        db_session,
+        title="Overdue task",
+        due_date=LocalDate.from_iso("2026-07-18"),
+    )
+    view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=ref,
+        policies=PolicySnapshot(today_include_rolled_tasks=True),
+    )
+    assert len(view.tasks) == 1
+    assert view.tasks[0].is_overdue is True
+
+
+def test_overdue_excluded_when_policy_false(db_session) -> None:
+    ref = LocalDate.from_iso("2026-07-21")
+    _add_task(
+        db_session,
+        title="Overdue task",
+        due_date=LocalDate.from_iso("2026-07-18"),
+    )
+    policies = replace(PolicySnapshot(), today_include_rolled_tasks=False)
+    view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=ref,
+        policies=policies,
+    )
+    assert view.tasks == []
+
+
+def test_unscheduled_excluded(db_session) -> None:
+    ref = LocalDate.from_iso("2026-07-21")
+    _add_task(db_session, title="No date", due_date=None)
+    view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=ref,
+        policies=PolicySnapshot(),
+    )
+    assert view.tasks == []
+
+
+def test_completed_excluded(db_session) -> None:
+    ref = LocalDate.from_iso("2026-07-21")
+    _add_task(
+        db_session,
+        title="Done",
+        due_date=ref,
+        status=TaskStatus.COMPLETED,
+    )
+    view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=ref,
+        policies=PolicySnapshot(),
+    )
+    assert view.tasks == []

@@ -342,6 +342,89 @@ a {
   font-size: 0.95rem;
 }
 
+.pf-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pf-page-header h1 {
+  margin: 0;
+}
+
+.pf-page-header__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pf-task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf-task-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius);
+  background: var(--pf-surface);
+}
+
+.pf-task-row__main {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.pf-task-row__title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.pf-task-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pf-task-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf-task-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.pf-week-view,
+.pf-today-view {
+  display: grid;
+  gap: 1rem;
+}
+
+.pf-week-day,
+.pf-today-section {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf-week-day h2,
+.pf-today-section h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
 @media (min-width: 768px) {
   .pf-header__inner {
     display: flex;

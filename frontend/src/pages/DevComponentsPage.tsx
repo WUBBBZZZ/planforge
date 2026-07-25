@@ -30,7 +30,10 @@ export function DevComponentsPage() {
           <nav aria-label="Primary">
             <ul className="pf-nav">
               <li>
-                <a href="/">Status</a>
+                <a href="/week">Week</a>
+              </li>
+              <li>
+                <a href="/today">Today</a>
               </li>
               <li>
                 <a href="/dev/components" aria-current="page">

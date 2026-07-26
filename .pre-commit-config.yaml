@@ -1,4 +1,3 @@
-# See docs/tooling.md for hook descriptions, install instructions, and debugging.
 default_install_hook_types: [pre-commit, commit-msg]
 
 repos:

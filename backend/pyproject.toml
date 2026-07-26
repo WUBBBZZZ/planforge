@@ -6,7 +6,6 @@ build-backend = "hatchling.build"
 name = "planforge-backend"
 version = "0.1.0"
 description = "Planforge backend API"
-readme = "README.md"
 requires-python = ">=3.14"
 license = { text = "MIT" }
 dependencies = [

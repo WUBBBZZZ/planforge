@@ -21,3 +21,15 @@ def test_ordering() -> None:
     earlier = LocalDate.from_iso("2026-07-20")
     later = LocalDate.from_iso("2026-07-21")
     assert earlier < later
+
+
+def test_start_and_end_of_month() -> None:
+    value = LocalDate.from_iso("2026-07-15")
+    assert value.start_of_month().to_iso() == "2026-07-01"
+    assert value.end_of_month().to_iso() == "2026-07-31"
+
+
+def test_add_months() -> None:
+    value = LocalDate.from_iso("2026-07-31")
+    assert value.add_months(1).to_iso() == "2026-08-31"
+    assert value.add_months(-1).to_iso() == "2026-06-30"

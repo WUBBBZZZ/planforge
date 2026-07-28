@@ -1,10 +1,12 @@
 """Tests for Week view assembly."""
 
 from planforge.core.owner import LOCAL_OWNER_ID
-from planforge.core.policy_defaults import PolicySnapshot
+from planforge.domain.enums import ViewItemKind
 from planforge.domain.local_date import LocalDate
 from planforge.models.task import Task
-from planforge.services.week_view import assemble_week_view, week_bounds
+from planforge.services.settings_service import PolicySnapshot
+from planforge.services.week_bounds import week_bounds
+from planforge.services.week_view import assemble_week_view
 
 
 def _add_task(session, *, title: str, due_date: LocalDate | None) -> Task:
@@ -20,7 +22,7 @@ def _add_task(session, *, title: str, due_date: LocalDate | None) -> Task:
 
 
 def test_week_bounds_monday_default() -> None:
-    ref = LocalDate.from_iso("2026-07-23")  # Thursday
+    ref = LocalDate.from_iso("2026-07-23")
     start, end = week_bounds(reference_date=ref, week_start_day="monday")
     assert start.to_iso() == "2026-07-20"
     assert end.to_iso() == "2026-07-26"
@@ -35,13 +37,15 @@ def test_tasks_grouped_by_due_date(db_session) -> None:
         session=db_session,
         owner_id=LOCAL_OWNER_ID,
         week_start=week_start,
+        today=week_start,
         policies=PolicySnapshot(),
     )
 
-    monday_tasks = view.days[0].tasks
-    wednesday_tasks = view.days[2].tasks
-    assert [task.title for task in monday_tasks] == ["Monday task"]
-    assert [task.title for task in wednesday_tasks] == ["Wednesday task"]
+    monday_items = view.days[0].items
+    wednesday_items = view.days[2].items
+    assert [item.title for item in monday_items] == ["Monday task"]
+    assert [item.title for item in wednesday_items] == ["Wednesday task"]
+    assert monday_items[0].kind is ViewItemKind.TASK
 
 
 def test_unscheduled_bucket(db_session) -> None:
@@ -52,10 +56,84 @@ def test_unscheduled_bucket(db_session) -> None:
         session=db_session,
         owner_id=LOCAL_OWNER_ID,
         week_start=week_start,
+        today=week_start,
         policies=PolicySnapshot(),
     )
 
     unscheduled = view.days[-1]
     assert unscheduled.date is None
-    assert len(unscheduled.tasks) == 1
-    assert unscheduled.tasks[0].title == "Someday"
+    assert unscheduled.label == "unscheduled"
+    assert len(unscheduled.items) == 1
+    assert unscheduled.items[0].title == "Someday"
+
+
+def test_upcoming_bucket(db_session) -> None:
+    week_start = LocalDate.from_iso("2026-07-20")
+    _add_task(db_session, title="Next week", due_date=week_start.add_days(7))
+    _add_task(db_session, title="Later", due_date=week_start.add_days(10))
+
+    view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=week_start,
+        policies=PolicySnapshot(),
+    )
+
+    upcoming = view.days[-1]
+    assert upcoming.date is None
+    assert upcoming.label == "upcoming"
+    assert [item.title for item in upcoming.items] == ["Next week", "Later"]
+
+
+def test_due_today_not_overdue_in_week_view(db_session) -> None:
+    today = LocalDate.from_iso("2026-07-26")
+    week_start = LocalDate.from_iso("2026-07-20")
+    _add_task(db_session, title="Saturday task", due_date=today)
+
+    view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=today,
+        policies=PolicySnapshot(),
+    )
+
+    saturday_items = view.days[6].items
+    assert [item.title for item in saturday_items] == ["Saturday task"]
+    assert saturday_items[0].is_overdue is False
+
+
+def test_overdue_task_rolls_to_today(db_session) -> None:
+    week_start = LocalDate.from_iso("2026-07-20")
+    today = LocalDate.from_iso("2026-07-26")
+    _add_task(db_session, title="Missed Monday", due_date=week_start)
+
+    view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=today,
+        policies=PolicySnapshot(),
+    )
+
+    saturday_items = view.days[6].items
+    assert [item.title for item in saturday_items] == ["Missed Monday"]
+    assert saturday_items[0].is_overdue is True
+    assert view.days[0].items == []
+
+
+def test_overdue_task_hidden_in_future_week(db_session) -> None:
+    week_start = LocalDate.from_iso("2026-07-27")
+    today = LocalDate.from_iso("2026-07-26")
+    _add_task(db_session, title="Missed Monday", due_date=LocalDate.from_iso("2026-07-20"))
+
+    view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=today,
+        policies=PolicySnapshot(),
+    )
+
+    assert all(group.items == [] for group in view.days[:7])

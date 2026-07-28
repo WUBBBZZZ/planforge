@@ -2,6 +2,7 @@
   color-scheme: light dark;
   --pf-font-sans: "Segoe UI", system-ui, sans-serif;
   --pf-radius: 0.75rem;
+  --pf-content-max: 1600px;
   --pf-focus: #2563eb;
   --pf-bg: #f8fafc;
   --pf-surface: #ffffff;
@@ -85,13 +86,15 @@ a {
 .pf-header,
 .pf-footer,
 .pf-main {
-  padding: 1rem;
+  padding: 1rem clamp(1rem, 2.5vw, 2rem);
 }
 
 .pf-header__inner,
-.pf-main {
-  max-width: 960px;
+.pf-main,
+.pf-footer__inner {
+  max-width: var(--pf-content-max);
   margin: 0 auto;
+  width: 100%;
 }
 
 .pf-header {
@@ -380,6 +383,15 @@ a {
   background: var(--pf-surface);
 }
 
+.pf-task-row--completed {
+  border-color: color-mix(in srgb, var(--pf-success) 45%, var(--pf-border));
+  background: color-mix(in srgb, var(--pf-success) 12%, var(--pf-surface));
+}
+
+.pf-task-row--completed .pf-task-row__title {
+  color: color-mix(in srgb, var(--pf-success) 70%, var(--pf-text));
+}
+
 .pf-task-row__main {
   display: grid;
   gap: 0.35rem;
@@ -407,10 +419,225 @@ a {
   gap: 0.5rem;
 }
 
+.pf-week-buckets {
+  width: 100%;
+}
+
+.pf-weekday-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pf-weekday-picker__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius);
+  background: var(--pf-surface);
+  font-size: 0.85rem;
+}
+
 .pf-week-view,
-.pf-today-view {
+.pf-today-view,
+.pf-month-view {
   display: grid;
   gap: 1rem;
+}
+
+.pf-week-board {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.pf-week-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  min-height: 12rem;
+  padding: 0.65rem;
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius);
+  background: var(--pf-surface);
+}
+
+.pf-week-column__header h2 {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+}
+
+.pf-week-column__weekday {
+  color: var(--pf-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pf-week-column__date {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.pf-week-column__empty {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.pf-week-column__items {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.pf-week-bucket {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf-week-bucket h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.pf-week-bucket__items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+
+.pf-task-row--compact {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0.65rem;
+  gap: 0.5rem;
+}
+
+.pf-task-row--compact .pf-task-row__title {
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.pf-task-row--compact .pf-task-row__meta {
+  gap: 0.25rem;
+}
+
+.pf-task-row__actions--compact {
+  width: 100%;
+}
+
+.pf-task-row__actions--compact .pf-button {
+  flex: 1 1 auto;
+  padding-inline: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.pf-period-nav {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pf-period-nav__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pf-period-nav__label {
+  margin: 0;
+  font-weight: 600;
+}
+
+.pf-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.pf-month-grid__weekday {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--pf-muted);
+}
+
+.pf-month-grid__pad {
+  min-height: 6rem;
+}
+
+.pf-month-day {
+  min-height: 6rem;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius);
+  background: var(--pf-surface);
+}
+
+.pf-month-day__header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pf-month-day__date {
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pf-month-day__date:hover {
+  text-decoration: underline;
+}
+
+.pf-month-day__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.pf-month-day__item {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.pf-month-day__item-kind {
+  color: var(--pf-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pf-month-day__more {
+  color: var(--pf-muted);
+  font-size: 0.75rem;
+}
+
+.pf-month-day__empty {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.pf-month-day__details summary {
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--pf-muted);
+}
+
+.pf-month-day__details .pf-task-list {
+  margin-top: 0.5rem;
 }
 
 .pf-week-day,
@@ -423,6 +650,97 @@ a {
 .pf-today-section h2 {
   margin: 0;
   font-size: 1rem;
+}
+
+.pf-task-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.pf-backlog-actions {
+  align-items: center;
+}
+
+.pf-settings {
+  display: grid;
+  gap: 1rem;
+  max-width: 32rem;
+}
+
+.pf-settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pf-target-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.pf-target-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius);
+}
+
+.pf-week-targets {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pf-week-targets__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pf-week-targets h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.pf-target-row__label {
+  font-weight: 600;
+}
+
+.pf-target-row__progress {
+  color: var(--pf-muted);
+  font-size: 0.9rem;
+}
+
+.pf-target-row__main {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.pf-target-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.pf-target-row__actions .pf-button {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.75rem;
+}
+
+@media (max-width: 1023px) {
+  .pf-week-board {
+    grid-template-columns: repeat(7, minmax(9rem, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -438,5 +756,50 @@ a {
 
   .pf-gallery__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .pf-week-board {
+    gap: 1rem;
+  }
+
+  .pf-week-column {
+    min-height: 20rem;
+    padding: 0.85rem;
+  }
+
+  .pf-week-column__header h2 {
+    font-size: 0.95rem;
+  }
+
+  .pf-week-column__date {
+    font-size: 1.25rem;
+  }
+
+  .pf-month-day {
+    min-height: 8.5rem;
+    padding: 0.65rem;
+  }
+
+  .pf-month-day__items {
+    font-size: 0.85rem;
+  }
+
+  .pf-target-list {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+
+  .pf-today-view {
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    align-items: start;
+  }
+
+  .pf-today-view > .pf-muted {
+    grid-column: 1 / -1;
+  }
+
+  .pf-week-bucket__items {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   }
 }

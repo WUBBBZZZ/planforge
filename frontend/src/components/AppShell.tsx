@@ -37,16 +37,28 @@ export function AppShell({
                 </a>
               </li>
               <li>
+                <a href="/month" aria-current={navCurrent("/month", currentPath)}>
+                  Month
+                </a>
+              </li>
+              <li>
                 <a href="/today" aria-current={navCurrent("/today", currentPath)}>
                   Today
                 </a>
               </li>
               <li>
-                <a
-                  href="/dev/components"
-                  aria-current={navCurrent("/dev/components", currentPath)}
-                >
-                  Components
+                <a href="/backlog" aria-current={navCurrent("/backlog", currentPath)}>
+                  Backlog
+                </a>
+              </li>
+              <li>
+                <a href="/routines" aria-current={navCurrent("/routines", currentPath)}>
+                  Routines
+                </a>
+              </li>
+              <li>
+                <a href="/settings" aria-current={navCurrent("/settings", currentPath)}>
+                  Settings
                 </a>
               </li>
             </ul>
@@ -63,7 +75,9 @@ export function AppShell({
       </main>
 
       <footer className="pf-footer">
-        <p>Local-first planning platform — fabricated demo data only.</p>
+        <div className="pf-footer__inner">
+          <p>Local-first planning platform — fabricated demo data only.</p>
+        </div>
       </footer>
     </div>
   );

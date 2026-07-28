@@ -60,3 +60,88 @@ async def test_complete_stays_on_today_as_completed(test_app) -> None:
     payload = today_response.json()
     assert len(payload["items"]) == 1
     assert payload["items"][0]["is_completed"] is True
+
+
+async def test_reopen_completed_task_returns_pending(test_app) -> None:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        create_response = await client.post(
+            "/api/tasks",
+            json={"title": "Reopen me", "due_date": "2026-07-21"},
+        )
+        task_id = create_response.json()["id"]
+        await client.post(f"/api/tasks/{task_id}/complete")
+        reopen_response = await client.post(f"/api/tasks/{task_id}/reopen")
+
+    assert reopen_response.status_code == 200
+    assert reopen_response.json()["status"] == "pending"
+    assert reopen_response.json()["due_date"] == "2026-07-21"
+
+
+async def test_reopen_pending_returns_409(test_app) -> None:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        create_response = await client.post(
+            "/api/tasks",
+            json={"title": "Already pending"},
+        )
+        task_id = create_response.json()["id"]
+        reopen_response = await client.post(f"/api/tasks/{task_id}/reopen")
+
+    assert reopen_response.status_code == 409
+
+
+async def test_move_task_to_backlog_returns_backlog_item(test_app) -> None:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        create_response = await client.post(
+            "/api/tasks",
+            json={"title": "Backlog candidate", "due_date": "2026-07-21"},
+        )
+        task_id = create_response.json()["id"]
+        move_response = await client.post(f"/api/tasks/{task_id}/move-to-backlog")
+        duplicate_response = await client.post(f"/api/tasks/{task_id}/move-to-backlog")
+
+    assert move_response.status_code == 200
+    payload = move_response.json()
+    assert payload["task"]["status"] == "moved_to_backlog"
+    assert payload["backlog_item"]["title"] == "Backlog candidate"
+    assert payload["backlog_item"]["source_entity_id"] == task_id
+    assert duplicate_response.status_code == 200
+    assert (
+        duplicate_response.json()["backlog_item"]["id"]
+        == payload["backlog_item"]["id"]
+    )
+
+
+async def test_move_completed_task_returns_409(test_app) -> None:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        create_response = await client.post(
+            "/api/tasks",
+            json={"title": "Completed task"},
+        )
+        task_id = create_response.json()["id"]
+        await client.post(f"/api/tasks/{task_id}/complete")
+        move_response = await client.post(f"/api/tasks/{task_id}/move-to-backlog")
+
+    assert move_response.status_code == 409
+
+
+async def test_update_task_title_and_due_date(test_app) -> None:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        create_response = await client.post(
+            "/api/tasks",
+            json={"title": "Original", "due_date": "2026-07-21"},
+        )
+        task_id = create_response.json()["id"]
+        update_response = await client.patch(
+            f"/api/tasks/{task_id}",
+            json={"title": "Updated", "due_date": None},
+        )
+
+    assert update_response.status_code == 200
+    payload = update_response.json()
+    assert payload["title"] == "Updated"
+    assert payload["due_date"] is None

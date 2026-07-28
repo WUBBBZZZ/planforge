@@ -23,6 +23,8 @@ class BacklogItem(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     )
     promoted_entity_type: Mapped[str | None] = mapped_column(String(32), nullable=True)
     promoted_entity_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    source_entity_type: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    source_entity_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
 
     @property
     def backlog_status(self) -> BacklogStatus:

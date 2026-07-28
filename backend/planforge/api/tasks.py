@@ -7,7 +7,13 @@ from planforge.api.deps import get_db
 from planforge.core.owner import LOCAL_OWNER_ID
 from planforge.domain.enums import TaskStatus
 from planforge.domain.local_date import LocalDate
-from planforge.schemas.task import TaskCreateRequest, TaskResponse, TaskUpdateRequest
+from planforge.schemas.backlog import BacklogItemResponse
+from planforge.schemas.task import (
+    MoveTaskToBacklogResponse,
+    TaskCreateRequest,
+    TaskResponse,
+    TaskUpdateRequest,
+)
 from planforge.services import task_service
 from planforge.services.task_service import UNSET
 
@@ -107,3 +113,34 @@ def cancel_task_endpoint(
         owner_id=LOCAL_OWNER_ID,
     )
     return TaskResponse.from_task(task)
+
+
+@router.post("/{task_id}/reopen", response_model=TaskResponse)
+def reopen_task_endpoint(
+    task_id: str,
+    session: Session = Depends(get_db),
+) -> TaskResponse:
+    """Restore a completed or cancelled task to pending."""
+    task = task_service.reopen_task(
+        session,
+        task_id=task_id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    return TaskResponse.from_task(task)
+
+
+@router.post("/{task_id}/move-to-backlog", response_model=MoveTaskToBacklogResponse)
+def move_task_to_backlog_endpoint(
+    task_id: str,
+    session: Session = Depends(get_db),
+) -> MoveTaskToBacklogResponse:
+    """Move a pending task into the backlog."""
+    task, backlog_item = task_service.move_task_to_backlog(
+        session,
+        task_id=task_id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    return MoveTaskToBacklogResponse(
+        task=TaskResponse.from_task(task),
+        backlog_item=BacklogItemResponse.from_item(backlog_item),
+    )

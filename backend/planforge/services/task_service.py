@@ -9,8 +9,9 @@ from planforge.core.exceptions import (
     TaskStateError,
     ValidationError,
 )
-from planforge.domain.enums import CompletionAction, TaskStatus
+from planforge.domain.enums import BacklogStatus, CompletionAction, TaskStatus
 from planforge.domain.local_date import LocalDate
+from planforge.models.backlog_item import BacklogItem
 from planforge.models.completion_record import CompletionRecord
 from planforge.models.task import Task
 from sqlalchemy import select
@@ -95,8 +96,8 @@ def update_task(
     *,
     task_id: str,
     owner_id: str,
-    title: str | None = None,
-    notes: str | None = None,
+    title: str | None | Any = _UNSET,
+    notes: str | None | Any = _UNSET,
     due_date: LocalDate | None | Any = _UNSET,
 ) -> Task:
     """Update a pending task."""
@@ -104,13 +105,13 @@ def update_task(
     if task.task_status is not TaskStatus.PENDING:
         raise TaskNotEditableError("Only pending tasks can be edited")
 
-    if title is not None:
-        cleaned_title = title.strip()
+    if title is not _UNSET:
+        cleaned_title = title.strip() if title is not None else ""
         if not cleaned_title:
             raise ValidationError("Title must not be empty")
         task.title = cleaned_title
 
-    if notes is not None:
+    if notes is not _UNSET:
         task.notes = notes
 
     if due_date is not _UNSET:
@@ -128,6 +129,11 @@ def complete_task(session: Session, *, task_id: str, owner_id: str) -> Task:
     if task.task_status is TaskStatus.CANCELLED:
         raise TaskStateError(
             "Cancelled tasks cannot be completed", status=TaskStatus.CANCELLED
+        )
+    if task.task_status is TaskStatus.MOVED_TO_BACKLOG:
+        raise TaskStateError(
+            "Tasks moved to backlog cannot be completed",
+            status=TaskStatus.MOVED_TO_BACKLOG,
         )
 
     task.status = TaskStatus.COMPLETED.value
@@ -150,6 +156,11 @@ def cancel_task(session: Session, *, task_id: str, owner_id: str) -> Task:
         raise TaskStateError(
             "Completed tasks cannot be cancelled", status=TaskStatus.COMPLETED
         )
+    if task.task_status is TaskStatus.MOVED_TO_BACKLOG:
+        raise TaskStateError(
+            "Tasks moved to backlog cannot be cancelled",
+            status=TaskStatus.MOVED_TO_BACKLOG,
+        )
 
     task.status = TaskStatus.CANCELLED.value
     _append_completion_record(
@@ -160,3 +171,110 @@ def cancel_task(session: Session, *, task_id: str, owner_id: str) -> Task:
     )
     session.flush()
     return task
+
+
+def _find_backlog_for_task(
+    session: Session,
+    *,
+    owner_id: str,
+    task_id: str,
+) -> BacklogItem | None:
+    return session.scalar(
+        select(BacklogItem).where(
+            BacklogItem.owner_id == owner_id,
+            BacklogItem.source_entity_type == "task",
+            BacklogItem.source_entity_id == task_id,
+        )
+    )
+
+
+def reopen_task(session: Session, *, task_id: str, owner_id: str) -> Task:
+    """Restore a completed or cancelled task to pending."""
+    task = _get_task_or_raise(session, task_id=task_id, owner_id=owner_id)
+    if task.task_status is TaskStatus.PENDING:
+        raise TaskStateError("Task is already pending", status=TaskStatus.PENDING)
+    if task.task_status is TaskStatus.MOVED_TO_BACKLOG:
+        raise TaskStateError(
+            "Tasks moved to backlog cannot be reopened",
+            status=TaskStatus.MOVED_TO_BACKLOG,
+        )
+
+    task.status = TaskStatus.PENDING.value
+    _append_completion_record(
+        session,
+        owner_id=owner_id,
+        task_id=task.id,
+        action=CompletionAction.REOPENED,
+    )
+    session.flush()
+    return task
+
+
+def move_task_to_backlog(
+    session: Session,
+    *,
+    task_id: str,
+    owner_id: str,
+) -> tuple[Task, BacklogItem]:
+    """Move a pending task into the backlog and mark the task moved."""
+    task = _get_task_or_raise(session, task_id=task_id, owner_id=owner_id)
+
+    if task.task_status is TaskStatus.MOVED_TO_BACKLOG:
+        backlog_item = _find_backlog_for_task(
+            session,
+            owner_id=owner_id,
+            task_id=task.id,
+        )
+        if backlog_item is None:
+            raise TaskStateError(
+                "Task is moved to backlog but no backlog item was found",
+                status=TaskStatus.MOVED_TO_BACKLOG,
+            )
+        if backlog_item.backlog_status is BacklogStatus.ARCHIVED:
+            backlog_item.status = BacklogStatus.ACTIVE.value
+            session.flush()
+        return task, backlog_item
+
+    if task.task_status is TaskStatus.COMPLETED:
+        raise TaskStateError(
+            "Completed tasks must be reopened before moving to backlog",
+            status=TaskStatus.COMPLETED,
+        )
+    if task.task_status is TaskStatus.CANCELLED:
+        raise TaskStateError(
+            "Cancelled tasks must be reopened before moving to backlog",
+            status=TaskStatus.CANCELLED,
+        )
+
+    existing = _find_backlog_for_task(
+        session,
+        owner_id=owner_id,
+        task_id=task.id,
+    )
+    if existing is not None:
+        task.status = TaskStatus.MOVED_TO_BACKLOG.value
+        task.due_date = None
+        if existing.backlog_status is BacklogStatus.ARCHIVED:
+            existing.status = BacklogStatus.ACTIVE.value
+        session.flush()
+        return task, existing
+
+    backlog_item = BacklogItem(
+        owner_id=owner_id,
+        title=task.title,
+        notes=task.notes,
+        status=BacklogStatus.ACTIVE.value,
+        source_entity_type="task",
+        source_entity_id=task.id,
+    )
+    session.add(backlog_item)
+    task.status = TaskStatus.MOVED_TO_BACKLOG.value
+    task.due_date = None
+    _append_completion_record(
+        session,
+        owner_id=owner_id,
+        task_id=task.id,
+        action=CompletionAction.MOVED_TO_BACKLOG,
+    )
+    session.flush()
+    return task, backlog_item

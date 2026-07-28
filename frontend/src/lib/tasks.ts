@@ -1,6 +1,6 @@
 export type ViewItemKind = "task" | "occurrence" | "appointment" | "maintenance";
 
-export type TaskStatus = "pending" | "completed" | "cancelled";
+export type TaskStatus = "pending" | "completed" | "cancelled" | "moved_to_backlog";
 
 export interface Task {
   id: string;
@@ -16,6 +16,17 @@ export interface TaskCreateBody {
   title: string;
   notes?: string | null;
   due_date?: string | null;
+}
+
+export interface TaskUpdateBody {
+  title?: string;
+  notes?: string | null;
+  due_date?: string | null;
+}
+
+export interface MoveTaskToBacklogResult {
+  task: Task;
+  backlog_item: BacklogItem;
 }
 
 export interface PlannerItem {
@@ -71,6 +82,8 @@ export interface BacklogItem {
   status: "active" | "promoted" | "archived";
   promoted_entity_type: string | null;
   promoted_entity_id: string | null;
+  source_entity_type: string | null;
+  source_entity_id: string | null;
 }
 
 export interface Routine {
@@ -127,6 +140,13 @@ async function parseJson<T>(response: Response): Promise<T> {
   return (await response.json()) as T;
 }
 
+export async function syncRoutineOccurrences(): Promise<void> {
+  const response = await fetch("/api/routines/sync-occurrences", { method: "POST" });
+  if (!response.ok) {
+    await parseJson(response);
+  }
+}
+
 export async function listTasks(status?: TaskStatus): Promise<Task[]> {
   const url = status ? `/api/tasks?status=${status}` : "/api/tasks";
   const response = await fetch(url);
@@ -150,6 +170,25 @@ export async function completeTask(id: string): Promise<Task> {
 export async function cancelTask(id: string): Promise<Task> {
   const response = await fetch(`/api/tasks/${id}/cancel`, { method: "POST" });
   return parseJson<Task>(response);
+}
+
+export async function updateTask(id: string, body: TaskUpdateBody): Promise<Task> {
+  const response = await fetch(`/api/tasks/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseJson<Task>(response);
+}
+
+export async function reopenTask(id: string): Promise<Task> {
+  const response = await fetch(`/api/tasks/${id}/reopen`, { method: "POST" });
+  return parseJson<Task>(response);
+}
+
+export async function moveTaskToBacklog(id: string): Promise<MoveTaskToBacklogResult> {
+  const response = await fetch(`/api/tasks/${id}/move-to-backlog`, { method: "POST" });
+  return parseJson<MoveTaskToBacklogResult>(response);
 }
 
 export async function fetchTodayView(date?: string): Promise<TodayView> {

@@ -7,12 +7,15 @@ class TaskStatus(StrEnum):
     PENDING = "pending"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
+    MOVED_TO_BACKLOG = "moved_to_backlog"
 
 
 class CompletionAction(StrEnum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
     SKIPPED = "skipped"
+    REOPENED = "reopened"
+    MOVED_TO_BACKLOG = "moved_to_backlog"
 
 
 class BacklogStatus(StrEnum):

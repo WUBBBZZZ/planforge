@@ -4,6 +4,7 @@ from datetime import date, datetime
 
 from planforge.domain.enums import TaskStatus
 from planforge.models.task import Task
+from planforge.schemas.backlog import BacklogItemResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -41,3 +42,8 @@ class TaskResponse(BaseModel):
             created_at=task.created_at,
             updated_at=task.updated_at,
         )
+
+
+class MoveTaskToBacklogResponse(BaseModel):
+    task: TaskResponse
+    backlog_item: BacklogItemResponse

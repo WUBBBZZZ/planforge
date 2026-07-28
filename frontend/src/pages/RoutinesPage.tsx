@@ -15,21 +15,14 @@ import {
   updateRoutine,
   type Routine,
 } from "../lib/tasks";
+import { formatDayOfMonth } from "../lib/ordinal";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function formatRoutineSchedule(routine: Routine): string {
   if (routine.schedule_type === "monthly") {
-    const suffix =
-      routine.day_of_month === 1
-        ? "st"
-        : routine.day_of_month === 2
-          ? "nd"
-          : routine.day_of_month === 3
-            ? "rd"
-            : "th";
-    return `Monthly on the ${routine.day_of_month}${suffix}`;
+    return `Monthly on the ${formatDayOfMonth(routine.day_of_month ?? 1)}`;
   }
   const days = routine.days_of_week.map((day) => WEEKDAY_LABELS[day]).join(", ");
   const interval =
@@ -97,7 +90,9 @@ export function RoutinesPage() {
 
   const toggleDay = (day: number) => {
     setSelectedDays((current) =>
-      current.includes(day) ? current.filter((value) => value !== day) : [...current, day].sort(),
+      current.includes(day)
+        ? current.filter((value) => value !== day)
+        : [...current, day].sort(),
     );
   };
 
@@ -148,12 +143,19 @@ export function RoutinesPage() {
   };
 
   const togglePause = async (routine: Routine) => {
-    if (routine.status === "active") {
-      await pauseRoutine(routine.id);
-    } else if (routine.status === "paused") {
-      await resumeRoutine(routine.id);
+    setError(null);
+    try {
+      if (routine.status === "active") {
+        await pauseRoutine(routine.id);
+      } else if (routine.status === "paused") {
+        await resumeRoutine(routine.id);
+      }
+      await reload();
+    } catch (pauseError) {
+      setError(
+        pauseError instanceof Error ? pauseError.message : "Could not update routine",
+      );
     }
-    await reload();
   };
 
   return (
@@ -197,7 +199,10 @@ export function RoutinesPage() {
                 ))}
               </div>
             </FormField>
-            <FormField label="Repeat every N weeks" hint="1 = every week, 2 = every other week">
+            <FormField
+              label="Repeat every N weeks"
+              hint="1 = every week, 2 = every other week"
+            >
               <Input
                 type="number"
                 min={1}
@@ -208,7 +213,10 @@ export function RoutinesPage() {
             </FormField>
           </>
         ) : (
-          <FormField label="Day of month" hint="Uses the last day when a month is shorter">
+          <FormField
+            label="Day of month"
+            hint="Uses the last day when a month is shorter"
+          >
             <Input
               type="number"
               min={1}
@@ -219,7 +227,10 @@ export function RoutinesPage() {
           </FormField>
         )}
 
-        <FormField label="Starts on" hint="Occurrences are only generated from this date forward">
+        <FormField
+          label="Starts on"
+          hint="Occurrences are only generated from this date forward"
+        >
           <Input
             type="date"
             value={startsOn}
@@ -255,7 +266,8 @@ export function RoutinesPage() {
                 <p className="pf-task-row__title">{routine.title}</p>
                 <p className="pf-muted">
                   {formatRoutineSchedule(routine)}
-                  {routine.starts_on ? ` · starts ${routine.starts_on}` : ""} · {routine.status}
+                  {routine.starts_on ? ` · starts ${routine.starts_on}` : ""} ·{" "}
+                  {routine.status}
                 </p>
               </div>
               <div className="pf-task-row__actions">

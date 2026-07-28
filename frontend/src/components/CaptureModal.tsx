@@ -1,10 +1,6 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
-import {
-  createAppointment,
-  createBacklogItem,
-  createTask,
-} from "../lib/tasks";
+import { createAppointment, createBacklogItem, createTask } from "../lib/tasks";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
 import { FormField } from "./FormField";
@@ -21,12 +17,13 @@ export interface CaptureModalProps {
   defaultDueDate?: string;
 }
 
-export function CaptureModal({
-  open,
-  onClose,
-  onCreated,
-  defaultDueDate,
-}: CaptureModalProps) {
+interface CaptureFormProps {
+  defaultDueDate?: string;
+  onClose: () => void;
+  onCreated: () => void;
+}
+
+function CaptureForm({ defaultDueDate, onClose, onCreated }: CaptureFormProps) {
   const [destination, setDestination] = useState<CaptureDestination>("task");
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
@@ -35,27 +32,6 @@ export function CaptureModal({
   const [endsAt, setEndsAt] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setDueDate(defaultDueDate ?? "");
-    }
-  }, [defaultDueDate, open]);
-
-  const resetForm = () => {
-    setDestination("task");
-    setTitle("");
-    setNotes("");
-    setDueDate(defaultDueDate ?? "");
-    setStartsAt("");
-    setEndsAt("");
-    setError(null);
-  };
-
-  const handleClose = () => {
-    resetForm();
-    onClose();
-  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -85,7 +61,6 @@ export function CaptureModal({
           ends_at: new Date(endsAt).toISOString(),
         });
       }
-      resetForm();
       onCreated();
       onClose();
     } catch (submitError) {
@@ -98,87 +73,105 @@ export function CaptureModal({
   };
 
   return (
-    <Dialog open={open} title="Capture" onClose={handleClose}>
-      <form className="pf-task-form" onSubmit={handleSubmit}>
-        <FormField label="Destination">
-          <Select
-            value={destination}
-            onChange={(event) =>
-              setDestination(event.target.value as CaptureDestination)
-            }
-            options={[
-              { value: "task", label: "Task" },
-              { value: "backlog", label: "Backlog" },
-              { value: "appointment", label: "Appointment" },
-            ]}
-          />
-        </FormField>
+    <form className="pf-task-form" onSubmit={(event) => void handleSubmit(event)}>
+      <FormField label="Destination">
+        <Select
+          value={destination}
+          onChange={(event) => setDestination(event.target.value as CaptureDestination)}
+          options={[
+            { value: "task", label: "Task" },
+            { value: "backlog", label: "Backlog" },
+            { value: "appointment", label: "Appointment" },
+          ]}
+        />
+      </FormField>
 
-        <FormField label="Title" hint="Fabricated example only">
+      <FormField label="Title" hint="Fabricated example only">
+        <Input
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          placeholder="Water the plants"
+          required
+          autoFocus
+        />
+      </FormField>
+
+      <FormField label="Notes">
+        <Textarea
+          value={notes}
+          onChange={(event) => setNotes(event.target.value)}
+          placeholder="Optional demo notes"
+          rows={3}
+        />
+      </FormField>
+
+      {destination === "task" ? (
+        <FormField label="Due date">
           <Input
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            placeholder="Water the plants"
-            required
-            autoFocus
+            type="date"
+            value={dueDate}
+            onChange={(event) => setDueDate(event.target.value)}
           />
         </FormField>
+      ) : null}
 
-        <FormField label="Notes">
-          <Textarea
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
-            placeholder="Optional demo notes"
-            rows={3}
-          />
-        </FormField>
-
-        {destination === "task" ? (
-          <FormField label="Due date">
+      {destination === "appointment" ? (
+        <>
+          <FormField label="Starts at">
             <Input
-              type="date"
-              value={dueDate}
-              onChange={(event) => setDueDate(event.target.value)}
+              type="datetime-local"
+              value={startsAt}
+              onChange={(event) => setStartsAt(event.target.value)}
+              required
             />
           </FormField>
-        ) : null}
+          <FormField label="Ends at">
+            <Input
+              type="datetime-local"
+              value={endsAt}
+              onChange={(event) => setEndsAt(event.target.value)}
+              required
+            />
+          </FormField>
+        </>
+      ) : null}
 
-        {destination === "appointment" ? (
-          <>
-            <FormField label="Starts at">
-              <Input
-                type="datetime-local"
-                value={startsAt}
-                onChange={(event) => setStartsAt(event.target.value)}
-                required
-              />
-            </FormField>
-            <FormField label="Ends at">
-              <Input
-                type="datetime-local"
-                value={endsAt}
-                onChange={(event) => setEndsAt(event.target.value)}
-                required
-              />
-            </FormField>
-          </>
-        ) : null}
+      {error ? (
+        <p className="pf-form-field__error" role="alert">
+          {error}
+        </p>
+      ) : null}
 
-        {error ? (
-          <p className="pf-form-field__error" role="alert">
-            {error}
-          </p>
-        ) : null}
+      <div className="pf-task-form__actions">
+        <Button type="button" variant="ghost" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? "Saving…" : "Save"}
+        </Button>
+      </div>
+    </form>
+  );
+}
 
-        <div className="pf-task-form__actions">
-          <Button type="button" variant="ghost" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? "Saving…" : "Save"}
-          </Button>
-        </div>
-      </form>
+export function CaptureModal({
+  open,
+  onClose,
+  onCreated,
+  defaultDueDate,
+}: CaptureModalProps) {
+  const formKey = `${defaultDueDate ?? "none"}`;
+
+  return (
+    <Dialog open={open} title="Capture" onClose={onClose}>
+      {open ? (
+        <CaptureForm
+          key={formKey}
+          defaultDueDate={defaultDueDate}
+          onClose={onClose}
+          onCreated={onCreated}
+        />
+      ) : null}
     </Dialog>
   );
 }

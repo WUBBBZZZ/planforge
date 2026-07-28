@@ -8,7 +8,9 @@ export interface TodayViewContentProps {
 }
 
 export function TodayViewContent({ view, onReload }: TodayViewContentProps) {
-  const overdueItems = view.items.filter((item) => item.is_overdue && !item.is_completed);
+  const overdueItems = view.items.filter(
+    (item) => item.is_overdue && !item.is_completed,
+  );
   const dueTodayItems = view.items.filter(
     (item) => !item.is_overdue && !item.is_completed,
   );

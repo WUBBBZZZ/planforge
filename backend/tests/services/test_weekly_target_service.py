@@ -34,7 +34,10 @@ def test_delete_weekly_target(db_session) -> None:
         target_id=target.id,
         owner_id=LOCAL_OWNER_ID,
     )
-    assert weekly_target_service.list_weekly_targets(db_session, owner_id=LOCAL_OWNER_ID) == []
+    assert (
+        weekly_target_service.list_weekly_targets(db_session, owner_id=LOCAL_OWNER_ID)
+        == []
+    )
 
 
 def test_update_weekly_target_count(db_session) -> None:

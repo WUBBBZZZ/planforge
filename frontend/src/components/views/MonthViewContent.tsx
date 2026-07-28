@@ -30,43 +30,55 @@ function MonthDayCell({
   const hiddenCount = items.length - visibleItems.length;
 
   return (
-    <article className="pf-month-day">
-      <header className="pf-month-day__header">
-        <a className="pf-month-day__date" href={`/week?week_start=${date}`}>
-          {Number(date.split("-")[2])}
-        </a>
-      </header>
-      {items.length === 0 ? (
-        <p className="pf-muted pf-month-day__empty">—</p>
-      ) : (
-        <ul className="pf-month-day__items">
-          {visibleItems.map((item) => (
-            <li key={`${item.kind}-${item.item_id}`} className="pf-month-day__item">
-              <span className="pf-month-day__item-kind">{itemKindLabel(item.kind)}</span>
-              <span>{item.title}</span>
-            </li>
-          ))}
-          {hiddenCount > 0 ? (
-            <li className="pf-month-day__more">+{hiddenCount} more</li>
-          ) : null}
-        </ul>
-      )}
-      {items.length > 0 ? (
-        <details className="pf-month-day__details">
-          <summary>Manage items</summary>
-          <ul className="pf-task-list">
-            {items.map((item) => (
-              <PlannerItemRow
-                key={`${item.kind}-${item.item_id}`}
-                item={item}
-                onChanged={onChanged}
-              />
+    <td className="pf-month-day-cell">
+      <article className="pf-month-day">
+        <header className="pf-month-day__header">
+          <a className="pf-month-day__date" href={`/week?week_start=${date}`}>
+            {Number(date.split("-")[2])}
+          </a>
+        </header>
+        {items.length === 0 ? (
+          <p className="pf-muted pf-month-day__empty">—</p>
+        ) : (
+          <ul className="pf-month-day__items">
+            {visibleItems.map((item) => (
+              <li key={`${item.kind}-${item.item_id}`} className="pf-month-day__item">
+                <span className="pf-month-day__item-kind">
+                  {itemKindLabel(item.kind)}
+                </span>
+                <span>{item.title}</span>
+              </li>
             ))}
+            {hiddenCount > 0 ? (
+              <li className="pf-month-day__more">+{hiddenCount} more</li>
+            ) : null}
           </ul>
-        </details>
-      ) : null}
-    </article>
+        )}
+        {items.length > 0 ? (
+          <details className="pf-month-day__details">
+            <summary>Manage items</summary>
+            <ul className="pf-task-list">
+              {items.map((item) => (
+                <PlannerItemRow
+                  key={`${item.kind}-${item.item_id}`}
+                  item={item}
+                  onChanged={onChanged}
+                />
+              ))}
+            </ul>
+          </details>
+        ) : null}
+      </article>
+    </td>
   );
+}
+
+function chunkCalendar<T>(cells: T[], size: number): T[][] {
+  const weeks: T[][] = [];
+  for (let index = 0; index < cells.length; index += size) {
+    weeks.push(cells.slice(index, index + size));
+  }
+  return weeks;
 }
 
 export function MonthViewContent({
@@ -82,6 +94,7 @@ export function MonthViewContent({
   const isEmpty =
     calendar.every((cell) => cell.kind === "pad" || cell.items.length === 0) &&
     extraBuckets.every((group) => group.items.length === 0);
+  const weeks = chunkCalendar(calendar, 7);
 
   return (
     <div className="pf-month-view">
@@ -95,25 +108,39 @@ export function MonthViewContent({
         onToday={onToday}
       />
 
-      <div className="pf-month-grid" role="grid" aria-label={periodLabel}>
-        {weekdayLabels(view.week_start_day).map((label) => (
-          <div key={label} className="pf-month-grid__weekday" role="columnheader">
-            {label}
-          </div>
-        ))}
-        {calendar.map((cell, index) =>
-          cell.kind === "pad" ? (
-            <div key={`pad-${index}`} className="pf-month-grid__pad" aria-hidden="true" />
-          ) : (
-            <MonthDayCell
-              key={cell.date}
-              date={cell.date}
-              items={cell.items}
-              onChanged={onReload}
-            />
-          ),
-        )}
-      </div>
+      <table className="pf-month-grid" aria-label={periodLabel}>
+        <thead>
+          <tr>
+            {weekdayLabels(view.week_start_day).map((label) => (
+              <th key={label} scope="col" className="pf-month-grid__weekday">
+                {label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {weeks.map((week, weekIndex) => (
+            <tr key={`week-${weekIndex}`}>
+              {week.map((cell, cellIndex) =>
+                cell.kind === "pad" ? (
+                  <td
+                    key={`pad-${weekIndex}-${cellIndex}`}
+                    className="pf-month-grid__pad"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <MonthDayCell
+                    key={cell.date}
+                    date={cell.date}
+                    items={cell.items}
+                    onChanged={onReload}
+                  />
+                ),
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       {isEmpty ? (
         <EmptyState
@@ -125,7 +152,8 @@ export function MonthViewContent({
       {extraBuckets.length > 0 ? (
         <div className="pf-week-buckets">
           {extraBuckets.map((group) => {
-            const sectionTitle = group.label === "upcoming" ? "Upcoming" : "Unscheduled";
+            const sectionTitle =
+              group.label === "upcoming" ? "Upcoming" : "Unscheduled";
             return (
               <section
                 key={group.label ?? "bucket"}

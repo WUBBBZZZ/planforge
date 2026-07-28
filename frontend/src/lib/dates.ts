@@ -10,7 +10,11 @@ const WEEKDAY_BY_NAME: Record<string, number> = {
 
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export function parseIsoDate(isoDate: string): { year: number; month: number; day: number } {
+export function parseIsoDate(isoDate: string): {
+  year: number;
+  month: number;
+  day: number;
+} {
   const [year, month, day] = isoDate.split("-").map(Number);
   return { year, month, day };
 }

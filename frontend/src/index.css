@@ -558,9 +558,10 @@ a {
 }
 
 .pf-month-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.5rem;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0.5rem;
+  table-layout: fixed;
 }
 
 .pf-month-grid__weekday {
@@ -568,6 +569,14 @@ a {
   font-weight: 600;
   text-align: center;
   color: var(--pf-muted);
+  padding-bottom: 0.25rem;
+}
+
+.pf-month-day-cell,
+.pf-month-grid__pad {
+  vertical-align: top;
+  width: 14.285%;
+  padding: 0;
 }
 
 .pf-month-grid__pad {

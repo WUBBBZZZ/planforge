@@ -3,6 +3,7 @@
 from datetime import date
 
 from planforge.domain.enums import ViewItemKind
+from planforge.services.month_view import MonthView
 from planforge.services.today_view import TodayItem, TodayView
 from planforge.services.week_view import (
     WeekDayGroup,
@@ -10,7 +11,6 @@ from planforge.services.week_view import (
     WeekTargetSummary,
     WeekView,
 )
-from planforge.services.month_view import MonthView
 from pydantic import BaseModel
 
 

@@ -10,7 +10,6 @@ from planforge.domain.enums import (
     ViewItemKind,
 )
 from planforge.domain.local_date import LocalDate
-from planforge.domain.timezone import get_timezone
 from planforge.models.appointment import Appointment
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
@@ -206,9 +205,7 @@ def assemble_month_view(
 
     if policies.week_show_completed:
         pending_ids = {
-            (item.kind, item.item_id)
-            for group in days
-            for item in group.items
+            (item.kind, item.item_id) for group in days for item in group.items
         }
         for offset in range(day_count):
             day = month_start.add_days(offset)

@@ -1,7 +1,7 @@
 """Routine and occurrence business logic."""
 
 import json
-from datetime import UTC, date, datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from planforge.core.exceptions import (
@@ -185,10 +185,10 @@ def update_routine(
         from planforge.services.occurrence_generator import parse_days_of_week
 
         next_days = parse_days_of_week(routine.days_of_week)
-    next_day_of_month = (
-        routine.day_of_month if day_of_month is UNSET else day_of_month
+    next_day_of_month = routine.day_of_month if day_of_month is UNSET else day_of_month
+    next_interval = (
+        interval_weeks if interval_weeks is not None else routine.interval_weeks
     )
-    next_interval = interval_weeks if interval_weeks is not None else routine.interval_weeks
 
     _validate_schedule(
         schedule_type=next_schedule_type,

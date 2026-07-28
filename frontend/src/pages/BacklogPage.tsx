@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AppShell } from "../components/AppShell";
 import { Button } from "../components/Button";
@@ -21,8 +21,9 @@ type BacklogState =
 export function BacklogPage() {
   const [state, setState] = useState<BacklogState>({ kind: "loading" });
   const [promoteDates, setPromoteDates] = useState<Record<string, string>>({});
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  const reload = useCallback(async () => {
+  const reload = async () => {
     try {
       const items = await listBacklog();
       setState({ kind: "ready", items });
@@ -30,7 +31,7 @@ export function BacklogPage() {
       const message = error instanceof Error ? error.message : "Could not load backlog";
       setState({ kind: "error", message });
     }
-  }, []);
+  };
 
   useEffect(() => {
     applyTheme(getStoredThemePreference());
@@ -56,18 +57,31 @@ export function BacklogPage() {
     };
   }, []);
 
+  const runAction = async (action: () => Promise<void>) => {
+    setActionError(null);
+    try {
+      await action();
+      await reload();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Action failed");
+    }
+  };
+
   const handlePromote = async (itemId: string) => {
     const dueDate = promoteDates[itemId];
     if (!dueDate) {
+      setActionError("Choose a due date before promoting.");
       return;
     }
-    await promoteBacklogItem(itemId, dueDate);
-    await reload();
+    await runAction(async () => {
+      await promoteBacklogItem(itemId, dueDate);
+    });
   };
 
   const handleArchive = async (itemId: string) => {
-    await archiveBacklogItem(itemId);
-    await reload();
+    await runAction(async () => {
+      await archiveBacklogItem(itemId);
+    });
   };
 
   return (
@@ -76,6 +90,11 @@ export function BacklogPage() {
       {state.kind === "error" ? (
         <p className="pf-form-field__error" role="alert">
           {state.message}
+        </p>
+      ) : null}
+      {actionError ? (
+        <p className="pf-form-field__error" role="alert">
+          {actionError}
         </p>
       ) : null}
       {state.kind === "ready" ? (

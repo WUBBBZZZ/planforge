@@ -36,8 +36,7 @@ export function MonthPage() {
   const [monthState, setMonthState] = useState<MonthState>({ kind: "loading" });
   const [modalOpen, setModalOpen] = useState(false);
 
-  const loadMonth = useCallback(async (month?: string) => {
-    setMonthState({ kind: "loading" });
+  const reloadMonth = useCallback(async (month?: string) => {
     try {
       const view = await fetchMonthView(month);
       setMonthState({ kind: "ready", view });
@@ -52,18 +51,33 @@ export function MonthPage() {
   }, []);
 
   useEffect(() => {
-    void loadMonth(monthParam);
-  }, [loadMonth, monthParam]);
+    let cancelled = false;
+    fetchMonthView(monthParam)
+      .then((view) => {
+        if (!cancelled) {
+          setMonthState({ kind: "ready", view });
+        }
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          const message =
+            error instanceof Error ? error.message : "Could not load month";
+          setMonthState({ kind: "error", message });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [monthParam]);
 
   const navigateMonth = (nextMonth: string | undefined) => {
+    setMonthState({ kind: "loading" });
     setMonthParam(nextMonth);
     setSearchParam("month", nextMonth ?? null);
   };
 
   const periodLabel =
-    monthState.kind === "ready"
-      ? formatMonthYear(monthState.view.month)
-      : "Loading…";
+    monthState.kind === "ready" ? formatMonthYear(monthState.view.month) : "Loading…";
 
   const calendar = useMemo(() => {
     if (monthState.kind !== "ready") {
@@ -75,8 +89,9 @@ export function MonthPage() {
       monthState.view.month_start,
       monthState.view.week_start_day,
     );
-    const cells: Array<{ kind: "pad" } | { kind: "day"; date: string; items: PlannerItem[] }> =
-      Array.from({ length: padding }, () => ({ kind: "pad" as const }));
+    const cells: Array<
+      { kind: "pad" } | { kind: "day"; date: string; items: PlannerItem[] }
+    > = Array.from({ length: padding }, () => ({ kind: "pad" as const }));
     for (const group of calendarDays) {
       if (!group.date) {
         continue;
@@ -117,14 +132,14 @@ export function MonthPage() {
           onPrevious={() => navigateMonth(addMonths(monthState.view.month, -1))}
           onNext={() => navigateMonth(addMonths(monthState.view.month, 1))}
           onToday={() => navigateMonth(undefined)}
-          onReload={async () => loadMonth(monthParam)}
+          onReload={async () => reloadMonth(monthParam)}
         />
       ) : null}
 
       <CaptureModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        onCreated={() => void loadMonth(monthParam)}
+        onCreated={() => void reloadMonth(monthParam)}
       />
     </AppShell>
   );

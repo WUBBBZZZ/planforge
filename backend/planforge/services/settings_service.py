@@ -1,6 +1,7 @@
 """Default settings and policy resolution."""
 
 from dataclasses import dataclass
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from planforge.core.owner import LOCAL_OWNER_ID
 from planforge.models.setting import Setting
@@ -113,10 +114,26 @@ def get_policy_snapshot(
     )
 
 
+def validate_timezone(value: str) -> None:
+    """Raise ValueError when a timezone name is not a valid IANA identifier."""
+    normalized = value.strip()
+    if not normalized:
+        raise ValueError("Timezone must not be empty")
+    if normalized.upper() in {"UTC", "ETC/UTC", "GMT"}:
+        return
+    try:
+        ZoneInfo(normalized)
+    except ZoneInfoNotFoundError as exc:
+        raise ValueError(f"Invalid timezone: {value}") from exc
+
+
 def validate_setting(key: str, value: str) -> None:
     """Raise ValueError when a setting key or value is invalid."""
     if key not in DEFAULT_SETTINGS:
         raise ValueError(f"Unknown setting key: {key}")
+    if key == "timezone":
+        validate_timezone(value)
+        return
     if value not in VALID_SETTINGS[key]:
         raise ValueError(f"Invalid value for {key}: {value}")
 

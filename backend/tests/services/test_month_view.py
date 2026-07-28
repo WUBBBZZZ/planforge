@@ -50,7 +50,9 @@ def test_tasks_grouped_by_due_date(db_session) -> None:
 
 def test_upcoming_bucket(db_session) -> None:
     reference = LocalDate.from_iso("2026-07-01")
-    _add_task(db_session, title="August task", due_date=LocalDate.from_iso("2026-08-05"))
+    _add_task(
+        db_session, title="August task", due_date=LocalDate.from_iso("2026-08-05")
+    )
 
     view = assemble_month_view(
         session=db_session,

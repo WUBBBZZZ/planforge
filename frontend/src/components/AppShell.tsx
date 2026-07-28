@@ -14,12 +14,7 @@ function navCurrent(path: string, currentPath: string): "page" | undefined {
   return currentPath === path ? "page" : undefined;
 }
 
-export function AppShell({
-  currentPath,
-  title,
-  children,
-  actions,
-}: AppShellProps) {
+export function AppShell({ currentPath, title, children, actions }: AppShellProps) {
   return (
     <div className="pf-app">
       <a className="pf-skip-link" href="#main-content">

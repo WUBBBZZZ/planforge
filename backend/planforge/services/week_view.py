@@ -227,32 +227,30 @@ def assemble_week_view(
 
     if policies.week_show_completed:
         pending_ids = {
-            (item.kind, item.item_id)
-            for group in days
-            for item in group.items
+            (item.kind, item.item_id) for group in days for item in group.items
         }
         for offset in range(7):
             day = week_start.add_days(offset)
-            for completed in completed_items_for_local_day(
+            for completed_item in completed_items_for_local_day(
                 session,
                 owner_id=owner_id,
                 day=day,
                 timezone_name=policies.timezone,
             ):
-                key = (completed.kind, completed.item_id)
+                key = (completed_item.kind, completed_item.item_id)
                 if key in pending_ids:
                     continue
                 pending_ids.add(key)
                 day_map[day].append(
                     WeekItem(
-                        kind=completed.kind,
-                        item_id=completed.item_id,
-                        title=completed.title,
-                        due_date=completed.due_date,
-                        starts_at=completed.starts_at,
-                        ends_at=completed.ends_at,
+                        kind=completed_item.kind,
+                        item_id=completed_item.item_id,
+                        title=completed_item.title,
+                        due_date=completed_item.due_date,
+                        starts_at=completed_item.starts_at,
+                        ends_at=completed_item.ends_at,
                         is_overdue=False,
-                        routine_title=completed.routine_title,
+                        routine_title=completed_item.routine_title,
                         is_completed=True,
                     )
                 )
@@ -280,7 +278,7 @@ def assemble_week_view(
         session,
         owner_id=owner_id,
     ):
-        completed, target_count = weekly_target_service.target_progress_for_week(
+        completed_count, target_count = weekly_target_service.target_progress_for_week(
             session,
             owner_id=owner_id,
             target=target,
@@ -291,7 +289,7 @@ def assemble_week_view(
             WeekTargetSummary(
                 target_id=target.id,
                 title=target.title,
-                completed_count=completed,
+                completed_count=completed_count,
                 target_count=target_count,
             )
         )

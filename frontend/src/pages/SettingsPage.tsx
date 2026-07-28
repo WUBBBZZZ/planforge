@@ -62,6 +62,7 @@ const POLICY_FIELDS = [
 export function SettingsPage() {
   const [settings, setSettings] = useState<Record<string, string> | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     applyTheme(getStoredThemePreference());
@@ -75,9 +76,11 @@ export function SettingsPage() {
           setSettings(values);
         }
       })
-      .catch((error: unknown) => {
+      .catch((loadError: unknown) => {
         if (!cancelled) {
-          setMessage(error instanceof Error ? error.message : "Could not load settings");
+          setError(
+            loadError instanceof Error ? loadError.message : "Could not load settings",
+          );
         }
       });
     return () => {
@@ -85,31 +88,52 @@ export function SettingsPage() {
     };
   }, []);
 
+  const runAction = async (action: () => Promise<void>, successMessage: string) => {
+    setError(null);
+    try {
+      await action();
+      setMessage(successMessage);
+    } catch (actionError) {
+      setMessage(null);
+      setError(actionError instanceof Error ? actionError.message : "Action failed");
+    }
+  };
+
   const handlePolicyChange = async (key: string, value: string) => {
-    const updated = await updateSetting(key, value);
-    setSettings(updated);
-    setMessage("Settings updated.");
+    await runAction(async () => {
+      const updated = await updateSetting(key, value);
+      setSettings(updated);
+    }, "Settings updated.");
   };
 
   const seedMaintenance = async () => {
-    await createMaintenance({
-      title: "Replace demo filter",
-      interval_days: 90,
-    });
-    setMessage("Demo maintenance item created.");
+    await runAction(async () => {
+      await createMaintenance({
+        title: "Replace demo filter",
+        interval_days: 90,
+      });
+    }, "Demo maintenance item created.");
   };
 
   const seedWeeklyTarget = async () => {
-    await createWeeklyTarget({
-      title: "Exercise 3 times",
-      target_count: 3,
-    });
-    setMessage("Demo weekly target created.");
+    await runAction(async () => {
+      await createWeeklyTarget({
+        title: "Exercise 3 times",
+        target_count: 3,
+      });
+    }, "Demo weekly target created.");
   };
 
   return (
     <AppShell currentPath="/settings" title="Settings">
-      {settings === null ? <LoadingIndicator label="Loading settings" /> : null}
+      {settings === null && error === null ? (
+        <LoadingIndicator label="Loading settings" />
+      ) : null}
+      {error ? (
+        <p className="pf-form-field__error" role="alert">
+          {error}
+        </p>
+      ) : null}
       {settings ? (
         <div className="pf-settings">
           {POLICY_FIELDS.map((field) => (

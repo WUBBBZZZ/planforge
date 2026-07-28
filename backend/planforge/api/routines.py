@@ -14,7 +14,7 @@ from planforge.domain.local_date import LocalDate
 from planforge.models.occurrence import Occurrence
 from planforge.models.routine import Routine
 from planforge.services import routine_service
-from planforge.services.occurrence_generator import SCHEDULE_MONTHLY, SCHEDULE_WEEKLY
+from planforge.services.occurrence_generator import SCHEDULE_WEEKLY
 from planforge.services.settings_service import get_policy_snapshot
 
 router = APIRouter(prefix="/routines", tags=["routines"])

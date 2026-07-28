@@ -4,10 +4,7 @@ import { Button } from "../Button";
 import { EmptyState } from "../EmptyState";
 import { PeriodNav } from "../PeriodNav";
 import { PlannerItemRow } from "../PlannerItemRow";
-import {
-  WeeklyTargetDialog,
-  type WeeklyTargetDraft,
-} from "../WeeklyTargetDialog";
+import { WeeklyTargetDialog, type WeeklyTargetDraft } from "../WeeklyTargetDialog";
 import { formatDisplayDate, type WeekView } from "../../lib/tasks";
 
 export interface WeekViewContentProps {
@@ -100,7 +97,9 @@ export function WeekViewContent({
                     variant="ghost"
                     onClick={() => {
                       if (
-                        window.confirm(`Delete "${target.title}"? This cannot be undone.`)
+                        window.confirm(
+                          `Delete "${target.title}"? This cannot be undone.`,
+                        )
                       ) {
                         void onDeleteTarget(target.target_id);
                       }
@@ -129,7 +128,9 @@ export function WeekViewContent({
           {calendarDays.map((group) => {
             const sectionKey = group.date ?? "day";
             const dayNumber = group.date?.split("-")[2];
-            const weekday = group.date ? formatDisplayDate(group.date).split(",")[0] : "";
+            const weekday = group.date
+              ? formatDisplayDate(group.date).split(",")[0]
+              : "";
 
             return (
               <section
@@ -166,7 +167,8 @@ export function WeekViewContent({
       {bucketGroups.length > 0 ? (
         <div className="pf-week-buckets">
           {bucketGroups.map((group) => {
-            const sectionTitle = group.label === "upcoming" ? "Upcoming" : "Unscheduled";
+            const sectionTitle =
+              group.label === "upcoming" ? "Upcoming" : "Unscheduled";
             return (
               <section
                 key={group.label ?? "bucket"}

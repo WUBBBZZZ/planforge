@@ -44,7 +44,7 @@ def test_monthly_first_of_month(db_session) -> None:
 
 def test_routine_does_not_backfill_before_start(db_session) -> None:
     clock_today = LocalDate.from_iso("2026-07-27")
-    routine = routine_service.create_routine(
+    routine_service.create_routine(
         db_session,
         owner_id=LOCAL_OWNER_ID,
         title="Thursday sheets",
@@ -64,7 +64,9 @@ def test_routine_does_not_backfill_before_start(db_session) -> None:
         db_session,
         owner_id=LOCAL_OWNER_ID,
     )
-    scheduled = [LocalDate.from_date(occurrence.scheduled_date) for occurrence, _ in pending]
+    scheduled = [
+        LocalDate.from_date(occurrence.scheduled_date) for occurrence, _ in pending
+    ]
     assert all(date >= clock_today for date in scheduled)
     assert scheduled[0].to_iso() == "2026-07-30"
 

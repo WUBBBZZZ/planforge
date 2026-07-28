@@ -159,9 +159,7 @@ export async function fetchTodayView(date?: string): Promise<TodayView> {
 }
 
 export async function fetchWeekView(weekStart?: string): Promise<WeekView> {
-  const url = weekStart
-    ? `/api/views/week?week_start=${weekStart}`
-    : "/api/views/week";
+  const url = weekStart ? `/api/views/week?week_start=${weekStart}` : "/api/views/week";
   const response = await fetch(url);
   return parseJson<WeekView>(response);
 }

@@ -33,7 +33,6 @@ export function TodayPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setTodayState({ kind: "loading" });
 
     fetchTodayView()
       .then((view) => {

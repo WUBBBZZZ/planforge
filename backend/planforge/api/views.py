@@ -9,12 +9,16 @@ from planforge.api.deps import get_db
 from planforge.core.owner import LOCAL_OWNER_ID
 from planforge.domain.clock import SystemClock
 from planforge.domain.local_date import InvalidLocalDateError, LocalDate
-from planforge.schemas.views import MonthViewResponse, TodayViewResponse, WeekViewResponse
+from planforge.schemas.views import (
+    MonthViewResponse,
+    TodayViewResponse,
+    WeekViewResponse,
+)
+from planforge.services.month_view import assemble_month_view
 from planforge.services.settings_service import get_policy_snapshot
 from planforge.services.today_view import assemble_today_view
 from planforge.services.week_bounds import week_bounds
 from planforge.services.week_view import assemble_week_view
-from planforge.services.month_view import assemble_month_view
 
 router = APIRouter(prefix="/views", tags=["views"])
 

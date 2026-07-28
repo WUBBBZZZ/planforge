@@ -22,14 +22,22 @@ export interface PlannerItemRowProps {
   compact?: boolean;
 }
 
-export function PlannerItemRow({ item, onChanged, compact = false }: PlannerItemRowProps) {
+export function PlannerItemRow({
+  item,
+  onChanged,
+  compact = false,
+}: PlannerItemRowProps) {
   const [busyAction, setBusyAction] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const runAction = async (actionKey: string, action: () => Promise<void>) => {
     setBusyAction(actionKey);
+    setActionError(null);
     try {
       await action();
       await onChanged();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Action failed");
     } finally {
       setBusyAction(null);
     }
@@ -56,108 +64,117 @@ export function PlannerItemRow({ item, onChanged, compact = false }: PlannerItem
               {formatDisplayDate(item.due_date)}
             </Badge>
           ) : null}
-          {compact && item.is_overdue ? (
-            <Badge tone="danger">Overdue</Badge>
-          ) : null}
+          {compact && item.is_overdue ? <Badge tone="danger">Overdue</Badge> : null}
           {!compact && item.starts_at && item.ends_at ? (
             <Badge>{formatTimeRange(item.starts_at, item.ends_at)}</Badge>
           ) : null}
         </div>
+        {actionError ? (
+          <p className="pf-form-field__error" role="alert">
+            {actionError}
+          </p>
+        ) : null}
       </div>
-      <div className={compact ? "pf-task-row__actions pf-task-row__actions--compact" : "pf-task-row__actions"}>
+      <div
+        className={
+          compact
+            ? "pf-task-row__actions pf-task-row__actions--compact"
+            : "pf-task-row__actions"
+        }
+      >
         {item.is_completed ? null : (
           <>
-        {item.kind === "task" ? (
-          <>
-            <Button
-              variant="secondary"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("complete", async () => {
-                  await completeTask(item.item_id);
-                })
-              }
-            >
-              {busyAction === "complete" ? "Completing…" : "Complete"}
-            </Button>
-            <Button
-              variant="ghost"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("cancel", async () => {
-                  await cancelTask(item.item_id);
-                })
-              }
-            >
-              {busyAction === "cancel" ? "Cancelling…" : "Cancel"}
-            </Button>
-          </>
-        ) : null}
-        {item.kind === "occurrence" ? (
-          <>
-            <Button
-              variant="secondary"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("complete", async () => {
-                  await completeOccurrence(item.item_id);
-                })
-              }
-            >
-              Complete
-            </Button>
-            <Button
-              variant="ghost"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("skip", async () => {
-                  await skipOccurrence(item.item_id);
-                })
-              }
-            >
-              Skip
-            </Button>
-          </>
-        ) : null}
-        {item.kind === "appointment" ? (
-          <>
-            <Button
-              variant="secondary"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("complete", async () => {
-                  await completeAppointment(item.item_id);
-                })
-              }
-            >
-              Complete
-            </Button>
-            <Button
-              variant="ghost"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("cancel", async () => {
-                  await cancelAppointment(item.item_id);
-                })
-              }
-            >
-              Cancel
-            </Button>
-          </>
-        ) : null}
-        {item.kind === "maintenance" ? (
-          <Button
-            variant="secondary"
-            disabled={busyAction !== null}
-            onClick={() =>
-              void runAction("complete", async () => {
-                await completeMaintenance(item.item_id);
-              })
-            }
-          >
-            Complete
-          </Button>
-        ) : null}
+            {item.kind === "task" ? (
+              <>
+                <Button
+                  variant="secondary"
+                  disabled={busyAction !== null}
+                  onClick={() =>
+                    void runAction("complete", async () => {
+                      await completeTask(item.item_id);
+                    })
+                  }
+                >
+                  {busyAction === "complete" ? "Completing…" : "Complete"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  disabled={busyAction !== null}
+                  onClick={() =>
+                    void runAction("cancel", async () => {
+                      await cancelTask(item.item_id);
+                    })
+                  }
+                >
+                  {busyAction === "cancel" ? "Cancelling…" : "Cancel"}
+                </Button>
+              </>
+            ) : null}
+            {item.kind === "occurrence" ? (
+              <>
+                <Button
+                  variant="secondary"
+                  disabled={busyAction !== null}
+                  onClick={() =>
+                    void runAction("complete", async () => {
+                      await completeOccurrence(item.item_id);
+                    })
+                  }
+                >
+                  Complete
+                </Button>
+                <Button
+                  variant="ghost"
+                  disabled={busyAction !== null}
+                  onClick={() =>
+                    void runAction("skip", async () => {
+                      await skipOccurrence(item.item_id);
+                    })
+                  }
+                >
+                  Skip
+                </Button>
+              </>
+            ) : null}
+            {item.kind === "appointment" ? (
+              <>
+                <Button
+                  variant="secondary"
+                  disabled={busyAction !== null}
+                  onClick={() =>
+                    void runAction("complete", async () => {
+                      await completeAppointment(item.item_id);
+                    })
+                  }
+                >
+                  Complete
+                </Button>
+                <Button
+                  variant="ghost"
+                  disabled={busyAction !== null}
+                  onClick={() =>
+                    void runAction("cancel", async () => {
+                      await cancelAppointment(item.item_id);
+                    })
+                  }
+                >
+                  Cancel
+                </Button>
+              </>
+            ) : null}
+            {item.kind === "maintenance" ? (
+              <Button
+                variant="secondary"
+                disabled={busyAction !== null}
+                onClick={() =>
+                  void runAction("complete", async () => {
+                    await completeMaintenance(item.item_id);
+                  })
+                }
+              >
+                Complete
+              </Button>
+            ) : null}
           </>
         )}
       </div>

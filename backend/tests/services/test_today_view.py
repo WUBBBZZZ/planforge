@@ -115,9 +115,10 @@ def test_completed_shown_as_completed(db_session) -> None:
         due_date=ref,
         status=TaskStatus.COMPLETED,
     )
-    from planforge.models.completion_record import CompletionRecord
-    from planforge.domain.enums import CompletionAction
     from datetime import UTC, datetime
+
+    from planforge.domain.enums import CompletionAction
+    from planforge.models.completion_record import CompletionRecord
 
     db_session.add(
         CompletionRecord(

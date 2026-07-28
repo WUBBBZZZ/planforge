@@ -22,9 +22,9 @@ describe("MonthPage", () => {
     expect(screen.getByText("Loading month view")).toBeVisible();
 
     await waitFor(() => {
-      expect(screen.getByRole("grid", { name: "July 2026" })).toBeVisible();
-      expect(screen.getByText("Mon")).toBeVisible();
-      expect(screen.getByText("Sun")).toBeVisible();
+      expect(screen.getByRole("table", { name: "July 2026" })).toBeVisible();
+      expect(screen.getByRole("columnheader", { name: "Mon" })).toBeVisible();
+      expect(screen.getByRole("columnheader", { name: "Sun" })).toBeVisible();
     });
   });
 });

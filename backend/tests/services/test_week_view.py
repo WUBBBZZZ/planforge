@@ -126,7 +126,9 @@ def test_overdue_task_rolls_to_today(db_session) -> None:
 def test_overdue_task_hidden_in_future_week(db_session) -> None:
     week_start = LocalDate.from_iso("2026-07-27")
     today = LocalDate.from_iso("2026-07-26")
-    _add_task(db_session, title="Missed Monday", due_date=LocalDate.from_iso("2026-07-20"))
+    _add_task(
+        db_session, title="Missed Monday", due_date=LocalDate.from_iso("2026-07-20")
+    )
 
     view = assemble_week_view(
         session=db_session,

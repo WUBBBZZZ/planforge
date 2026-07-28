@@ -1,10 +1,11 @@
 """Time source for planner views."""
 
+from datetime import datetime
 from typing import Protocol
-from zoneinfo import ZoneInfo
 
 from planforge.core.config import Settings, get_settings
 from planforge.domain.local_date import LocalDate
+from planforge.domain.timezone import get_timezone
 
 
 class Clock(Protocol):
@@ -25,7 +26,5 @@ class SystemClock:
         return self._settings.timezone
 
     def today(self) -> LocalDate:
-        from datetime import datetime
-
-        now = datetime.now(ZoneInfo(self.timezone_name()))
+        now = datetime.now(get_timezone(self.timezone_name()))
         return LocalDate(now.year, now.month, now.day)

@@ -11,7 +11,15 @@ class ValidationError(PlanforgeError):
     """Input failed business validation."""
 
 
-class TaskNotFoundError(PlanforgeError):
+class NotFoundError(PlanforgeError):
+    """Entity id does not exist for this owner."""
+
+
+class StateError(PlanforgeError):
+    """Invalid state transition."""
+
+
+class TaskNotFoundError(NotFoundError):
     """Task id does not exist for this owner."""
 
 
@@ -19,9 +27,53 @@ class TaskNotEditableError(PlanforgeError):
     """Task cannot be edited in its current state."""
 
 
-class TaskStateError(PlanforgeError):
+class TaskStateError(StateError):
     """Invalid state transition for a task."""
 
     def __init__(self, message: str, *, status: TaskStatus) -> None:
         super().__init__(message)
         self.status = status
+
+
+class BacklogNotFoundError(NotFoundError):
+    """Backlog item does not exist."""
+
+
+class BacklogStateError(StateError):
+    """Invalid backlog state transition."""
+
+
+class RoutineNotFoundError(NotFoundError):
+    """Routine does not exist."""
+
+
+class RoutineStateError(StateError):
+    """Invalid routine state transition."""
+
+
+class OccurrenceNotFoundError(NotFoundError):
+    """Occurrence does not exist."""
+
+
+class OccurrenceStateError(StateError):
+    """Invalid occurrence state transition."""
+
+
+class AppointmentNotFoundError(NotFoundError):
+    """Appointment does not exist."""
+
+
+class AppointmentStateError(StateError):
+    """Invalid appointment state transition."""
+
+
+class MaintenanceNotFoundError(NotFoundError):
+    """Maintenance definition does not exist."""
+
+
+class MaintenanceStateError(StateError):
+    """Invalid maintenance state transition."""
+
+
+class WeeklyTargetNotFoundError(NotFoundError):
+    """Weekly target does not exist."""

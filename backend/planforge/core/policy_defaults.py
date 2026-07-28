@@ -1,17 +1,23 @@
-"""Hard-coded policy defaults until the settings UI exists."""
+"""Backward-compatible policy exports."""
 
-from dataclasses import dataclass
+from planforge.services.settings_service import (
+    DEFAULT_SETTINGS,
+    VALID_SETTINGS,
+    PolicySnapshot,
+    ensure_default_settings,
+    get_policy_snapshot,
+    get_settings_map,
+    update_setting,
+    validate_setting,
+)
 
-
-@dataclass(frozen=True)
-class PolicySnapshot:
-    """Reminder-first policy defaults for view assembly."""
-
-    today_include_rolled_tasks: bool = True
-    week_include_overdue_tasks: bool = True
-    week_start_day: str = "monday"
-
-
-def get_policy_snapshot() -> PolicySnapshot:
-    """Return the active policy snapshot."""
-    return PolicySnapshot()
+__all__ = [
+    "DEFAULT_SETTINGS",
+    "PolicySnapshot",
+    "VALID_SETTINGS",
+    "ensure_default_settings",
+    "get_policy_snapshot",
+    "get_settings_map",
+    "update_setting",
+    "validate_setting",
+]

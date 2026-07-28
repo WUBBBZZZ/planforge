@@ -1,14 +1,38 @@
 """SQLAlchemy engine and session factory."""
 
 from collections.abc import Generator
+from pathlib import Path
+from urllib.parse import unquote
 
 from sqlalchemy import create_engine as sa_create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
 
+def _ensure_sqlite_parent_dir(database_url: str) -> None:
+    """Create parent directories for file-backed SQLite database URLs."""
+    if not database_url.startswith("sqlite"):
+        return
+    if ":memory:" in database_url:
+        return
+
+    prefix = "sqlite:///"
+    if not database_url.startswith(prefix):
+        return
+
+    db_path = unquote(database_url.removeprefix(prefix))
+    if not db_path:
+        return
+
+    parent = Path(db_path).expanduser().parent
+    if parent != Path("."):
+        parent.mkdir(parents=True, exist_ok=True)
+
+
 def create_engine(database_url: str) -> Engine:
     """Create a SQLAlchemy engine for the given database URL."""
+    _ensure_sqlite_parent_dir(database_url)
+
     connect_args: dict[str, object] = {}
     if database_url.startswith("sqlite"):
         connect_args["check_same_thread"] = False

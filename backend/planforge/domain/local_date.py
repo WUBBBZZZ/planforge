@@ -48,6 +48,24 @@ class LocalDate:
         """Return a new date offset by the given number of days."""
         return LocalDate.from_date(self.to_date() + timedelta(days=days))
 
+    def start_of_month(self) -> LocalDate:
+        """Return the first day of this date's calendar month."""
+        return LocalDate(self.year, self.month, 1)
+
+    def end_of_month(self) -> LocalDate:
+        """Return the last day of this date's calendar month."""
+        if self.month == 12:
+            return LocalDate(self.year + 1, 1, 1).add_days(-1)
+        return LocalDate(self.year, self.month + 1, 1).add_days(-1)
+
+    def add_months(self, months: int) -> LocalDate:
+        """Return the same day-of-month offset by the given number of months."""
+        month_index = (self.year * 12 + (self.month - 1)) + months
+        year = month_index // 12
+        month = (month_index % 12) + 1
+        last_day = LocalDate(year, month, 1).end_of_month().day
+        return LocalDate(year, month, min(self.day, last_day))
+
     def weekday(self) -> int:
         """Monday=0 .. Sunday=6 (matches datetime.date.weekday)."""
         return self.to_date().weekday()

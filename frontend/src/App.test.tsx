@@ -8,7 +8,9 @@ describe("App routing", () => {
     window.history.pushState({}, "", "/does-not-exist");
     render(<App />);
 
-    expect(screen.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Page not found" }),
+    ).toBeVisible();
     expect(screen.getByRole("link", { name: "Week view" })).toHaveAttribute(
       "href",
       "/week",

@@ -47,6 +47,10 @@ backups/
 *.crt
 *.cer
 
+# === Local-only documentation (machine-specific audits) ===
+docs/current-state-handoff.md
+docs/private-audits/
+
 # === OS and editor noise ===
 Thumbs.db
 Desktop.ini

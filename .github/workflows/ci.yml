@@ -30,7 +30,7 @@ jobs:
       - name: Skip — backend not initialized
         if: steps.check.outputs.exists != 'true'
         run: echo "Backend pyproject.toml not found; skipping format check."
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: steps.check.outputs.exists == 'true'
         with:
           python-version: "3.14"
@@ -60,7 +60,7 @@ jobs:
       - name: Skip — backend not initialized
         if: steps.check.outputs.exists != 'true'
         run: echo "Backend pyproject.toml not found; skipping lint."
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: steps.check.outputs.exists == 'true'
         with:
           python-version: "3.14"
@@ -90,7 +90,7 @@ jobs:
       - name: Skip — backend not initialized
         if: steps.check.outputs.exists != 'true'
         run: echo "Backend pyproject.toml not found; skipping type check."
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: steps.check.outputs.exists == 'true'
         with:
           python-version: "3.14"
@@ -120,7 +120,7 @@ jobs:
       - name: Skip — backend not initialized
         if: steps.check.outputs.exists != 'true'
         run: echo "Backend pyproject.toml not found; skipping tests."
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: steps.check.outputs.exists == 'true'
         with:
           python-version: "3.14"
@@ -299,7 +299,7 @@ jobs:
         working-directory: backend
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
       - name: Install dependencies
@@ -330,7 +330,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
       - uses: actions/setup-node@v4

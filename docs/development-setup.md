@@ -2,11 +2,11 @@
 
 All commands use **PowerShell**. Planforge binds to `127.0.0.1` during
 development. Do not expose services to the LAN or internet until approved
-security phases are complete.
+security phases are complete. **Phone access is not enabled.**
 
 ## Prerequisites
 
-- Python 3.14 via `py` launcher (verified compatible with backend dependencies)
+- Python 3.14 via `py` launcher
 - Node.js 24 LTS (`node`, `npm`)
 - Git 2.53+
 - pre-commit 4.6+ (`py -m pre_commit`)
@@ -29,6 +29,18 @@ py -m venv .venv
 copy ..\.env.example ..\.env
 ```
 
+Reproducible installs from the lock file:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.lock
+```
+
+Regenerate the lock after dependency changes:
+
+```powershell
+..\scripts\lock-python-deps.ps1
+```
+
 Start the API (loopback only):
 
 ```powershell
@@ -44,6 +56,7 @@ Health check: `http://127.0.0.1:8000/api/health`
 .\.venv\Scripts\ruff.exe check .
 .\.venv\Scripts\mypy.exe planforge
 .\.venv\Scripts\pytest.exe
+.\.venv\Scripts\pip-audit.exe
 ```
 
 ## Frontend
@@ -63,25 +76,31 @@ npm run format:check
 npm run lint
 npm run typecheck
 npm run test
+npm run test:coverage
 npm run build
+npm audit --audit-level=high
 ```
 
 ### OpenAPI type generation
 
-Requires the backend running at `127.0.0.1:8000`:
+No running server required — uses the committed schema:
 
 ```powershell
+cd backend
+.\.venv\Scripts\python.exe scripts\export_openapi.py
+
+cd ..\frontend
 npm run generate:api-types
 ```
 
+## Backup (manual)
+
+```powershell
+.\scripts\backup-sqlite.ps1
+```
+
+See [backup.md](backup.md).
+
 ## Fabricated data only
 
-Until authentication and product features exist, use demo/fabricated data
-only. Do not enter real personal tasks or appointments into development
-databases that may appear in local backups.
-
-## Python version note
-
-Backend dependencies were verified on **Python 3.14.2** during infrastructure
-setup. If a future dependency drops 3.14 support, record the incompatibility
-in an ADR before changing the supported version.
+Use demo/fabricated data only in development databases and screenshots.

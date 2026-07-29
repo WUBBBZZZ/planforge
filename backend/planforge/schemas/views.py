@@ -25,6 +25,13 @@ class TodayItemResponse(BaseModel):
     is_overdue: bool
     routine_title: str | None = None
     is_completed: bool = False
+    occurrence_role: str | None = None
+    is_all_day: bool = False
+    span_start_date: date | None = None
+    span_end_date: date | None = None
+    span_segment: str | None = None
+    location: str | None = None
+    status: str | None = None
 
     @classmethod
     def from_item(cls, item: TodayItem) -> TodayItemResponse:
@@ -39,6 +46,15 @@ class TodayItemResponse(BaseModel):
             is_overdue=item.is_overdue,
             routine_title=item.routine_title,
             is_completed=item.is_completed,
+            occurrence_role=item.occurrence_role,
+            is_all_day=item.is_all_day,
+            span_start_date=(
+                item.span_start_date.to_date() if item.span_start_date else None
+            ),
+            span_end_date=item.span_end_date.to_date() if item.span_end_date else None,
+            span_segment=item.span_segment,
+            location=item.location,
+            status=item.status,
         )
 
 
@@ -64,6 +80,13 @@ class WeekItemResponse(BaseModel):
     is_overdue: bool
     routine_title: str | None = None
     is_completed: bool = False
+    occurrence_role: str | None = None
+    is_all_day: bool = False
+    span_start_date: date | None = None
+    span_end_date: date | None = None
+    span_segment: str | None = None
+    location: str | None = None
+    status: str | None = None
 
     @classmethod
     def from_item(cls, item: WeekItem) -> WeekItemResponse:
@@ -77,6 +100,15 @@ class WeekItemResponse(BaseModel):
             is_overdue=item.is_overdue,
             routine_title=item.routine_title,
             is_completed=item.is_completed,
+            occurrence_role=item.occurrence_role,
+            is_all_day=item.is_all_day,
+            span_start_date=(
+                item.span_start_date.to_date() if item.span_start_date else None
+            ),
+            span_end_date=item.span_end_date.to_date() if item.span_end_date else None,
+            span_segment=item.span_segment,
+            location=item.location,
+            status=item.status,
         )
 
 

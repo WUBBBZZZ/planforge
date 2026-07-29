@@ -4,6 +4,12 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from planforge.core.exceptions import (
+    AppointmentDeleteError,
+    AppointmentNotEditableError,
+    AppointmentNotFoundError,
+    MaintenanceLinkError,
+    MaintenanceNotEditableError,
+    MaintenanceNotFoundError,
     NotFoundError,
     PlanforgeError,
     StateError,
@@ -58,6 +64,48 @@ def register_exception_handlers(app: FastAPI) -> None:
         exc: TaskStateError,
     ) -> JSONResponse:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(AppointmentNotFoundError)
+    async def appointment_not_found_handler(
+        _request: Request,
+        exc: AppointmentNotFoundError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+
+    @app.exception_handler(AppointmentNotEditableError)
+    async def appointment_not_editable_handler(
+        _request: Request,
+        exc: AppointmentNotEditableError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(AppointmentDeleteError)
+    async def appointment_delete_error_handler(
+        _request: Request,
+        exc: AppointmentDeleteError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(MaintenanceLinkError)
+    async def maintenance_link_error_handler(
+        _request: Request,
+        exc: MaintenanceLinkError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(MaintenanceNotEditableError)
+    async def maintenance_not_editable_handler(
+        _request: Request,
+        exc: MaintenanceNotEditableError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(MaintenanceNotFoundError)
+    async def maintenance_not_found_handler(
+        _request: Request,
+        exc: MaintenanceNotFoundError,
+    ) -> JSONResponse:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
 
     @app.exception_handler(PlanforgeError)
     async def planforge_error_handler(

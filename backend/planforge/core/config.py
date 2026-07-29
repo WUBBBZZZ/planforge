@@ -22,7 +22,12 @@ class Settings(BaseSettings):
     database_url: str = Field(default="sqlite:///./data/planforge.db")
     secret_key: str = Field(default="replace-with-a-generated-secret")
     log_level: str = Field(default="INFO")
-    timezone: str = Field(default="UTC")
+    timezone: str = Field(
+        default="UTC",
+        description=(
+            "Bootstrap default for the database timezone setting on first run only."
+        ),
+    )
 
 
 @lru_cache

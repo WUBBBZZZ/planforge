@@ -8,9 +8,9 @@ from sqlalchemy.orm import Session
 
 from planforge.api.deps import get_db
 from planforge.core.owner import LOCAL_OWNER_ID
-from planforge.domain.clock import SystemClock
 from planforge.domain.enums import OccurrenceStatus, RoutineStatus
 from planforge.domain.local_date import LocalDate
+from planforge.domain.planner_clock import PlannerClock
 from planforge.models.occurrence import Occurrence
 from planforge.models.routine import Routine
 from planforge.services import routine_service
@@ -84,6 +84,19 @@ class OccurrenceResponse(BaseModel):
         )
 
 
+@router.post("/sync-occurrences", status_code=status.HTTP_204_NO_CONTENT)
+def sync_occurrences_endpoint(session: Session = Depends(get_db)) -> None:
+    """Generate pending routine occurrences within the configured horizon."""
+    policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
+    clock = PlannerClock(policies.timezone)
+    routine_service.ensure_occurrences(
+        session,
+        owner_id=LOCAL_OWNER_ID,
+        clock_today=clock.today(),
+        policies=policies,
+    )
+
+
 @router.get("", response_model=list[RoutineResponse])
 def list_routines_endpoint(session: Session = Depends(get_db)) -> list[RoutineResponse]:
     routines = routine_service.list_routines(session, owner_id=LOCAL_OWNER_ID)
@@ -95,8 +108,8 @@ def create_routine_endpoint(
     body: RoutineCreateRequest,
     session: Session = Depends(get_db),
 ) -> RoutineResponse:
-    clock = SystemClock()
     policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
+    clock = PlannerClock(policies.timezone)
     starts_on = (
         LocalDate.from_date(body.starts_on) if body.starts_on is not None else None
     )
@@ -127,8 +140,8 @@ def update_routine_endpoint(
     body: RoutineUpdateRequest,
     session: Session = Depends(get_db),
 ) -> RoutineResponse:
-    clock = SystemClock()
     policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
+    clock = PlannerClock(policies.timezone)
     starts_on_value: LocalDate | None | object = routine_service.UNSET
     if "starts_on" in body.model_fields_set:
         starts_on_value = (
@@ -174,8 +187,8 @@ def resume_routine_endpoint(
     routine_id: str,
     session: Session = Depends(get_db),
 ) -> RoutineResponse:
-    clock = SystemClock()
     policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
+    clock = PlannerClock(policies.timezone)
     routine = routine_service.resume_routine(
         session,
         routine_id=routine_id,

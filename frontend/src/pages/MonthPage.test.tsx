@@ -6,6 +6,7 @@ import { MonthPage } from "./MonthPage";
 
 describe("MonthPage", () => {
   it("renders the month grid", async () => {
+    vi.spyOn(tasksApi, "syncRoutineOccurrences").mockResolvedValue();
     vi.spyOn(tasksApi, "fetchMonthView").mockResolvedValue({
       month: "2026-07",
       month_start: "2026-07-01",

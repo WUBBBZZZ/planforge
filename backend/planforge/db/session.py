@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from sqlalchemy import create_engine as sa_create_engine
+from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -37,7 +38,20 @@ def create_engine(database_url: str) -> Engine:
     if database_url.startswith("sqlite"):
         connect_args["check_same_thread"] = False
 
-    return sa_create_engine(database_url, connect_args=connect_args)
+    engine = sa_create_engine(database_url, connect_args=connect_args)
+
+    if database_url.startswith("sqlite"):
+
+        @event.listens_for(engine, "connect")
+        def _set_sqlite_pragma(
+            dbapi_connection: object,
+            _connection_record: object,
+        ) -> None:
+            cursor = dbapi_connection.cursor()  # type: ignore[attr-defined]
+            cursor.execute("PRAGMA foreign_keys=ON")
+            cursor.close()
+
+    return engine
 
 
 def create_session_factory(engine: Engine) -> sessionmaker[Session]:

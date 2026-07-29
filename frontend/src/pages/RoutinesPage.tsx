@@ -9,6 +9,7 @@ import { LoadingIndicator } from "../components/LoadingIndicator";
 import { Select } from "../components/Select";
 import {
   createRoutine,
+  fetchTodayView,
   listRoutines,
   pauseRoutine,
   resumeRoutine,
@@ -32,13 +33,6 @@ function formatRoutineSchedule(routine: Routine): string {
   return `${interval} on ${days}`;
 }
 
-function todayIso(): string {
-  const now = new Date();
-  const month = `${now.getMonth() + 1}`.padStart(2, "0");
-  const day = `${now.getDate()}`.padStart(2, "0");
-  return `${now.getFullYear()}-${month}-${day}`;
-}
-
 export function RoutinesPage() {
   const [routines, setRoutines] = useState<Routine[] | null>(null);
   const [title, setTitle] = useState("");
@@ -46,7 +40,8 @@ export function RoutinesPage() {
   const [selectedDays, setSelectedDays] = useState<number[]>([4]);
   const [dayOfMonth, setDayOfMonth] = useState("1");
   const [intervalWeeks, setIntervalWeeks] = useState("1");
-  const [startsOn, setStartsOn] = useState(todayIso());
+  const [startsOn, setStartsOn] = useState("");
+  const [plannerToday, setPlannerToday] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,6 +51,23 @@ export function RoutinesPage() {
 
   useEffect(() => {
     applyTheme(getStoredThemePreference());
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchTodayView()
+      .then((view) => {
+        if (!cancelled) {
+          setStartsOn(view.reference_date);
+          setPlannerToday(view.reference_date);
+        }
+      })
+      .catch(() => {
+        // Leave starts_on empty when the planner reference date is unavailable.
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -84,7 +96,7 @@ export function RoutinesPage() {
     setSelectedDays([4]);
     setDayOfMonth("1");
     setIntervalWeeks("1");
-    setStartsOn(todayIso());
+    setStartsOn(plannerToday);
     setEditingId(null);
   };
 
@@ -99,18 +111,18 @@ export function RoutinesPage() {
   const loadRoutineForEdit = (routine: Routine) => {
     setEditingId(routine.id);
     setTitle(routine.title);
-    setScheduleType(routine.schedule_type);
+    setScheduleType(routine.schedule_type as "weekly" | "monthly");
     setSelectedDays(routine.days_of_week);
     setDayOfMonth(String(routine.day_of_month ?? 1));
     setIntervalWeeks(String(routine.interval_weeks));
-    setStartsOn(routine.starts_on ?? todayIso());
+    setStartsOn(routine.starts_on ?? plannerToday);
   };
 
   const buildPayload = () => {
     const payload = {
       title,
       schedule_type: scheduleType,
-      starts_on: startsOn || todayIso(),
+      starts_on: startsOn || plannerToday,
       interval_weeks: Number(intervalWeeks) || 1,
     };
     if (scheduleType === "weekly") {

@@ -12,7 +12,12 @@ import {
   leadingPaddingDays,
   setSearchParam,
 } from "../lib/dates";
-import { fetchMonthView, type MonthView, type PlannerItem } from "../lib/tasks";
+import {
+  fetchMonthView,
+  syncRoutineOccurrences,
+  type MonthView,
+  type PlannerItem,
+} from "../lib/tasks";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
 type MonthState =
@@ -38,6 +43,7 @@ export function MonthPage() {
 
   const reloadMonth = useCallback(async (month?: string) => {
     try {
+      await syncRoutineOccurrences();
       const view = await fetchMonthView(month);
       setMonthState({ kind: "ready", view });
     } catch (error) {
@@ -52,7 +58,8 @@ export function MonthPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchMonthView(monthParam)
+    syncRoutineOccurrences()
+      .then(() => fetchMonthView(monthParam))
       .then((view) => {
         if (!cancelled) {
           setMonthState({ kind: "ready", view });

@@ -87,3 +87,63 @@ def test_monthly_routine_schedules_calendar_day(db_session) -> None:
         end=LocalDate.from_iso("2026-09-30"),
     )
     assert [date.to_iso() for date in dates] == ["2026-08-01", "2026-09-01"]
+
+
+def test_biweekly_schedule_skips_off_weeks() -> None:
+    dates = iter_weekly_dates(
+        start=LocalDate.from_iso("2026-01-05"),
+        end=LocalDate.from_iso("2026-02-28"),
+        days_of_week=[0],
+        interval_weeks=2,
+        anchor=LocalDate.from_iso("2026-01-05"),
+    )
+    assert [date.to_iso() for date in dates] == [
+        "2026-01-05",
+        "2026-01-19",
+        "2026-02-02",
+        "2026-02-16",
+    ]
+
+
+def test_biweekly_multiple_weekdays() -> None:
+    dates = iter_weekly_dates(
+        start=LocalDate.from_iso("2026-07-01"),
+        end=LocalDate.from_iso("2026-07-31"),
+        days_of_week=[1, 3],
+        interval_weeks=2,
+        anchor=LocalDate.from_iso("2026-07-02"),
+    )
+    assert [date.to_iso() for date in dates] == [
+        "2026-07-02",
+        "2026-07-07",
+        "2026-07-16",
+        "2026-07-21",
+        "2026-07-30",
+    ]
+
+
+def test_monthly_day_31_clamps_in_shorter_months() -> None:
+    dates = iter_monthly_dates(
+        start=LocalDate.from_iso("2026-01-01"),
+        end=LocalDate.from_iso("2026-04-30"),
+        day_of_month=31,
+    )
+    assert [date.to_iso() for date in dates] == [
+        "2026-01-31",
+        "2026-02-28",
+        "2026-03-31",
+        "2026-04-30",
+    ]
+
+
+def test_monthly_day_29_on_leap_year() -> None:
+    dates = iter_monthly_dates(
+        start=LocalDate.from_iso("2024-01-01"),
+        end=LocalDate.from_iso("2024-03-31"),
+        day_of_month=29,
+    )
+    assert [date.to_iso() for date in dates] == [
+        "2024-01-29",
+        "2024-02-29",
+        "2024-03-29",
+    ]

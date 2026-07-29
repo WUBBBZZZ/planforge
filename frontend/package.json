@@ -12,6 +12,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "generate:api-types": "node scripts/generate-api-types.mjs"
   },
@@ -29,6 +30,8 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/coverage-v8": "^4.1.0",
+    "axe-core": "^4.11.1",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.26",
@@ -39,6 +42,7 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.1.1",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "vitest-axe": "^0.1.0"
   }
 }

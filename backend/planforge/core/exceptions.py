@@ -67,12 +67,28 @@ class AppointmentStateError(StateError):
     """Invalid appointment state transition."""
 
 
+class AppointmentNotEditableError(PlanforgeError):
+    """Appointment cannot be edited in its current state."""
+
+
+class AppointmentDeleteError(PlanforgeError):
+    """Appointment cannot be deleted while audit history exists."""
+
+
 class MaintenanceNotFoundError(NotFoundError):
     """Maintenance definition does not exist."""
 
 
 class MaintenanceStateError(StateError):
     """Invalid maintenance state transition."""
+
+
+class MaintenanceNotEditableError(PlanforgeError):
+    """Maintenance cannot be edited in its current state."""
+
+
+class MaintenanceLinkError(PlanforgeError):
+    """Invalid maintenance appointment link."""
 
 
 class WeeklyTargetNotFoundError(NotFoundError):

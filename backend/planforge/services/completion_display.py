@@ -28,6 +28,12 @@ class CompletedViewItem:
     is_overdue: bool
     routine_title: str | None = None
     is_completed: bool = True
+    is_all_day: bool = False
+    span_start_date: LocalDate | None = None
+    span_end_date: LocalDate | None = None
+    span_segment: str | None = None
+    location: str | None = None
+    status: str | None = None
 
 
 def local_day_utc_bounds(
@@ -40,6 +46,18 @@ def local_day_utc_bounds(
     start = datetime.combine(day.to_date(), time.min, tzinfo=tz)
     end = start + timedelta(days=1)
     return start.astimezone(UTC), end.astimezone(UTC)
+
+
+def week_local_utc_bounds(
+    week_start: LocalDate,
+    week_end: LocalDate,
+    *,
+    timezone_name: str,
+) -> tuple[datetime, datetime]:
+    """Return UTC bounds for a local calendar week."""
+    start_utc, _ = local_day_utc_bounds(week_start, timezone_name=timezone_name)
+    _, end_utc = local_day_utc_bounds(week_end, timezone_name=timezone_name)
+    return start_utc, end_utc
 
 
 def list_completed_records_for_local_day(
@@ -94,16 +112,33 @@ def _occurrence_item(occurrence: Occurrence, routine: Routine) -> CompletedViewI
     )
 
 
-def _appointment_item(appointment: Appointment) -> CompletedViewItem:
+def _appointment_item(
+    appointment: Appointment,
+    *,
+    timezone_name: str,
+) -> CompletedViewItem:
+    from planforge.domain.appointment_scheduling import appointment_times_iso
+    from planforge.domain.local_date import LocalDate
+
+    starts_at, ends_at = appointment_times_iso(
+        is_all_day=appointment.is_all_day,
+        starts_at=appointment.starts_at,
+        ends_at=appointment.ends_at,
+    )
     return CompletedViewItem(
         kind=ViewItemKind.APPOINTMENT,
         item_id=appointment.id,
         title=appointment.title,
         notes=appointment.notes,
-        due_date=None,
-        starts_at=appointment.starts_at.astimezone(UTC).isoformat(),
-        ends_at=appointment.ends_at.astimezone(UTC).isoformat(),
+        due_date=LocalDate.from_date(appointment.start_date),
+        starts_at=starts_at,
+        ends_at=ends_at,
         is_overdue=False,
+        is_all_day=appointment.is_all_day,
+        span_start_date=LocalDate.from_date(appointment.start_date),
+        span_end_date=LocalDate.from_date(appointment.end_date),
+        location=appointment.location,
+        status=appointment.status,
     )
 
 
@@ -173,7 +208,7 @@ def completed_items_for_local_day(
             appointment = session.get(Appointment, record.entity_id)
             if appointment is None or appointment.owner_id != owner_id:
                 continue
-            items.append(_appointment_item(appointment))
+            items.append(_appointment_item(appointment, timezone_name=timezone_name))
             continue
 
         if record.entity_type == "maintenance":

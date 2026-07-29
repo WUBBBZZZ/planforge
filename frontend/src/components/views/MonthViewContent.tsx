@@ -42,11 +42,28 @@ function MonthDayCell({
         ) : (
           <ul className="pf-month-day__items">
             {visibleItems.map((item) => (
-              <li key={`${item.kind}-${item.item_id}`} className="pf-month-day__item">
-                <span className="pf-month-day__item-kind">
-                  {itemKindLabel(item.kind)}
-                </span>
-                <span>{item.title}</span>
+              <li
+                key={`${item.kind}-${item.item_id}-${item.span_segment ?? "single"}`}
+                className={`pf-month-day__item${
+                  item.span_segment && item.span_segment !== "single"
+                    ? ` pf-month-day__item--span-${item.span_segment}`
+                    : ""
+                }`}
+              >
+                {item.span_segment === "middle" ||
+                item.span_segment === "end" ? null : (
+                  <span className="pf-month-day__item-kind">
+                    {itemKindLabel(item.kind)}
+                  </span>
+                )}
+                {item.span_segment === "middle" ? (
+                  <span className="pf-month-day__span-bar" aria-hidden="true" />
+                ) : (
+                  <span>{item.title}</span>
+                )}
+                {item.is_all_day && item.span_segment !== "middle" ? (
+                  <span className="pf-month-day__all-day">All day</span>
+                ) : null}
               </li>
             ))}
             {hiddenCount > 0 ? (

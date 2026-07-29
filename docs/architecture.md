@@ -7,40 +7,94 @@ monorepo:
 
 | Component | Stack | Status |
 |-----------|-------|--------|
-| `backend/` | FastAPI, SQLAlchemy, Alembic, SQLite | Infrastructure skeleton |
-| `frontend/` | React, TypeScript, Vite | Infrastructure skeleton |
-| `docs/` | ADRs, setup, security | Active |
+| `backend/` | FastAPI, SQLAlchemy, Alembic, SQLite | **Implemented** |
+| `frontend/` | React, TypeScript, Vite | **Implemented** |
+| `docs/` | ADRs, setup, security, backup | **Active** |
+
+```mermaid
+flowchart TB
+  subgraph frontend
+    Pages[Pages: Today Week Month Schedule Maintenance]
+    APIClient[Typed API client]
+    Pages --> APIClient
+  end
+
+  subgraph backend
+    Routers[API routers]
+    Services[Services]
+    Domain[Domain: LocalDate recurrence intervals]
+    Models[SQLAlchemy models]
+    Routers --> Services
+    Services --> Domain
+    Services --> Models
+  end
+
+  DB[(SQLite)]
+
+  APIClient -->|HTTP /api| Routers
+  Models --> DB
+```
 
 ## Principles
 
-- **End-user program:** planner behavior is configured through the UI, not
-  source code or environment variables.
+- **End-user program:** planner behavior is configured through the UI, not source
+  code or environment variables.
 - **Local-first:** each installation is independent; no shared cloud service.
 - **Security by default:** loopback binding until authentication; no public
   exposure; secrets only in untracked `.env`.
-- **SQLite default:** fully supported for personal self-hosting; portable ORM
-  patterns for optional PostgreSQL later.
+- **SQLite default:** fully supported for personal self-hosting.
 - **Vertical slices:** features ship end-to-end (domain → persistence → API → UI).
 - **Single-user first, multi-user-ready:** UUID keys and ownership columns from
   the start.
 
-## Current API surface
+## API surface
 
-- `GET /api/health` — returns `{"status": "ok"}`
+| Router | Prefix | Purpose |
+|--------|--------|---------|
+| health | `/api/health` | Liveness |
+| tasks | `/api/tasks` | Task CRUD and lifecycle |
+| backlog | `/api/backlog` | Someday capture |
+| routines | `/api/routines` | Recurring obligations |
+| appointments | `/api/appointments` | Scheduled events |
+| maintenance | `/api/maintenance` | Long-term upkeep |
+| weekly-targets | `/api/weekly-targets` | Weekly habits |
+| settings | `/api/settings` | Planner policies |
+| views | `/api/views` | Today, Week, Month |
 
-OpenAPI schema: `http://127.0.0.1:8000/openapi.json` when the backend is running.
+OpenAPI schema: committed at `frontend/openapi/openapi.json`. Regenerate with
+`backend/scripts/export_openapi.py`.
 
-## Frontend installability
+## Recurrence design
 
-The frontend includes a web app manifest and generic icons for installability
-metadata. **No service worker or offline caching** — deferred to a security gate.
+- **Weekly routines** use weekday + `interval_weeks` with an anchor date.
+- **Monthly routines** target a calendar day; short months clamp (day 31 → last
+  day of month).
+- **Occurrence horizon** is policy-driven; occurrences are not backfilled before
+  routine start.
+- **Maintenance intervals** use `days` / `weeks` / `months` / `years` / `manual`
+  with calendar month arithmetic for month/year units.
+
+## Data model highlights
+
+- **Tasks** — due dates, completion, backlog promotion.
+- **Routines + occurrences** — generated pending rows within horizon.
+- **Appointments** — timed or all-day; optional link to maintenance.
+- **Maintenance** — definitions, completion history, scheduling reminders,
+  optional linked appointment (unique FK).
+
+## Frontend
+
+- Path-based routing in `App.tsx` (no client-side router dependency).
+- Vite dev server proxies `/api` to the backend on loopback.
+- OpenAPI-generated types wired through `src/api/client.ts`.
 
 ## Decision records
 
 See [`decisions/`](decisions/) for numbered ADRs.
 
-## Roadmap alignment
+## Related docs
 
-Implemented infrastructure corresponds to Phases 1–2 and partial backend/frontend
-skeleton phases. Product requirements, planner logic, authentication, offline
-behavior, deployment, and Tailscale access follow later approved phases.
+- [Feature status](feature-status.md)
+- [Roadmap](roadmap.md)
+- [Backup](backup.md)
+- [Security](security.md)

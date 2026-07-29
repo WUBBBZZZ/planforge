@@ -11,6 +11,7 @@ describe("WeekPage", () => {
   });
 
   it("shows loading then empty state", async () => {
+    vi.spyOn(tasksApi, "syncRoutineOccurrences").mockResolvedValue();
     vi.spyOn(tasksApi, "fetchWeekView").mockResolvedValue({
       week_start: "2026-07-20",
       week_end: "2026-07-26",
@@ -31,6 +32,7 @@ describe("WeekPage", () => {
   });
 
   it("loads the next week when Next is clicked", async () => {
+    vi.spyOn(tasksApi, "syncRoutineOccurrences").mockResolvedValue();
     const fetchWeekView = vi
       .spyOn(tasksApi, "fetchWeekView")
       .mockResolvedValueOnce({

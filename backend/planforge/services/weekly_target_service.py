@@ -1,14 +1,15 @@
 """Weekly target business logic."""
 
-from datetime import UTC, datetime, time
+from datetime import UTC, datetime
 
 from planforge.core.exceptions import ValidationError, WeeklyTargetNotFoundError
 from planforge.domain.enums import CompletionAction, WeeklyTargetStatus
 from planforge.domain.local_date import LocalDate
 from planforge.models.completion_record import CompletionRecord
 from planforge.models.weekly_target import WeeklyTarget
+from planforge.services.completion_display import week_local_utc_bounds
 from planforge.services.week_bounds import week_bounds
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 
@@ -101,8 +102,15 @@ def delete_weekly_target(
     target_id: str,
     owner_id: str,
 ) -> None:
-    """Remove a weekly target."""
+    """Remove a weekly target and its progress records."""
     target = _get_target_or_raise(session, target_id=target_id, owner_id=owner_id)
+    session.execute(
+        delete(CompletionRecord).where(
+            CompletionRecord.owner_id == owner_id,
+            CompletionRecord.entity_type == "weekly_target",
+            CompletionRecord.entity_id == target.id,
+        )
+    )
     session.delete(target)
     session.flush()
 
@@ -135,14 +143,18 @@ def target_progress_for_week(
     target: WeeklyTarget,
     week_start: LocalDate,
     week_start_day: str,
+    timezone_name: str,
 ) -> tuple[int, int]:
     """Return completed count and target count for the given week."""
     _, week_end = week_bounds(
         reference_date=week_start,
         week_start_day=week_start_day,
     )
-    start_dt = datetime.combine(week_start.to_date(), time.min, UTC)
-    end_dt = datetime.combine(week_end.add_days(1).to_date(), time.min, UTC)
+    start_dt, end_dt = week_local_utc_bounds(
+        week_start,
+        week_end,
+        timezone_name=timezone_name,
+    )
     completed = session.scalar(
         select(func.count())
         .select_from(CompletionRecord)

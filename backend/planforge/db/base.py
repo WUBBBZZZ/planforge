@@ -3,8 +3,10 @@
 from datetime import UTC, datetime
 from uuid import uuid4
 
-from sqlalchemy import DateTime, MetaData, String, func
+from sqlalchemy import MetaData, String, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from planforge.db.types import UTCDateTime
 
 NAMING_CONVENTION: dict[str, str] = {
     "ix": "ix_%(column_0_label)s",
@@ -35,12 +37,12 @@ class TimestampMixin:
     """Created/updated timestamps stored in UTC."""
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
+        UTCDateTime(),
         server_default=func.now(),
         nullable=False,
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
+        UTCDateTime(),
         server_default=func.now(),
         onupdate=lambda: datetime.now(UTC),
         nullable=False,

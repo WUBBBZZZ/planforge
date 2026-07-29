@@ -1,7 +1,6 @@
 """Month view assembly."""
 
 from dataclasses import dataclass
-from datetime import UTC
 
 from planforge.domain.enums import (
     AppointmentStatus,
@@ -10,14 +9,23 @@ from planforge.domain.enums import (
     ViewItemKind,
 )
 from planforge.domain.local_date import LocalDate
+from planforge.domain.recurring_display import DEFAULT_RECURRING_DISPLAY_POLICY
 from planforge.models.appointment import Appointment
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
 from planforge.services import routine_service
 from planforge.services.completion_display import completed_items_for_local_day
+from planforge.services.display_date import rolled_display_date
 from planforge.services.month_bounds import month_bounds
+from planforge.services.recurring_occurrence_display import (
+    select_visible_routine_occurrences,
+)
 from planforge.services.settings_service import PolicySnapshot
-from planforge.services.week_view import WeekDayGroup, WeekItem, _appointment_local_date
+from planforge.services.week_view import (
+    WeekDayGroup,
+    WeekItem,
+    week_items_for_appointment,
+)
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -102,31 +110,37 @@ def assemble_month_view(
                 )
             )
 
-    routine_service.ensure_occurrences(
-        session,
-        owner_id=owner_id,
-        clock_today=clock_today,
-        policies=policies,
+    recurring_policy = DEFAULT_RECURRING_DISPLAY_POLICY
+    horizon_start, horizon_end = recurring_policy.horizon_bounds(
+        today=clock_today,
+        week_start_day=policies.week_start_day,
     )
-    for occurrence, routine in routine_service.list_pending_occurrences(
-        session,
-        owner_id=owner_id,
+    for visible in select_visible_routine_occurrences(
+        routine_service.list_pending_occurrences(session, owner_id=owner_id),
+        today=clock_today,
+        horizon_start=horizon_start,
+        horizon_end=horizon_end,
+        policy=recurring_policy,
+        missed_behavior=policies.routine_missed_behavior,
     ):
-        scheduled = LocalDate.from_date(occurrence.scheduled_date)
-        due_date = scheduled.to_date()
+        scheduled = visible.scheduled
+        display = rolled_display_date(due=scheduled, today=clock_today)
+        due_date = display.to_date()
+        item = WeekItem(
+            kind=ViewItemKind.OCCURRENCE,
+            item_id=visible.occurrence.id,
+            title=visible.routine.title,
+            due_date=scheduled,
+            starts_at=None,
+            ends_at=None,
+            is_overdue=visible.is_overdue,
+            routine_title=visible.routine.title,
+            occurrence_role=visible.role.value,
+        )
         if start_date <= due_date <= end_date:
-            day_map[scheduled].append(
-                WeekItem(
-                    kind=ViewItemKind.OCCURRENCE,
-                    item_id=occurrence.id,
-                    title=routine.title,
-                    due_date=scheduled,
-                    starts_at=None,
-                    ends_at=None,
-                    is_overdue=False,
-                    routine_title=routine.title,
-                )
-            )
+            day_map[display].append(item)
+        elif due_date > end_date:
+            upcoming.append(item)
 
     appointments = list(
         session.scalars(
@@ -137,23 +151,13 @@ def assemble_month_view(
         )
     )
     for appointment in appointments:
-        local_date = _appointment_local_date(
+        for day, item in week_items_for_appointment(
             appointment,
             timezone_name=policies.timezone,
-        )
-        due_date = local_date.to_date()
-        if start_date <= due_date <= end_date:
-            day_map[local_date].append(
-                WeekItem(
-                    kind=ViewItemKind.APPOINTMENT,
-                    item_id=appointment.id,
-                    title=appointment.title,
-                    due_date=local_date,
-                    starts_at=appointment.starts_at.astimezone(UTC).isoformat(),
-                    ends_at=appointment.ends_at.astimezone(UTC).isoformat(),
-                    is_overdue=False,
-                )
-            )
+            window_start=month_start,
+            window_end=month_end,
+        ):
+            day_map[day].append(item)
 
     maintenance_items = list(
         session.scalars(
@@ -230,6 +234,12 @@ def assemble_month_view(
                         is_overdue=False,
                         routine_title=completed.routine_title,
                         is_completed=True,
+                        is_all_day=completed.is_all_day,
+                        span_start_date=completed.span_start_date,
+                        span_end_date=completed.span_end_date,
+                        span_segment=completed.span_segment,
+                        location=completed.location,
+                        status=completed.status,
                     )
                 )
         for day_items in day_map.values():

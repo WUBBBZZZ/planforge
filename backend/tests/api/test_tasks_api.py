@@ -109,8 +109,7 @@ async def test_move_task_to_backlog_returns_backlog_item(test_app) -> None:
     assert payload["backlog_item"]["source_entity_id"] == task_id
     assert duplicate_response.status_code == 200
     assert (
-        duplicate_response.json()["backlog_item"]["id"]
-        == payload["backlog_item"]["id"]
+        duplicate_response.json()["backlog_item"]["id"] == payload["backlog_item"]["id"]
     )
 
 

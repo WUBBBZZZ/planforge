@@ -28,8 +28,11 @@ function CaptureForm({ defaultDueDate, onClose, onCreated }: CaptureFormProps) {
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [dueDate, setDueDate] = useState(defaultDueDate ?? "");
-  const [startsAt, setStartsAt] = useState("");
-  const [endsAt, setEndsAt] = useState("");
+  const [isAllDay, setIsAllDay] = useState(false);
+  const [startDate, setStartDate] = useState(defaultDueDate ?? "");
+  const [endDate, setEndDate] = useState(defaultDueDate ?? "");
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("10:00");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -51,14 +54,20 @@ function CaptureForm({ defaultDueDate, onClose, onCreated }: CaptureFormProps) {
           notes: notes.trim() ? notes : null,
         });
       } else {
-        if (!startsAt || !endsAt) {
-          throw new Error("Start and end times are required for appointments");
+        if (!startDate || !endDate) {
+          throw new Error("Start and end dates are required for appointments");
+        }
+        if (!isAllDay && (!startTime || !endTime)) {
+          throw new Error("Start and end times are required for timed appointments");
         }
         await createAppointment({
           title,
           notes: notes.trim() ? notes : null,
-          starts_at: new Date(startsAt).toISOString(),
-          ends_at: new Date(endsAt).toISOString(),
+          is_all_day: isAllDay,
+          start_date: startDate,
+          end_date: endDate,
+          start_time: isAllDay ? null : `${startTime}:00`,
+          end_time: isAllDay ? null : `${endTime}:00`,
         });
       }
       onCreated();
@@ -117,22 +126,58 @@ function CaptureForm({ defaultDueDate, onClose, onCreated }: CaptureFormProps) {
 
       {destination === "appointment" ? (
         <>
-          <FormField label="Starts at">
+          <FormField label="All day">
+            <label className="pf-checkbox-row">
+              <input
+                type="checkbox"
+                checked={isAllDay}
+                onChange={(event) => setIsAllDay(event.target.checked)}
+              />
+              <span>All-day or multi-day event</span>
+            </label>
+          </FormField>
+          <FormField label="Start date">
             <Input
-              type="datetime-local"
-              value={startsAt}
-              onChange={(event) => setStartsAt(event.target.value)}
+              type="date"
+              value={startDate}
+              onChange={(event) => {
+                setStartDate(event.target.value);
+                if (!endDate || endDate < event.target.value) {
+                  setEndDate(event.target.value);
+                }
+              }}
               required
             />
           </FormField>
-          <FormField label="Ends at">
+          <FormField label="End date">
             <Input
-              type="datetime-local"
-              value={endsAt}
-              onChange={(event) => setEndsAt(event.target.value)}
+              type="date"
+              value={endDate}
+              min={startDate}
+              onChange={(event) => setEndDate(event.target.value)}
               required
             />
           </FormField>
+          {!isAllDay ? (
+            <>
+              <FormField label="Start time">
+                <Input
+                  type="time"
+                  value={startTime}
+                  onChange={(event) => setStartTime(event.target.value)}
+                  required
+                />
+              </FormField>
+              <FormField label="End time">
+                <Input
+                  type="time"
+                  value={endTime}
+                  onChange={(event) => setEndTime(event.target.value)}
+                  required
+                />
+              </FormField>
+            </>
+          ) : null}
         </>
       ) : null}
 

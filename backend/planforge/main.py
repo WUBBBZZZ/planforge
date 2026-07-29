@@ -21,7 +21,12 @@ from planforge.core.logging import configure_logging
 from planforge.core.owner import LOCAL_OWNER_ID
 from planforge.db.migrations import upgrade_database
 from planforge.db.session import create_engine, create_session_factory
-from planforge.services.settings_service import ensure_default_settings
+from planforge.domain.planner_clock import PlannerClock
+from planforge.services import routine_service
+from planforge.services.settings_service import (
+    ensure_default_settings,
+    get_policy_snapshot,
+)
 
 
 @asynccontextmanager
@@ -38,7 +43,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     bootstrap = session_factory()
     try:
-        ensure_default_settings(bootstrap, owner_id=LOCAL_OWNER_ID)
+        ensure_default_settings(
+            bootstrap,
+            owner_id=LOCAL_OWNER_ID,
+            bootstrap_timezone=settings.timezone,
+        )
+        policies = get_policy_snapshot(bootstrap, owner_id=LOCAL_OWNER_ID)
+        clock = PlannerClock(policies.timezone)
+        routine_service.ensure_occurrences(
+            bootstrap,
+            owner_id=LOCAL_OWNER_ID,
+            clock_today=clock.today(),
+            policies=policies,
+        )
         bootstrap.commit()
     finally:
         bootstrap.close()

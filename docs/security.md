@@ -49,11 +49,17 @@ metadata only.
 
 ## Network exposure
 
-- Development: loopback only
+- Development: loopback only (`127.0.0.1`)
+- **Phone access: not enabled** in the current phase
 - Deployment: application and database ports must not be reachable from LAN or
   public internet
-- Phone access (future): only via approved **Tailscale Serve** on the private
+- Future phone access: only via approved **Tailscale Serve** on the private
   tailnet — **Funnel and router port forwarding are prohibited**
+
+## Database backup
+
+Manual verified backups are documented in [backup.md](backup.md). Arbitrary
+file import is not implemented.
 
 ## If a secret is committed
 

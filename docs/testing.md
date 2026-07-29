@@ -9,38 +9,63 @@ cd backend
 .\.venv\Scripts\pytest.exe
 ```
 
-Current mechanical tests cover:
+Coverage is enforced at **80%** (`--cov-fail-under=80` in `pyproject.toml`).
 
-- Application factory construction
-- Default loopback configuration
-- Environment overrides with fabricated values
-- `/api/health` response
+### Suites
 
-Behavioral planner tests will be written against specs from the requirements
-phase; core logic is implemented by the project owner.
+| Area | Location | Coverage |
+|------|----------|----------|
+| Domain (dates, intervals, scheduling) | `tests/domain/` | Calendar rules, DST |
+| Services | `tests/services/` | Business logic |
+| API | `tests/api/` | All routers |
+| E2E workflows | `tests/test_e2e_workflows.py` | Cross-entity flows |
+| Migrations | `tests/test_migrations.py` | Fresh DB + upgrade from 0007 |
+| Integration | `tests/test_appointment_maintenance_integration.py` | Linked appointments |
+| Recurrence edges | `tests/test_recurrence_edge_cases.py` | Month-end, biweekly |
+| Backup | `tests/test_backup_verification.py` | SQLite backup API |
+| Router smoke | `tests/test_api_router_smoke.py` | Every router responds |
 
 ## Frontend (Vitest + Testing Library)
 
-Location: `frontend/src/**/*.test.tsx`
+Location: `frontend/src/**/*.test.ts(x)`
 
 ```powershell
 cd frontend
 npm run test
+npm run test:coverage
 ```
 
-Current mechanical tests cover shared primitives (Button, EmptyState).
+### Suites
+
+| Area | Location |
+|------|----------|
+| Components | `src/components/*.test.tsx` |
+| Pages | `src/pages/*.test.tsx` |
+| API client errors | `src/lib/apiClient.test.ts` |
+| Accessibility | `src/test/accessibility.test.tsx` |
+
+Coverage thresholds are configured in `vite.config.ts` (realistic baselines for
+the current UI surface).
 
 ## CI
 
-GitHub Actions runs the same checks on every push and pull request. Reproduce
-failures locally using the commands in [tooling.md](tooling.md).
+GitHub Actions runs the same checks on every push and pull request. See
+[tooling.md](tooling.md) for the job matrix.
 
 ## Fabricated data
 
-Tests, fixtures, and examples use obviously fake content only (e.g. "Alex
-Example", "Water the plants"). Never use real personal data in the repository.
+Tests, fixtures, and examples use obviously fake content only (e.g. "Dentist
+demo", "Water demo plants"). Never use real personal data in the repository.
 
-## Definition of done
+## Regenerating OpenAPI types
 
-See the roadmap: features need acceptance criteria, accessibility, passing
-checks, and security review when applicable.
+```powershell
+cd backend
+.\.venv\Scripts\python.exe scripts\export_openapi.py
+
+cd ..\frontend
+npm run generate:api-types
+```
+
+Commit both `frontend/openapi/openapi.json` and `frontend/src/api/schema.d.ts`
+when API shapes change.

@@ -3,14 +3,10 @@ import { useEffect, useState } from "react";
 import { AppShell } from "../components/AppShell";
 import { Button } from "../components/Button";
 import { FormField } from "../components/FormField";
+import { Input } from "../components/Input";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { Select } from "../components/Select";
-import {
-  createMaintenance,
-  createWeeklyTarget,
-  fetchSettings,
-  updateSetting,
-} from "../lib/tasks";
+import { createWeeklyTarget, fetchSettings, updateSetting } from "../lib/tasks";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
 const POLICY_FIELDS = [
@@ -106,15 +102,6 @@ export function SettingsPage() {
     }, "Settings updated.");
   };
 
-  const seedMaintenance = async () => {
-    await runAction(async () => {
-      await createMaintenance({
-        title: "Replace demo filter",
-        interval_days: 90,
-      });
-    }, "Demo maintenance item created.");
-  };
-
   const seedWeeklyTarget = async () => {
     await runAction(async () => {
       await createWeeklyTarget({
@@ -136,6 +123,17 @@ export function SettingsPage() {
       ) : null}
       {settings ? (
         <div className="pf-settings">
+          <FormField label="Planner timezone (IANA)">
+            <Input
+              value={settings.timezone ?? "UTC"}
+              onChange={(event) => {
+                setSettings({ ...settings, timezone: event.target.value });
+              }}
+              onBlur={(event) =>
+                void handlePolicyChange("timezone", event.target.value)
+              }
+            />
+          </FormField>
           {POLICY_FIELDS.map((field) => (
             <FormField key={field.key} label={field.label}>
               <Select
@@ -148,9 +146,6 @@ export function SettingsPage() {
             </FormField>
           ))}
           <div className="pf-settings__actions">
-            <Button variant="secondary" onClick={() => void seedMaintenance()}>
-              Add demo maintenance
-            </Button>
             <Button variant="secondary" onClick={() => void seedWeeklyTarget()}>
               Add demo weekly target
             </Button>

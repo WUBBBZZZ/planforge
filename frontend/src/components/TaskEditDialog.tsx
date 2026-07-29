@@ -22,12 +22,7 @@ interface TaskEditFormProps {
   onMoveToBacklog?: () => void;
 }
 
-function TaskEditForm({
-  task,
-  onClose,
-  onSaved,
-  onMoveToBacklog,
-}: TaskEditFormProps) {
+function TaskEditForm({ task, onClose, onSaved, onMoveToBacklog }: TaskEditFormProps) {
   const [title, setTitle] = useState(task.title);
   const [notes, setNotes] = useState(task.notes ?? "");
   const [dueDate, setDueDate] = useState(task.due_date ?? "");

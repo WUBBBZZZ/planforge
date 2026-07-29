@@ -1,16 +1,25 @@
+import {
+  parseApiJson,
+  type AppointmentResponse,
+  type BacklogItemResponse,
+  type MaintenanceCompletionResponse,
+  type MaintenanceDetailResponse,
+  type MaintenanceResponse,
+  type MonthViewResponse,
+  type RoutineResponse,
+  type TaskResponse,
+  type TodayViewResponse,
+  type WeekViewResponse,
+  type WeeklyTargetResponse,
+} from "../api/client";
+
+export { ApiError } from "../api/client";
+
 export type ViewItemKind = "task" | "occurrence" | "appointment" | "maintenance";
 
-export type TaskStatus = "pending" | "completed" | "cancelled" | "moved_to_backlog";
+export type TaskStatus = TaskResponse["status"];
 
-export interface Task {
-  id: string;
-  title: string;
-  notes: string | null;
-  due_date: string | null;
-  status: TaskStatus;
-  created_at: string;
-  updated_at: string;
-}
+export type Task = TaskResponse;
 
 export interface TaskCreateBody {
   title: string;
@@ -29,7 +38,7 @@ export interface MoveTaskToBacklogResult {
   backlog_item: BacklogItem;
 }
 
-export interface PlannerItem {
+export type PlannerItem = {
   kind: ViewItemKind;
   item_id: string;
   title: string;
@@ -40,117 +49,94 @@ export interface PlannerItem {
   is_overdue: boolean;
   is_completed?: boolean;
   routine_title?: string | null;
-}
+  occurrence_role?: string | null;
+  is_all_day?: boolean;
+  span_start_date?: string | null;
+  span_end_date?: string | null;
+  span_segment?: string | null;
+  location?: string | null;
+  status?: string | null;
+};
 
-export interface TodayView {
-  reference_date: string;
-  items: PlannerItem[];
-}
+export type TodayView = TodayViewResponse;
+export type WeekView = WeekViewResponse;
+export type MonthView = MonthViewResponse;
 
-export interface WeekDayGroup {
-  date: string | null;
-  items: PlannerItem[];
-  label?: string | null;
-}
+export type BacklogItem = BacklogItemResponse;
+export type Routine = RoutineResponse;
+export type Appointment = AppointmentResponse;
 
-export interface WeekTargetSummary {
-  target_id: string;
+export type AppointmentListFilter =
+  "upcoming" | "today" | "past" | "cancelled" | "archived" | "scheduled" | "completed";
+
+export interface AppointmentCreateBody {
   title: string;
-  completed_count: number;
-  target_count: number;
+  notes?: string | null;
+  location?: string | null;
+  category?: string | null;
+  reminder_minutes?: number | null;
+  maintenance_definition_id?: string | null;
+  is_all_day: boolean;
+  start_date: string;
+  end_date: string;
+  start_time?: string | null;
+  end_time?: string | null;
 }
 
-export interface WeekView {
-  week_start: string;
-  week_end: string;
-  days: WeekDayGroup[];
-  targets: WeekTargetSummary[];
+export interface AppointmentUpdateBody {
+  title?: string;
+  notes?: string | null;
+  location?: string | null;
+  category?: string | null;
+  reminder_minutes?: number | null;
+  maintenance_definition_id?: string | null;
 }
 
-export interface MonthView {
-  month: string;
-  month_start: string;
-  month_end: string;
-  week_start_day: string;
-  days: WeekDayGroup[];
+export interface AppointmentRescheduleBody {
+  is_all_day: boolean;
+  start_date: string;
+  end_date: string;
+  start_time?: string | null;
+  end_time?: string | null;
 }
 
-export interface BacklogItem {
-  id: string;
-  title: string;
-  notes: string | null;
-  status: "active" | "promoted" | "archived";
-  promoted_entity_type: string | null;
-  promoted_entity_id: string | null;
-  source_entity_type: string | null;
-  source_entity_id: string | null;
+export type MaintenanceItem = MaintenanceResponse;
+export type MaintenanceCompletion = MaintenanceCompletionResponse;
+export type MaintenanceDetail = MaintenanceDetailResponse;
+
+export type MaintenanceListFilter =
+  | "overdue"
+  | "due_soon"
+  | "needs_scheduling"
+  | "scheduled_upcoming"
+  | "active"
+  | "archived";
+
+export interface MaintenanceHistoryRow {
+  maintenance: MaintenanceItem;
+  current_next_label: string;
+  completions: MaintenanceCompletion[];
+  linked_appointment: Appointment | null;
 }
 
-export interface Routine {
-  id: string;
-  title: string;
-  notes: string | null;
-  schedule_type: "weekly" | "monthly";
-  days_of_week: number[];
-  day_of_month: number | null;
-  interval_weeks: number;
-  starts_on: string | null;
-  status: "active" | "paused" | "archived";
+export interface MaintenanceHistoryBoardData {
+  rows: MaintenanceHistoryRow[];
+  history_limit: number;
 }
 
-export interface Appointment {
-  id: string;
-  title: string;
-  notes: string | null;
-  starts_at: string;
-  ends_at: string;
-  status: "scheduled" | "completed" | "cancelled";
-}
-
-export interface MaintenanceItem {
-  id: string;
-  title: string;
-  notes: string | null;
-  interval_days: number;
-  next_due_date: string | null;
-  status: "active" | "paused" | "archived";
-}
-
-export interface WeeklyTarget {
-  id: string;
-  title: string;
-  target_count: number;
-  status: "active" | "met" | "unmet";
-}
-
-async function parseJson<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    let message = `Request failed with status ${response.status}`;
-    try {
-      const payload = (await response.json()) as { detail?: string };
-      if (payload.detail) {
-        message = payload.detail;
-      }
-    } catch {
-      // Keep default message when body is not JSON.
-    }
-    throw new Error(message);
-  }
-
-  return (await response.json()) as T;
-}
+export type WeeklyTarget = WeeklyTargetResponse;
 
 export async function syncRoutineOccurrences(): Promise<void> {
   const response = await fetch("/api/routines/sync-occurrences", { method: "POST" });
   if (!response.ok) {
-    await parseJson(response);
+    await parseApiJson(response);
   }
 }
 
 export async function listTasks(status?: TaskStatus): Promise<Task[]> {
   const url = status ? `/api/tasks?status=${status}` : "/api/tasks";
   const response = await fetch(url);
-  return parseJson<Task[]>(response);
+  return parseApiJson<Task[]>(response);
 }
 
 export async function createTask(body: TaskCreateBody): Promise<Task> {
@@ -159,17 +145,17 @@ export async function createTask(body: TaskCreateBody): Promise<Task> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<Task>(response);
+  return parseApiJson<Task>(response);
 }
 
 export async function completeTask(id: string): Promise<Task> {
   const response = await fetch(`/api/tasks/${id}/complete`, { method: "POST" });
-  return parseJson<Task>(response);
+  return parseApiJson<Task>(response);
 }
 
 export async function cancelTask(id: string): Promise<Task> {
   const response = await fetch(`/api/tasks/${id}/cancel`, { method: "POST" });
-  return parseJson<Task>(response);
+  return parseApiJson<Task>(response);
 }
 
 export async function updateTask(id: string, body: TaskUpdateBody): Promise<Task> {
@@ -178,40 +164,40 @@ export async function updateTask(id: string, body: TaskUpdateBody): Promise<Task
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<Task>(response);
+  return parseApiJson<Task>(response);
 }
 
 export async function reopenTask(id: string): Promise<Task> {
   const response = await fetch(`/api/tasks/${id}/reopen`, { method: "POST" });
-  return parseJson<Task>(response);
+  return parseApiJson<Task>(response);
 }
 
 export async function moveTaskToBacklog(id: string): Promise<MoveTaskToBacklogResult> {
   const response = await fetch(`/api/tasks/${id}/move-to-backlog`, { method: "POST" });
-  return parseJson<MoveTaskToBacklogResult>(response);
+  return parseApiJson<MoveTaskToBacklogResult>(response);
 }
 
 export async function fetchTodayView(date?: string): Promise<TodayView> {
   const url = date ? `/api/views/today?date=${date}` : "/api/views/today";
   const response = await fetch(url);
-  return parseJson<TodayView>(response);
+  return parseApiJson<TodayView>(response);
 }
 
 export async function fetchWeekView(weekStart?: string): Promise<WeekView> {
   const url = weekStart ? `/api/views/week?week_start=${weekStart}` : "/api/views/week";
   const response = await fetch(url);
-  return parseJson<WeekView>(response);
+  return parseApiJson<WeekView>(response);
 }
 
 export async function fetchMonthView(month?: string): Promise<MonthView> {
   const url = month ? `/api/views/month?month=${month}` : "/api/views/month";
   const response = await fetch(url);
-  return parseJson<MonthView>(response);
+  return parseApiJson<MonthView>(response);
 }
 
 export async function listBacklog(): Promise<BacklogItem[]> {
   const response = await fetch("/api/backlog");
-  return parseJson<BacklogItem[]>(response);
+  return parseApiJson<BacklogItem[]>(response);
 }
 
 export async function createBacklogItem(body: {
@@ -223,12 +209,12 @@ export async function createBacklogItem(body: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<BacklogItem>(response);
+  return parseApiJson<BacklogItem>(response);
 }
 
 export async function archiveBacklogItem(id: string): Promise<BacklogItem> {
   const response = await fetch(`/api/backlog/${id}/archive`, { method: "POST" });
-  return parseJson<BacklogItem>(response);
+  return parseApiJson<BacklogItem>(response);
 }
 
 export async function promoteBacklogItem(
@@ -240,12 +226,12 @@ export async function promoteBacklogItem(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ due_date: dueDate }),
   });
-  return parseJson<{ backlog: BacklogItem; task: Task }>(response);
+  return parseApiJson<{ backlog: BacklogItem; task: Task }>(response);
 }
 
 export async function listRoutines(): Promise<Routine[]> {
   const response = await fetch("/api/routines");
-  return parseJson<Routine[]>(response);
+  return parseApiJson<Routine[]>(response);
 }
 
 export async function createRoutine(body: {
@@ -262,7 +248,7 @@ export async function createRoutine(body: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<Routine>(response);
+  return parseApiJson<Routine>(response);
 }
 
 export async function updateRoutine(
@@ -282,81 +268,345 @@ export async function updateRoutine(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<Routine>(response);
+  return parseApiJson<Routine>(response);
 }
 
 export async function pauseRoutine(id: string): Promise<Routine> {
   const response = await fetch(`/api/routines/${id}/pause`, { method: "POST" });
-  return parseJson<Routine>(response);
+  return parseApiJson<Routine>(response);
 }
 
 export async function resumeRoutine(id: string): Promise<Routine> {
   const response = await fetch(`/api/routines/${id}/resume`, { method: "POST" });
-  return parseJson<Routine>(response);
+  return parseApiJson<Routine>(response);
 }
 
 export async function completeOccurrence(id: string): Promise<void> {
   const response = await fetch(`/api/routines/occurrences/${id}/complete`, {
     method: "POST",
   });
-  await parseJson(response);
+  await parseApiJson(response);
 }
 
 export async function skipOccurrence(id: string): Promise<void> {
   const response = await fetch(`/api/routines/occurrences/${id}/skip`, {
     method: "POST",
   });
-  await parseJson(response);
+  await parseApiJson(response);
 }
 
-export async function createAppointment(body: {
-  title: string;
-  notes?: string | null;
-  starts_at: string;
-  ends_at: string;
-}): Promise<Appointment> {
+export async function listAppointments(options?: {
+  filter?: AppointmentListFilter;
+  status?: Appointment["status"];
+  search?: string;
+}): Promise<Appointment[]> {
+  const params = new URLSearchParams();
+  if (options?.filter) {
+    params.set("filter", options.filter);
+  }
+  if (options?.status) {
+    params.set("status", options.status);
+  }
+  if (options?.search) {
+    params.set("search", options.search);
+  }
+  const query = params.toString();
+  const url = query ? `/api/appointments?${query}` : "/api/appointments";
+  const response = await fetch(url);
+  return parseApiJson<Appointment[]>(response);
+}
+
+export async function getAppointment(id: string): Promise<Appointment> {
+  const response = await fetch(`/api/appointments/${id}`);
+  return parseApiJson<Appointment>(response);
+}
+
+export async function createAppointment(
+  body: AppointmentCreateBody,
+): Promise<Appointment> {
   const response = await fetch("/api/appointments", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<Appointment>(response);
+  return parseApiJson<Appointment>(response);
+}
+
+export async function updateAppointment(
+  id: string,
+  body: AppointmentUpdateBody,
+): Promise<Appointment> {
+  const response = await fetch(`/api/appointments/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<Appointment>(response);
+}
+
+export async function rescheduleAppointment(
+  id: string,
+  body: AppointmentRescheduleBody,
+): Promise<Appointment> {
+  const response = await fetch(`/api/appointments/${id}/reschedule`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<Appointment>(response);
 }
 
 export async function completeAppointment(id: string): Promise<Appointment> {
   const response = await fetch(`/api/appointments/${id}/complete`, {
     method: "POST",
   });
-  return parseJson<Appointment>(response);
+  return parseApiJson<Appointment>(response);
 }
 
 export async function cancelAppointment(id: string): Promise<Appointment> {
   const response = await fetch(`/api/appointments/${id}/cancel`, { method: "POST" });
-  return parseJson<Appointment>(response);
+  return parseApiJson<Appointment>(response);
 }
 
-export async function listMaintenance(): Promise<MaintenanceItem[]> {
-  const response = await fetch("/api/maintenance");
-  return parseJson<MaintenanceItem[]>(response);
+export async function reopenAppointment(id: string): Promise<Appointment> {
+  const response = await fetch(`/api/appointments/${id}/reopen`, { method: "POST" });
+  return parseApiJson<Appointment>(response);
+}
+
+export async function archiveAppointment(id: string): Promise<Appointment> {
+  const response = await fetch(`/api/appointments/${id}/archive`, { method: "POST" });
+  return parseApiJson<Appointment>(response);
+}
+
+export async function restoreAppointment(id: string): Promise<Appointment> {
+  const response = await fetch(`/api/appointments/${id}/restore`, { method: "POST" });
+  return parseApiJson<Appointment>(response);
+}
+
+export async function deleteAppointment(id: string): Promise<void> {
+  const response = await fetch(`/api/appointments/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    await parseApiJson(response);
+  }
+}
+
+export async function listMaintenance(options?: {
+  filter?: MaintenanceListFilter;
+  status?: MaintenanceItem["status"];
+}): Promise<MaintenanceItem[]> {
+  const params = new URLSearchParams();
+  if (options?.filter) {
+    params.set("filter", options.filter);
+  }
+  if (options?.status) {
+    params.set("status", options.status);
+  }
+  const query = params.toString();
+  const url = query ? `/api/maintenance?${query}` : "/api/maintenance";
+  const response = await fetch(url);
+  return parseApiJson<MaintenanceItem[]>(response);
+}
+
+export async function fetchMaintenanceHistoryBoard(
+  historyLimit = 10,
+): Promise<MaintenanceHistoryBoardData> {
+  const response = await fetch(
+    `/api/maintenance/history-board?history_limit=${historyLimit}`,
+  );
+  return parseApiJson<MaintenanceHistoryBoardData>(response);
+}
+
+export async function getMaintenance(
+  id: string,
+  historyLimit = 25,
+): Promise<MaintenanceDetail> {
+  const response = await fetch(`/api/maintenance/${id}?history_limit=${historyLimit}`);
+  return parseApiJson<MaintenanceDetail>(response);
 }
 
 export async function createMaintenance(body: {
   title: string;
+  category?: string | null;
   notes?: string | null;
-  interval_days?: number;
-  next_due_date?: string;
+  interval_unit?: MaintenanceItem["interval_unit"];
+  interval_value?: number | null;
+  lead_time_days?: number;
+  reminder_offset_days?: number | null;
 }): Promise<MaintenanceItem> {
   const response = await fetch("/api/maintenance", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<MaintenanceItem>(response);
+  return parseApiJson<MaintenanceItem>(response);
 }
 
-export async function completeMaintenance(id: string): Promise<MaintenanceItem> {
-  const response = await fetch(`/api/maintenance/${id}/complete`, { method: "POST" });
-  return parseJson<MaintenanceItem>(response);
+export async function updateMaintenance(
+  id: string,
+  body: Partial<{
+    title: string;
+    category: string | null;
+    notes: string | null;
+    interval_unit: MaintenanceItem["interval_unit"];
+    interval_value: number | null;
+    lead_time_days: number;
+    reminder_offset_days: number | null;
+  }>,
+): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function completeMaintenance(
+  id: string,
+  body?: { completed_on?: string; notes?: string | null },
+): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/complete`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body ?? {}),
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function archiveMaintenance(id: string): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/archive`, { method: "POST" });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function restoreMaintenance(id: string): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/restore`, { method: "POST" });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function addMaintenanceHistoricalCompletion(
+  id: string,
+  body: { completed_on: string; notes?: string | null },
+): Promise<MaintenanceCompletion> {
+  const response = await fetch(`/api/maintenance/${id}/completions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<MaintenanceCompletion>(response);
+}
+
+export async function scheduleMaintenanceAppointment(
+  id: string,
+  body: {
+    title?: string | null;
+    notes?: string | null;
+    location?: string | null;
+    is_all_day: boolean;
+    start_date: string;
+    end_date: string;
+    start_time?: string | null;
+    end_time?: string | null;
+  },
+): Promise<MaintenanceDetail> {
+  const response = await fetch(`/api/maintenance/${id}/schedule-appointment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<MaintenanceDetail>(response);
+}
+
+export async function setMaintenanceSchedulingReminder(
+  id: string,
+  reminderDate: string,
+): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/scheduling-reminder`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reminder_date: reminderDate }),
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function clearMaintenanceSchedulingReminder(
+  id: string,
+): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/scheduling-reminder`, {
+    method: "DELETE",
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function linkMaintenanceAppointment(
+  id: string,
+  appointmentId: string,
+): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/link-appointment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ appointment_id: appointmentId }),
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function rescheduleMaintenanceAppointment(
+  id: string,
+  body: {
+    is_all_day: boolean;
+    start_date: string;
+    end_date: string;
+    start_time?: string | null;
+    end_time?: string | null;
+  },
+): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/reschedule-appointment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export async function correctMaintenanceCompletion(
+  maintenanceId: string,
+  completionId: string,
+  body: { completed_on: string; notes?: string | null; void_reason?: string | null },
+): Promise<MaintenanceCompletion> {
+  const response = await fetch(
+    `/api/maintenance/${maintenanceId}/completions/${completionId}/correct`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    },
+  );
+  return parseApiJson<MaintenanceCompletion>(response);
+}
+
+export async function clearMaintenanceNextAction(id: string): Promise<MaintenanceItem> {
+  const response = await fetch(`/api/maintenance/${id}/clear-next-action`, {
+    method: "POST",
+  });
+  return parseApiJson<MaintenanceItem>(response);
+}
+
+export function maintenanceNextActionLabel(item: MaintenanceItem): string {
+  switch (item.next_action_status) {
+    case "scheduled":
+      return "Scheduled";
+    case "needs_scheduling":
+      return item.next_due_date
+        ? `Due ${formatDisplayDate(item.next_due_date)}`
+        : "Needs scheduling";
+    case "reminder_set":
+      return item.scheduling_reminder_date
+        ? `Remind ${formatDisplayDate(item.scheduling_reminder_date)}`
+        : "Reminder set";
+    case "not_applicable":
+      return "Archived";
+    default:
+      return "No next date";
+  }
 }
 
 export async function createWeeklyTarget(body: {
@@ -368,14 +618,14 @@ export async function createWeeklyTarget(body: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<WeeklyTarget>(response);
+  return parseApiJson<WeeklyTarget>(response);
 }
 
 export async function logWeeklyTargetProgress(id: string): Promise<WeeklyTarget> {
   const response = await fetch(`/api/weekly-targets/${id}/progress`, {
     method: "POST",
   });
-  return parseJson<WeeklyTarget>(response);
+  return parseApiJson<WeeklyTarget>(response);
 }
 
 export async function updateWeeklyTarget(
@@ -387,19 +637,19 @@ export async function updateWeeklyTarget(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseJson<WeeklyTarget>(response);
+  return parseApiJson<WeeklyTarget>(response);
 }
 
 export async function deleteWeeklyTarget(id: string): Promise<void> {
   const response = await fetch(`/api/weekly-targets/${id}`, { method: "DELETE" });
   if (!response.ok) {
-    await parseJson(response);
+    await parseApiJson(response);
   }
 }
 
 export async function fetchSettings(): Promise<Record<string, string>> {
   const response = await fetch("/api/settings");
-  const payload = await parseJson<{ settings: Record<string, string> }>(response);
+  const payload = await parseApiJson<{ settings: Record<string, string> }>(response);
   return payload.settings;
 }
 
@@ -412,7 +662,7 @@ export async function updateSetting(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ value }),
   });
-  const payload = await parseJson<{ settings: Record<string, string> }>(response);
+  const payload = await parseApiJson<{ settings: Record<string, string> }>(response);
   return payload.settings;
 }
 
@@ -430,6 +680,32 @@ export function formatTimeRange(startsAt: string, endsAt: string): string {
   const start = new Date(startsAt);
   const end = new Date(endsAt);
   return `${start.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })} – ${end.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}`;
+}
+
+export function formatAppointmentSchedule(appointment: Appointment): string {
+  if (appointment.is_all_day) {
+    if (appointment.start_date === appointment.end_date) {
+      return `All day · ${formatDisplayDate(appointment.start_date)}`;
+    }
+    return `All day · ${formatDisplayDate(appointment.start_date)} – ${formatDisplayDate(appointment.end_date)}`;
+  }
+  if (appointment.starts_at && appointment.ends_at) {
+    return `${formatDisplayDate(appointment.start_date)} · ${formatTimeRange(appointment.starts_at, appointment.ends_at)}`;
+  }
+  return formatDisplayDate(appointment.start_date);
+}
+
+export function appointmentStatusLabel(status: Appointment["status"]): string {
+  switch (status) {
+    case "scheduled":
+      return "Scheduled";
+    case "completed":
+      return "Completed";
+    case "cancelled":
+      return "Cancelled";
+    case "archived":
+      return "Archived";
+  }
 }
 
 export function itemKindLabel(kind: ViewItemKind): string {

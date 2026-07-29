@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from planforge.api.deps import get_db
 from planforge.core.owner import LOCAL_OWNER_ID
-from planforge.domain.clock import SystemClock
 from planforge.domain.local_date import InvalidLocalDateError, LocalDate
+from planforge.domain.planner_clock import PlannerClock
 from planforge.schemas.views import (
     MonthViewResponse,
     TodayViewResponse,
@@ -29,11 +29,11 @@ def today_view_endpoint(
     reference: date | None = Query(default=None, alias="date"),
 ) -> TodayViewResponse:
     """Return the Today view for a reference date."""
-    clock = SystemClock()
+    policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
+    clock = PlannerClock(policies.timezone)
     reference_date = (
         LocalDate.from_date(reference) if reference is not None else clock.today()
     )
-    policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
     view = assemble_today_view(
         session=session,
         owner_id=LOCAL_OWNER_ID,
@@ -51,7 +51,7 @@ def week_view_endpoint(
 ) -> WeekViewResponse:
     """Return the Week view for a week starting on the given date."""
     policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
-    clock = SystemClock()
+    clock = PlannerClock(policies.timezone)
     today = clock.today()
     if week_start_param is not None:
         week_start, _ = week_bounds(
@@ -81,7 +81,7 @@ def month_view_endpoint(
 ) -> MonthViewResponse:
     """Return the Month view for a YYYY-MM calendar month."""
     policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
-    clock = SystemClock()
+    clock = PlannerClock(policies.timezone)
     if month_param is not None:
         try:
             year_str, month_str = month_param.split("-", maxsplit=1)

@@ -1,12 +1,16 @@
 """Routine ORM model."""
 
 from datetime import date
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Date, Index, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from planforge.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 from planforge.domain.enums import RoutineStatus
+
+if TYPE_CHECKING:
+    from planforge.models.occurrence import Occurrence
 
 
 class Routine(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -36,6 +40,8 @@ class Routine(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         nullable=False,
         default=RoutineStatus.ACTIVE.value,
     )
+
+    occurrences: Mapped[list[Occurrence]] = relationship(back_populates="routine")
 
     @property
     def routine_status(self) -> RoutineStatus:

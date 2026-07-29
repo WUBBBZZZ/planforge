@@ -60,12 +60,16 @@ class PolicySnapshot:
     week_include_overdue_tasks: bool = True
     week_start_day: str = "monday"
     routine_horizon_days: int = 30
+    routine_missed_behavior: str = "prompt"
     maintenance_lead_days: int = 7
     timezone: str = "UTC"
 
 
 def ensure_default_settings(
-    session: Session, *, owner_id: str = LOCAL_OWNER_ID
+    session: Session,
+    *,
+    owner_id: str = LOCAL_OWNER_ID,
+    bootstrap_timezone: str | None = None,
 ) -> None:
     """Insert missing default settings for an owner."""
     existing = {
@@ -74,8 +78,26 @@ def ensure_default_settings(
     }
     for key, value in DEFAULT_SETTINGS.items():
         if key not in existing:
-            session.add(Setting(owner_id=owner_id, key=key, value=value))
+            seed_value = (
+                bootstrap_timezone
+                if key == "timezone" and bootstrap_timezone is not None
+                else value
+            )
+            session.add(Setting(owner_id=owner_id, key=key, value=seed_value))
     session.flush()
+
+
+def load_settings_map(
+    session: Session,
+    *,
+    owner_id: str = LOCAL_OWNER_ID,
+) -> dict[str, str]:
+    """Return merged settings without writing missing defaults."""
+    values = dict(DEFAULT_SETTINGS)
+    rows = session.scalars(select(Setting).where(Setting.owner_id == owner_id))
+    for row in rows:
+        values[row.key] = row.value
+    return values
 
 
 def get_settings_map(
@@ -84,12 +106,7 @@ def get_settings_map(
     owner_id: str = LOCAL_OWNER_ID,
 ) -> dict[str, str]:
     """Return all settings for an owner, including defaults."""
-    ensure_default_settings(session, owner_id=owner_id)
-    values = dict(DEFAULT_SETTINGS)
-    rows = session.scalars(select(Setting).where(Setting.owner_id == owner_id))
-    for row in rows:
-        values[row.key] = row.value
-    return values
+    return load_settings_map(session, owner_id=owner_id)
 
 
 def get_policy_snapshot(
@@ -98,7 +115,7 @@ def get_policy_snapshot(
     owner_id: str = LOCAL_OWNER_ID,
 ) -> PolicySnapshot:
     """Build a policy snapshot from persisted settings."""
-    settings = get_settings_map(session, owner_id=owner_id)
+    settings = load_settings_map(session, owner_id=owner_id)
     horizon_key = settings["routine.horizon_days"]
     return PolicySnapshot(
         today_include_rolled_tasks=settings["today.include_rolled_tasks"] == "yes",
@@ -109,6 +126,7 @@ def get_policy_snapshot(
         week_include_overdue_tasks=settings["week.include_overdue_tasks"] == "yes",
         week_start_day=settings["week.start_day"],
         routine_horizon_days=HORIZON_DAYS.get(horizon_key, 30),
+        routine_missed_behavior=settings["routine.missed_behavior"],
         maintenance_lead_days=int(settings["maintenance.lead_days"]),
         timezone=settings["timezone"],
     )

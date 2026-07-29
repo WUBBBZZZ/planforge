@@ -5,7 +5,7 @@ import { Button } from "../components/Button";
 import { CaptureModal } from "../components/CaptureModal";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { TodayViewContent } from "../components/views/TodayViewContent";
-import { fetchTodayView, type TodayView } from "../lib/tasks";
+import { fetchTodayView, syncRoutineOccurrences, type TodayView } from "../lib/tasks";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
 type TodayState =
@@ -19,6 +19,7 @@ export function TodayPage() {
 
   const reloadToday = useCallback(async () => {
     try {
+      await syncRoutineOccurrences();
       const view = await fetchTodayView();
       setTodayState({ kind: "ready", view });
     } catch (error) {
@@ -34,7 +35,8 @@ export function TodayPage() {
   useEffect(() => {
     let cancelled = false;
 
-    fetchTodayView()
+    syncRoutineOccurrences()
+      .then(() => fetchTodayView())
       .then((view) => {
         if (!cancelled) {
           setTodayState({ kind: "ready", view });

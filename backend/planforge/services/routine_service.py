@@ -25,6 +25,7 @@ from planforge.services.occurrence_generator import (
 )
 from planforge.services.settings_service import PolicySnapshot
 from sqlalchemy import delete, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 _UNSET: Any = object()
@@ -338,14 +339,19 @@ def _generate_occurrences_for_routine(
     for scheduled_date in scheduled_dates:
         if scheduled_date in existing_dates:
             continue
-        session.add(
-            Occurrence(
-                owner_id=owner_id,
-                routine_id=routine.id,
-                scheduled_date=scheduled_date.to_date(),
-                status=OccurrenceStatus.PENDING.value,
-            )
+        occurrence = Occurrence(
+            owner_id=owner_id,
+            routine_id=routine.id,
+            scheduled_date=scheduled_date.to_date(),
+            status=OccurrenceStatus.PENDING.value,
         )
+        try:
+            with session.begin_nested():
+                session.add(occurrence)
+                session.flush()
+            existing_dates.add(scheduled_date)
+        except IntegrityError:
+            existing_dates.add(scheduled_date)
 
 
 def ensure_occurrences(

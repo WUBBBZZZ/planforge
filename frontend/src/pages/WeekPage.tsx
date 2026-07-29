@@ -13,6 +13,7 @@ import {
   fetchWeekView,
   formatDisplayDate,
   logWeeklyTargetProgress,
+  syncRoutineOccurrences,
   updateWeeklyTarget,
   type WeekView,
 } from "../lib/tasks";
@@ -38,6 +39,7 @@ export function WeekPage() {
 
   const reloadWeek = useCallback(async (weekStart?: string) => {
     try {
+      await syncRoutineOccurrences();
       const view = await fetchWeekView(weekStart);
       setWeekState({ kind: "ready", view });
     } catch (error) {
@@ -52,7 +54,8 @@ export function WeekPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchWeekView(weekStartParam)
+    syncRoutineOccurrences()
+      .then(() => fetchWeekView(weekStartParam))
       .then((view) => {
         if (!cancelled) {
           setWeekState({ kind: "ready", view });

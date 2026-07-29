@@ -52,6 +52,19 @@ export function AppShell({ currentPath, title, children, actions }: AppShellProp
                 </a>
               </li>
               <li>
+                <a href="/schedule" aria-current={navCurrent("/schedule", currentPath)}>
+                  Schedule
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/maintenance"
+                  aria-current={navCurrent("/maintenance", currentPath)}
+                >
+                  Maintenance
+                </a>
+              </li>
+              <li>
                 <a href="/settings" aria-current={navCurrent("/settings", currentPath)}>
                   Settings
                 </a>

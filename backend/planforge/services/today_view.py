@@ -1,8 +1,11 @@
 """Today view assembly."""
 
 from dataclasses import dataclass
-from datetime import UTC
 
+from planforge.domain.appointment_scheduling import (
+    appointment_overlaps_day,
+    appointment_times_iso,
+)
 from planforge.domain.enums import (
     AppointmentStatus,
     MaintenanceStatus,
@@ -10,13 +13,16 @@ from planforge.domain.enums import (
     ViewItemKind,
 )
 from planforge.domain.local_date import LocalDate
-from planforge.domain.timezone import get_timezone
+from planforge.domain.recurring_display import DEFAULT_RECURRING_DISPLAY_POLICY
 from planforge.models.appointment import Appointment
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
 from planforge.services import routine_service
 from planforge.services.completion_display import completed_items_for_local_day
-from planforge.services.display_date import is_item_overdue
+from planforge.services.display_date import is_item_overdue, rolled_display_date
+from planforge.services.recurring_occurrence_display import (
+    select_visible_routine_occurrences,
+)
 from planforge.services.settings_service import PolicySnapshot
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -34,21 +40,19 @@ class TodayItem:
     is_overdue: bool
     routine_title: str | None = None
     is_completed: bool = False
+    occurrence_role: str | None = None
+    is_all_day: bool = False
+    span_start_date: LocalDate | None = None
+    span_end_date: LocalDate | None = None
+    span_segment: str | None = None
+    location: str | None = None
+    status: str | None = None
 
 
 @dataclass(frozen=True)
 class TodayView:
     reference_date: LocalDate
     items: list[TodayItem]
-
-
-def _appointment_local_date(
-    appointment: Appointment,
-    *,
-    timezone_name: str,
-) -> LocalDate:
-    local = appointment.starts_at.astimezone(get_timezone(timezone_name))
-    return LocalDate(local.year, local.month, local.day)
 
 
 def assemble_today_view(
@@ -105,31 +109,36 @@ def assemble_today_view(
             )
 
     if policies.today_include_routine_occurrences:
-        routine_service.ensure_occurrences(
-            session,
-            owner_id=owner_id,
-            clock_today=clock_today,
-            policies=policies,
+        recurring_policy = DEFAULT_RECURRING_DISPLAY_POLICY
+        horizon_start, horizon_end = recurring_policy.horizon_bounds(
+            today=reference_date,
+            week_start_day=policies.week_start_day,
         )
-        for occurrence, routine in routine_service.list_pending_occurrences(
-            session,
-            owner_id=owner_id,
+        for visible in select_visible_routine_occurrences(
+            routine_service.list_pending_occurrences(session, owner_id=owner_id),
+            today=reference_date,
+            horizon_start=horizon_start,
+            horizon_end=horizon_end,
+            policy=recurring_policy,
+            missed_behavior=policies.routine_missed_behavior,
         ):
-            scheduled = LocalDate.from_date(occurrence.scheduled_date)
-            if scheduled.to_date() == ref:
-                items.append(
-                    TodayItem(
-                        kind=ViewItemKind.OCCURRENCE,
-                        item_id=occurrence.id,
-                        title=routine.title,
-                        notes=routine.notes,
-                        due_date=scheduled,
-                        starts_at=None,
-                        ends_at=None,
-                        is_overdue=False,
-                        routine_title=routine.title,
-                    )
+            display = rolled_display_date(due=visible.scheduled, today=reference_date)
+            if display.to_date() != ref:
+                continue
+            items.append(
+                TodayItem(
+                    kind=ViewItemKind.OCCURRENCE,
+                    item_id=visible.occurrence.id,
+                    title=visible.routine.title,
+                    notes=visible.routine.notes,
+                    due_date=visible.scheduled,
+                    starts_at=None,
+                    ends_at=None,
+                    is_overdue=visible.is_overdue,
+                    routine_title=visible.routine.title,
+                    occurrence_role=visible.role.value,
                 )
+            )
 
     appointments = list(
         session.scalars(
@@ -140,23 +149,48 @@ def assemble_today_view(
         )
     )
     for appointment in appointments:
-        local_date = _appointment_local_date(
-            appointment,
+        if not appointment_overlaps_day(
+            is_all_day=appointment.is_all_day,
+            start_date=appointment.start_date,
+            end_date=appointment.end_date,
+            starts_at=appointment.starts_at,
+            ends_at=appointment.ends_at,
+            day=reference_date,
             timezone_name=policies.timezone,
+        ):
+            continue
+        starts_at, ends_at = appointment_times_iso(
+            is_all_day=appointment.is_all_day,
+            starts_at=appointment.starts_at,
+            ends_at=appointment.ends_at,
         )
-        if local_date.to_date() == ref:
-            items.append(
-                TodayItem(
-                    kind=ViewItemKind.APPOINTMENT,
-                    item_id=appointment.id,
-                    title=appointment.title,
-                    notes=appointment.notes,
-                    due_date=local_date,
-                    starts_at=appointment.starts_at.astimezone(UTC).isoformat(),
-                    ends_at=appointment.ends_at.astimezone(UTC).isoformat(),
-                    is_overdue=False,
-                )
+        span_start = LocalDate.from_date(appointment.start_date)
+        span_end = LocalDate.from_date(appointment.end_date)
+        from planforge.domain.appointment_scheduling import span_segment_for_day
+
+        segment = span_segment_for_day(
+            reference_date,
+            start_date=span_start,
+            end_date=span_end,
+        )
+        items.append(
+            TodayItem(
+                kind=ViewItemKind.APPOINTMENT,
+                item_id=appointment.id,
+                title=appointment.title,
+                notes=appointment.notes,
+                due_date=reference_date,
+                starts_at=starts_at,
+                ends_at=ends_at,
+                is_overdue=False,
+                is_all_day=appointment.is_all_day,
+                span_start_date=span_start,
+                span_end_date=span_end,
+                span_segment=segment.value,
+                location=appointment.location,
+                status=appointment.status,
             )
+        )
 
     maintenance_items = list(
         session.scalars(
@@ -215,6 +249,12 @@ def assemble_today_view(
                 is_overdue=False,
                 routine_title=completed.routine_title,
                 is_completed=True,
+                is_all_day=completed.is_all_day,
+                span_start_date=completed.span_start_date,
+                span_end_date=completed.span_end_date,
+                span_segment=completed.span_segment,
+                location=completed.location,
+                status=completed.status,
             )
         )
 

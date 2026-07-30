@@ -69,6 +69,18 @@ def archive_backlog_endpoint(
     return BacklogItemResponse.from_item(item)
 
 
+@router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_backlog_endpoint(
+    item_id: str,
+    session: Session = Depends(get_db),
+) -> None:
+    backlog_service.delete_backlog_item(
+        session,
+        item_id=item_id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+
+
 @router.post("/{item_id}/promote", response_model=PromoteBacklogResponse)
 def promote_backlog_endpoint(
     item_id: str,

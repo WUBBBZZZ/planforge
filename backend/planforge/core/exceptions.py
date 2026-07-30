@@ -97,3 +97,7 @@ class MaintenanceLinkError(PlanforgeError):
 
 class WeeklyTargetNotFoundError(NotFoundError):
     """Weekly target does not exist."""
+
+
+class PackingListNotFoundError(NotFoundError):
+    """Packing list or entry does not exist."""

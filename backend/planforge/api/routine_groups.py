@@ -17,6 +17,7 @@ class RoutineGroupResponse(BaseModel):
     name: str
     sort_order: int
     week_visible: bool
+    month_visible: bool
     is_system: bool
 
     @classmethod
@@ -26,6 +27,7 @@ class RoutineGroupResponse(BaseModel):
             name=group.name,
             sort_order=group.sort_order,
             week_visible=group.week_visible,
+            month_visible=group.month_visible,
             is_system=group.is_system,
         )
 
@@ -41,6 +43,7 @@ class RoutineGroupCreateRequest(BaseModel):
 class RoutineGroupUpdateRequest(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=120)
     week_visible: bool | None = None
+    month_visible: bool | None = None
 
 
 class ReorderGroupsRequest(BaseModel):
@@ -76,6 +79,7 @@ def grouped_routines_endpoint(
             name=group.name,
             sort_order=group.sort_order,
             week_visible=group.week_visible,
+            month_visible=group.month_visible,
             is_system=group.is_system,
             routines=[RoutineResponse.from_routine(routine) for routine in routines],
         )
@@ -109,6 +113,7 @@ def update_group_endpoint(
         owner_id=LOCAL_OWNER_ID,
         name=body.name,
         week_visible=body.week_visible,
+        month_visible=body.month_visible,
     )
     session.commit()
     return RoutineGroupResponse.from_group(group)

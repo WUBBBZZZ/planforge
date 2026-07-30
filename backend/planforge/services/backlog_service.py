@@ -83,6 +83,15 @@ def archive_backlog_item(
     return item
 
 
+def delete_backlog_item(session: Session, *, item_id: str, owner_id: str) -> None:
+    """Permanently delete a backlog item."""
+    item = _get_backlog_or_raise(session, item_id=item_id, owner_id=owner_id)
+    if item.backlog_status is BacklogStatus.PROMOTED:
+        raise BacklogStateError("Promoted backlog items cannot be deleted")
+    session.delete(item)
+    session.flush()
+
+
 def promote_backlog_to_task(
     session: Session,
     *,

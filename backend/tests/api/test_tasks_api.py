@@ -144,3 +144,18 @@ async def test_update_task_title_and_due_date(test_app) -> None:
     payload = update_response.json()
     assert payload["title"] == "Updated"
     assert payload["due_date"] is None
+
+
+async def test_delete_task(test_app) -> None:
+    transport = ASGITransport(app=test_app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        create_response = await client.post(
+            "/api/tasks",
+            json={"title": "Delete me", "due_date": "2026-07-21"},
+        )
+        task_id = create_response.json()["id"]
+        delete_response = await client.delete(f"/api/tasks/{task_id}")
+        get_response = await client.get(f"/api/tasks/{task_id}")
+
+    assert delete_response.status_code == 204
+    assert get_response.status_code == 404

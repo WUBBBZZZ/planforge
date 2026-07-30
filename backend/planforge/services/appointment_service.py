@@ -366,6 +366,7 @@ def complete_appointment(
     *,
     appointment_id: str,
     owner_id: str,
+    clock_today: LocalDate | None = None,
 ) -> Appointment:
     """Mark an appointment completed."""
     appointment = _get_appointment_or_raise(
@@ -382,6 +383,32 @@ def complete_appointment(
         appointment_id=appointment.id,
         action=CompletionAction.COMPLETED,
     )
+    if appointment.maintenance_definition_id:
+        from planforge.domain.planner_clock import PlannerClock
+        from planforge.services import maintenance_service
+        from planforge.services.settings_service import get_policy_snapshot
+
+        policies = get_policy_snapshot(session, owner_id=owner_id)
+        resolved_today = clock_today or PlannerClock(policies.timezone).today()
+        maintenance = session.scalar(
+            select(MaintenanceDefinition).where(
+                MaintenanceDefinition.id == appointment.maintenance_definition_id,
+                MaintenanceDefinition.owner_id == owner_id,
+            )
+        )
+        if maintenance is not None:
+            completed_on = maintenance_service.resolve_maintenance_completion_date(
+                maintenance,
+                completed_on=LocalDate.from_date(appointment.start_date),
+                clock_today=resolved_today,
+            )
+            maintenance_service.complete_maintenance(
+                session,
+                maintenance_id=appointment.maintenance_definition_id,
+                owner_id=owner_id,
+                completed_on=completed_on,
+                clock_today=resolved_today,
+            )
     session.flush()
     return appointment
 

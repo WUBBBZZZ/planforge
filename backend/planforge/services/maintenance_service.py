@@ -28,6 +28,7 @@ from planforge.models.completion_record import CompletionRecord
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.maintenance_completion import MaintenanceCompletion
 from planforge.services import appointment_service
+from planforge.services.display_date import is_item_overdue
 from sqlalchemy import Select, select
 from sqlalchemy.orm import Session
 
@@ -114,11 +115,47 @@ def _default_next_action(
     return MaintenanceNextActionStatus.NO_NEXT_DATE
 
 
+def resolve_maintenance_completion_date(
+    item: MaintenanceDefinition,
+    *,
+    completed_on: LocalDate | None,
+    clock_today: LocalDate,
+) -> LocalDate:
+    """Return the completion date to record for a maintenance item.
+
+    Overdue work is recorded on the day it is marked complete, not back-dated
+    to the original due date.
+    """
+    when = completed_on or clock_today
+    if item.next_due_date is None:
+        return when
+    due = LocalDate.from_date(item.next_due_date)
+    if is_item_overdue(scheduled=due, today=clock_today) and when <= due:
+        return clock_today
+    return when
+
+
+def _reset_scheduling_state_after_due_change(item: MaintenanceDefinition) -> None:
+    """Clear booked-forward state when derived due dates change."""
+    item.linked_appointment_id = None
+    item.scheduling_reminder_date = None
+    if item.interval is MaintenanceIntervalUnit.MANUAL:
+        item.next_action_status = MaintenanceNextActionStatus.NO_NEXT_DATE.value
+    elif item.next_due_date is None:
+        item.next_action_status = MaintenanceNextActionStatus.NO_NEXT_DATE.value
+    else:
+        item.next_action_status = MaintenanceNextActionStatus.NEEDS_SCHEDULING.value
+
+
 def _sync_last_completed_from_history(
     session: Session,
     *,
     item: MaintenanceDefinition,
+    force_scheduling_reset: bool = False,
 ) -> None:
+    previous_last = item.last_completed_date
+    previous_next_due = item.next_due_date
+
     latest = session.scalar(
         select(MaintenanceCompletion)
         .where(
@@ -133,18 +170,30 @@ def _sync_last_completed_from_history(
     )
     if latest is None:
         item.last_completed_date = None
+        item.next_due_date = None
         if item.interval is MaintenanceIntervalUnit.MANUAL:
-            item.next_due_date = None
-        return
+            item.next_action_status = MaintenanceNextActionStatus.NO_NEXT_DATE.value
+        else:
+            item.next_action_status = _default_next_action(
+                interval_unit=item.interval,
+                has_completion=False,
+            ).value
+    else:
+        completed = LocalDate.from_date(latest.completed_on)
+        item.last_completed_date = latest.completed_on
+        next_due = compute_next_due_date(
+            completed,
+            unit=item.interval,
+            value=item.interval_value,
+        )
+        item.next_due_date = next_due.to_date() if next_due is not None else None
 
-    completed = LocalDate.from_date(latest.completed_on)
-    item.last_completed_date = latest.completed_on
-    next_due = compute_next_due_date(
-        completed,
-        unit=item.interval,
-        value=item.interval_value,
+    dates_changed = (
+        item.last_completed_date != previous_last
+        or item.next_due_date != previous_next_due
     )
-    item.next_due_date = next_due.to_date() if next_due is not None else None
+    if force_scheduling_reset or dates_changed:
+        _reset_scheduling_state_after_due_change(item)
 
 
 def list_completions(
@@ -420,25 +469,11 @@ def _record_completion(
     )
     session.add(completion)
     session.flush()
-    item.last_completed_date = completed_on.to_date()
-    next_due = compute_next_due_date(
-        completed_on,
-        unit=item.interval,
-        value=item.interval_value,
+    _sync_last_completed_from_history(
+        session,
+        item=item,
+        force_scheduling_reset=True,
     )
-    item.next_due_date = next_due.to_date() if next_due is not None else None
-    if item.linked_appointment_id:
-        item.linked_appointment_id = None
-    item.scheduling_reminder_date = None
-    if item.interval is MaintenanceIntervalUnit.MANUAL:
-        item.next_action_status = MaintenanceNextActionStatus.NO_NEXT_DATE.value
-    else:
-        item.next_action_status = MaintenanceNextActionStatus.NEEDS_SCHEDULING.value
-        if item.reminder_offset_days is not None:
-            item.scheduling_reminder_date = completed_on.add_days(
-                item.reminder_offset_days
-            ).to_date()
-            item.next_action_status = MaintenanceNextActionStatus.REMINDER_SET.value
     return completion
 
 
@@ -448,6 +483,7 @@ def complete_maintenance(
     maintenance_id: str,
     owner_id: str,
     completed_on: LocalDate | None = None,
+    clock_today: LocalDate | None = None,
     notes: str | None = None,
 ) -> MaintenanceDefinition:
     item = _get_maintenance_or_raise(
@@ -457,7 +493,12 @@ def complete_maintenance(
     )
     if item.maintenance_status is not MaintenanceStatus.ACTIVE:
         raise MaintenanceStateError("Only active maintenance can be completed")
-    when = completed_on or LocalDate.from_date(datetime.now(UTC).date())
+    today = clock_today or LocalDate.from_date(datetime.now(UTC).date())
+    when = resolve_maintenance_completion_date(
+        item,
+        completed_on=completed_on,
+        clock_today=today,
+    )
     _record_completion(
         session,
         owner_id=owner_id,

@@ -10,10 +10,11 @@ export interface MaintenanceHistoryBoardProps {
 function formatCompletionDate(isoDate: string): string {
   const [year, month, day] = isoDate.split("-").map(Number);
   const date = new Date(year, month - 1, day);
+  const currentYear = new Date().getFullYear();
   return date.toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
-    year: "numeric",
+    ...(year !== currentYear ? { year: "numeric" } : {}),
   });
 }
 

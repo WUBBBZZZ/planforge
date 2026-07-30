@@ -11,6 +11,7 @@ from planforge.api.backlog import router as backlog_router
 from planforge.api.exception_handlers import register_exception_handlers
 from planforge.api.health import router as health_router
 from planforge.api.maintenance import router as maintenance_router
+from planforge.api.packing_lists import router as packing_lists_router
 from planforge.api.routine_groups import router as routine_groups_router
 from planforge.api.routines import router as routines_router
 from planforge.api.settings import router as settings_router
@@ -92,6 +93,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(routine_groups_router, prefix="/api")
     app.include_router(appointments_router, prefix="/api")
     app.include_router(maintenance_router, prefix="/api")
+    app.include_router(packing_lists_router, prefix="/api")
     app.include_router(weekly_targets_router, prefix="/api")
     app.include_router(settings_router, prefix="/api")
     app.include_router(views_router, prefix="/api")

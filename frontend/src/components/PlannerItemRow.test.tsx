@@ -174,4 +174,25 @@ describe("PlannerItemRow", () => {
     expect(screen.getByRole("dialog", { name: "Edit task" })).toBeVisible();
     expect(screen.getByDisplayValue("Water the plants")).toBeVisible();
   });
+
+  it("renders read-only week preview items without actions", () => {
+    render(
+      <PlannerItemRow
+        item={{
+          kind: "occurrence",
+          item_id: "occ-1",
+          title: "Exercise",
+          due_date: "2026-07-21",
+          starts_at: null,
+          ends_at: null,
+          is_overdue: false,
+        }}
+        onChanged={vi.fn().mockResolvedValue(undefined)}
+        readOnly
+      />,
+    );
+
+    expect(screen.getByText("Exercise")).toBeVisible();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
 });

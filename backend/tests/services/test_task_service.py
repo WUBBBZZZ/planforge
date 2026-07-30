@@ -230,6 +230,29 @@ def test_move_completed_task_raises(db_session) -> None:
         )
 
 
+def test_delete_task_removes_task_and_linked_backlog(db_session) -> None:
+    from planforge.models.backlog_item import BacklogItem
+    from planforge.models.task import Task
+
+    task = task_service.create_task(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Delete me",
+    )
+    _, backlog_item = task_service.move_task_to_backlog(
+        db_session,
+        task_id=task.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    task_service.delete_task(
+        db_session,
+        task_id=task.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    assert db_session.get(Task, task.id) is None
+    assert db_session.get(BacklogItem, backlog_item.id) is None
+
+
 def test_move_cancelled_task_raises(db_session) -> None:
     task = task_service.create_task(
         db_session,

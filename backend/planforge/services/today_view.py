@@ -19,7 +19,13 @@ from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
 from planforge.services import routine_service
 from planforge.services.completion_display import completed_items_for_local_day
-from planforge.services.display_date import is_item_overdue, rolled_display_date
+from planforge.services.display_date import (
+    is_browsing_future_day,
+    is_item_overdue,
+    overdue_evaluation_date,
+    rolled_display_date,
+)
+from planforge.services.maintenance_display import should_show_maintenance_on_day
 from planforge.services.recurring_occurrence_display import (
     select_visible_routine_occurrences,
 )
@@ -64,8 +70,28 @@ def assemble_today_view(
     policies: PolicySnapshot,
 ) -> TodayView:
     """Assemble items for the Today view."""
+    recurring_policy = DEFAULT_RECURRING_DISPLAY_POLICY
+    _, routine_horizon_end = recurring_policy.horizon_bounds(
+        today=reference_date,
+        week_start_day=policies.week_start_day,
+    )
+    routine_service.ensure_occurrences(
+        session,
+        owner_id=owner_id,
+        clock_today=clock_today,
+        policies=policies,
+        through_date=routine_horizon_end,
+    )
     ref = reference_date.to_date()
     items: list[TodayItem] = []
+    overdue_today = overdue_evaluation_date(
+        reference_date=reference_date,
+        clock_today=clock_today,
+    )
+    browsing_future = is_browsing_future_day(
+        reference_date=reference_date,
+        clock_today=clock_today,
+    )
 
     tasks = list(
         session.scalars(
@@ -92,8 +118,10 @@ def assemble_today_view(
                     is_overdue=False,
                 )
             )
-        elif policies.today_include_rolled_tasks and is_item_overdue(
-            scheduled=due, today=reference_date
+        elif (
+            not browsing_future
+            and policies.today_include_rolled_tasks
+            and is_item_overdue(scheduled=due, today=overdue_today)
         ):
             items.append(
                 TodayItem(
@@ -116,13 +144,13 @@ def assemble_today_view(
         )
         for visible in select_visible_routine_occurrences(
             routine_service.list_pending_occurrences(session, owner_id=owner_id),
-            today=reference_date,
+            today=overdue_today,
             horizon_start=horizon_start,
             horizon_end=horizon_end,
             policy=recurring_policy,
             missed_behavior=policies.routine_missed_behavior,
         ):
-            display = rolled_display_date(due=visible.scheduled, today=reference_date)
+            display = rolled_display_date(due=visible.scheduled, today=overdue_today)
             if display.to_date() != ref:
                 continue
             items.append(
@@ -134,7 +162,7 @@ def assemble_today_view(
                     due_date=visible.scheduled,
                     starts_at=None,
                     ends_at=None,
-                    is_overdue=visible.is_overdue,
+                    is_overdue=visible.is_overdue if not browsing_future else False,
                     routine_title=visible.routine.title,
                     occurrence_role=visible.role.value,
                 )
@@ -201,23 +229,39 @@ def assemble_today_view(
             )
         )
     )
-    lead_end = reference_date.add_days(policies.maintenance_lead_days).to_date()
+    browsing_future = is_browsing_future_day(
+        reference_date=reference_date,
+        clock_today=clock_today,
+    )
+    overdue_today = overdue_evaluation_date(
+        reference_date=reference_date,
+        clock_today=clock_today,
+    )
     for maintenance in maintenance_items:
+        if not should_show_maintenance_on_day(
+            maintenance,
+            reference_date=reference_date,
+            clock_today=clock_today,
+        ):
+            continue
         assert maintenance.next_due_date is not None
         due = LocalDate.from_date(maintenance.next_due_date)
-        if due.to_date() <= lead_end:
-            items.append(
-                TodayItem(
-                    kind=ViewItemKind.MAINTENANCE,
-                    item_id=maintenance.id,
-                    title=maintenance.title,
-                    notes=maintenance.notes,
-                    due_date=due,
-                    starts_at=None,
-                    ends_at=None,
-                    is_overdue=is_item_overdue(scheduled=due, today=reference_date),
-                )
+        items.append(
+            TodayItem(
+                kind=ViewItemKind.MAINTENANCE,
+                item_id=maintenance.id,
+                title=maintenance.title,
+                notes=maintenance.notes,
+                due_date=due,
+                starts_at=None,
+                ends_at=None,
+                is_overdue=(
+                    False
+                    if browsing_future
+                    else is_item_overdue(scheduled=due, today=overdue_today)
+                ),
             )
+        )
 
     items.sort(
         key=lambda item: (

@@ -13,9 +13,16 @@ import {
   type WeeklyTargetResponse,
 } from "../api/client";
 
+import { addDays } from "./dates";
+
 export { ApiError } from "../api/client";
 
-export type ViewItemKind = "task" | "occurrence" | "appointment" | "maintenance";
+export type ViewItemKind =
+  | "task"
+  | "occurrence"
+  | "appointment"
+  | "maintenance"
+  | "backlog";
 
 export type TaskStatus = TaskResponse["status"];
 
@@ -158,6 +165,13 @@ export async function cancelTask(id: string): Promise<Task> {
   return parseApiJson<Task>(response);
 }
 
+export async function deleteTask(id: string): Promise<void> {
+  const response = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    await parseApiJson(response);
+  }
+}
+
 export async function updateTask(id: string, body: TaskUpdateBody): Promise<Task> {
   const response = await fetch(`/api/tasks/${id}`, {
     method: "PATCH",
@@ -217,6 +231,13 @@ export async function archiveBacklogItem(id: string): Promise<BacklogItem> {
   return parseApiJson<BacklogItem>(response);
 }
 
+export async function deleteBacklogItem(id: string): Promise<void> {
+  const response = await fetch(`/api/backlog/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    await parseApiJson(response);
+  }
+}
+
 export async function promoteBacklogItem(
   id: string,
   dueDate: string,
@@ -227,6 +248,115 @@ export async function promoteBacklogItem(
     body: JSON.stringify({ due_date: dueDate }),
   });
   return parseApiJson<{ backlog: BacklogItem; task: Task }>(response);
+}
+
+export type PackingEntryType = "item" | "question";
+export type PackingQuestionAnswer = "yes" | "no";
+
+export type PackingListEntry = {
+  id: string;
+  list_id: string;
+  entry_type: PackingEntryType;
+  title: string;
+  sort_order: number;
+  is_checked: boolean;
+  answer: PackingQuestionAnswer | null;
+};
+
+export type PackingListSummary = {
+  id: string;
+  title: string;
+  notes: string | null;
+  sort_order: number;
+  item_count: number;
+  question_count: number;
+};
+
+export type PackingListDetail = {
+  id: string;
+  title: string;
+  notes: string | null;
+  sort_order: number;
+  entries: PackingListEntry[];
+};
+
+export async function listPackingLists(): Promise<PackingListSummary[]> {
+  const response = await fetch("/api/packing-lists");
+  return parseApiJson<PackingListSummary[]>(response);
+}
+
+export async function fetchPackingList(id: string): Promise<PackingListDetail> {
+  const response = await fetch(`/api/packing-lists/${id}`);
+  return parseApiJson<PackingListDetail>(response);
+}
+
+export async function createPackingList(body: {
+  title: string;
+  notes?: string | null;
+}): Promise<PackingListDetail> {
+  const response = await fetch("/api/packing-lists", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<PackingListDetail>(response);
+}
+
+export async function updatePackingList(
+  id: string,
+  body: { title?: string; notes?: string | null },
+): Promise<PackingListDetail> {
+  const response = await fetch(`/api/packing-lists/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<PackingListDetail>(response);
+}
+
+export async function deletePackingList(id: string): Promise<void> {
+  const response = await fetch(`/api/packing-lists/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    await parseApiJson(response);
+  }
+}
+
+export async function createPackingEntry(
+  listId: string,
+  body: { entry_type: PackingEntryType; title: string },
+): Promise<PackingListEntry> {
+  const response = await fetch(`/api/packing-lists/${listId}/entries`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<PackingListEntry>(response);
+}
+
+export async function updatePackingEntry(
+  entryId: string,
+  body: {
+    title?: string;
+    is_checked?: boolean;
+    answer?: PackingQuestionAnswer | null;
+    clear_answer?: boolean;
+  },
+): Promise<PackingListEntry> {
+  const response = await fetch(`/api/packing-lists/entries/${entryId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<PackingListEntry>(response);
+}
+
+export async function deletePackingEntry(entryId: string): Promise<void> {
+  const response = await fetch(`/api/packing-lists/entries/${entryId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    await parseApiJson(response);
+  }
 }
 
 export async function listRoutines(): Promise<Routine[]> {
@@ -281,6 +411,11 @@ export async function resumeRoutine(id: string): Promise<Routine> {
   return parseApiJson<Routine>(response);
 }
 
+export async function archiveRoutine(id: string): Promise<Routine> {
+  const response = await fetch(`/api/routines/${id}/archive`, { method: "POST" });
+  return parseApiJson<Routine>(response);
+}
+
 export async function completeOccurrence(id: string): Promise<void> {
   const response = await fetch(`/api/routines/occurrences/${id}/complete`, {
     method: "POST",
@@ -300,6 +435,7 @@ export type RoutineGroup = {
   name: string;
   sort_order: number;
   week_visible: boolean;
+  month_visible: boolean;
   is_system: boolean;
 };
 
@@ -328,7 +464,7 @@ export async function createRoutineGroup(name: string): Promise<RoutineGroup> {
 
 export async function updateRoutineGroup(
   id: string,
-  body: { name?: string; week_visible?: boolean },
+  body: { name?: string; week_visible?: boolean; month_visible?: boolean },
 ): Promise<RoutineGroup> {
   const response = await fetch(`/api/routine-groups/${id}`, {
     method: "PATCH",
@@ -671,18 +807,24 @@ export async function clearMaintenanceNextAction(id: string): Promise<Maintenanc
   return parseApiJson<MaintenanceItem>(response);
 }
 
+export function maintenanceScheduleByDate(item: MaintenanceItem): string | null {
+  if (!item.next_due_date) {
+    return null;
+  }
+  return addDays(item.next_due_date, -item.lead_time_days);
+}
+
 export function maintenanceNextActionLabel(item: MaintenanceItem): string {
   switch (item.next_action_status) {
     case "scheduled":
       return "Scheduled";
     case "needs_scheduling":
-      return item.next_due_date
-        ? `Due ${formatDisplayDate(item.next_due_date)}`
+    case "reminder_set": {
+      const scheduleBy = maintenanceScheduleByDate(item);
+      return scheduleBy
+        ? `Schedule by ${formatDisplayDate(scheduleBy)}`
         : "Needs scheduling";
-    case "reminder_set":
-      return item.scheduling_reminder_date
-        ? `Remind ${formatDisplayDate(item.scheduling_reminder_date)}`
-        : "Reminder set";
+    }
     case "not_applicable":
       return "Archived";
     default:
@@ -750,10 +892,12 @@ export async function updateSetting(
 export function formatDisplayDate(isoDate: string): string {
   const [year, month, day] = isoDate.split("-").map(Number);
   const date = new Date(year, month - 1, day);
+  const currentYear = new Date().getFullYear();
   return date.toLocaleDateString(undefined, {
     weekday: "short",
     month: "short",
     day: "numeric",
+    ...(year !== currentYear ? { year: "numeric" } : {}),
   });
 }
 
@@ -799,5 +943,7 @@ export function itemKindLabel(kind: ViewItemKind): string {
       return "Appointment";
     case "maintenance":
       return "Maintenance";
+    case "backlog":
+      return "Backlog";
   }
 }

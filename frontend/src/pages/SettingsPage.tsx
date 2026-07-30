@@ -121,9 +121,12 @@ export function SettingsPage() {
     }, "Settings updated.");
   };
 
-  const handleGroupVisibility = async (groupId: string, weekVisible: boolean) => {
+  const handleGroupVisibility = async (
+    groupId: string,
+    updates: { week_visible?: boolean; month_visible?: boolean },
+  ) => {
     await runAction(async () => {
-      const updated = await updateRoutineGroup(groupId, { week_visible: weekVisible });
+      const updated = await updateRoutineGroup(groupId, updates);
       setRoutineGroups((current) =>
         current
           ? current.map((group) => (group.id === updated.id ? updated : group))
@@ -179,22 +182,39 @@ export function SettingsPage() {
             <section className="pf-settings__routine-groups" aria-labelledby="routine-group-visibility">
               <h2 id="routine-group-visibility">Routine groups on Week &amp; Month</h2>
               <p className="pf-muted">
-                Hidden groups stay off the week and month calendars. Today always shows all
-                routines due that day.
+                Choose separately which groups appear on the week and month calendars.
+                Today always shows all routines due that day.
               </p>
               <ul className="pf-settings__routine-group-list">
                 {routineGroups.map((group) => (
                   <li key={group.id} className="pf-settings__routine-group-item">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={group.week_visible}
-                        onChange={(event) =>
-                          void handleGroupVisibility(group.id, event.target.checked)
-                        }
-                      />
-                      {group.name}
-                    </label>
+                    <span className="pf-settings__routine-group-name">{group.name}</span>
+                    <div className="pf-settings__routine-group-checks">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={group.week_visible}
+                          onChange={(event) =>
+                            void handleGroupVisibility(group.id, {
+                              week_visible: event.target.checked,
+                            })
+                          }
+                        />
+                        Week
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={group.month_visible}
+                          onChange={(event) =>
+                            void handleGroupVisibility(group.id, {
+                              month_visible: event.target.checked,
+                            })
+                          }
+                        />
+                        Month
+                      </label>
+                    </div>
                   </li>
                 ))}
               </ul>

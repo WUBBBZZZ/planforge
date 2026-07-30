@@ -139,3 +139,19 @@ def test_completed_shown_as_completed(db_session) -> None:
     )
     assert len(view.items) == 1
     assert view.items[0].is_completed is True
+
+
+def test_future_day_omits_rolled_overdue_tasks(db_session) -> None:
+    clock = LocalDate.from_iso("2026-07-21")
+    tomorrow = LocalDate.from_iso("2026-07-22")
+    _add_task(db_session, title="Still pending today", due_date=clock)
+
+    view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=tomorrow,
+        clock_today=clock,
+        policies=PolicySnapshot(today_include_rolled_tasks=True),
+    )
+
+    assert view.items == []

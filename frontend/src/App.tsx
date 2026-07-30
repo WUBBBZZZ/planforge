@@ -2,6 +2,7 @@ import { BacklogPage } from "./pages/BacklogPage";
 import { DevComponentsPage } from "./pages/DevComponentsPage";
 import { MonthPage } from "./pages/MonthPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { PackingListsPage } from "./pages/PackingListsPage";
 import { RoutinesPage } from "./pages/RoutinesPage";
 import { MaintenancePage } from "./pages/MaintenancePage";
 import { SchedulePage } from "./pages/SchedulePage";
@@ -18,6 +19,7 @@ const KNOWN_PATHS = new Set([
   "/routines",
   "/schedule",
   "/maintenance",
+  "/packing",
   "/settings",
   "/dev/components",
 ]);
@@ -55,6 +57,10 @@ function App() {
 
   if (path === "/maintenance") {
     return <MaintenancePage />;
+  }
+
+  if (path === "/packing") {
+    return <PackingListsPage />;
   }
 
   if (path === "/settings") {

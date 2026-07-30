@@ -87,6 +87,48 @@ def test_schedule_and_cancel_linked_appointment(db_session) -> None:
     assert refreshed.next_action is MaintenanceNextActionStatus.NEEDS_SCHEDULING
 
 
+def test_complete_appointment_auto_completes_linked_maintenance(db_session) -> None:
+    _set_timezone(db_session, PACIFIC)
+    item = maintenance_service.create_maintenance(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Dentist",
+    )
+    maintenance_service.complete_maintenance(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-07-01"),
+    )
+    item, appointment = maintenance_service.schedule_appointment(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        title=None,
+        start_date=LocalDate.from_iso("2026-10-04"),
+        end_date=LocalDate.from_iso("2026-10-04"),
+        is_all_day=True,
+        start_time=None,
+        end_time=None,
+        timezone_name=PACIFIC,
+    )
+    from planforge.services import appointment_service
+
+    appointment_service.complete_appointment(
+        db_session,
+        appointment_id=appointment.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    refreshed = maintenance_service.get_maintenance(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    assert refreshed.linked_appointment_id is None
+    assert refreshed.last_completed_date.isoformat() == "2026-10-04"
+    assert refreshed.next_action is MaintenanceNextActionStatus.NEEDS_SCHEDULING
+
+
 def test_duplicate_linked_appointment_prevented(db_session) -> None:
     _set_timezone(db_session, PACIFIC)
     first = maintenance_service.create_maintenance(
@@ -169,6 +211,8 @@ def test_historical_completion_and_correction(db_session) -> None:
         owner_id=LOCAL_OWNER_ID,
     )
     assert completions[0].completed_on.isoformat() == "2026-07-27"
+    assert item.last_completed_date.isoformat() == "2026-07-27"
+    assert item.next_due_date.isoformat() == "2026-10-27"
     corrected = maintenance_service.correct_completion(
         db_session,
         maintenance_id=item.id,
@@ -178,6 +222,170 @@ def test_historical_completion_and_correction(db_session) -> None:
         void_reason="Wrong day",
     )
     assert corrected.completed_on.isoformat() == "2026-07-28"
+    db_session.refresh(item)
+    assert item.last_completed_date.isoformat() == "2026-07-28"
+    assert item.next_due_date.isoformat() == "2026-10-28"
+
+
+def test_correcting_older_completion_keeps_current_schedule(db_session) -> None:
+    item = maintenance_service.create_maintenance(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Oil change",
+        interval_unit=MaintenanceIntervalUnit.MONTHS,
+        interval_value=3,
+    )
+    maintenance_service.add_historical_completion(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-03-03"),
+    )
+    maintenance_service.add_historical_completion(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-07-27"),
+    )
+    completions = maintenance_service.list_completions(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    older = next(
+        completion
+        for completion in completions
+        if completion.completed_on.isoformat() == "2026-03-03"
+    )
+    maintenance_service.correct_completion(
+        db_session,
+        maintenance_id=item.id,
+        completion_id=older.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-03-01"),
+    )
+    db_session.refresh(item)
+    assert item.last_completed_date.isoformat() == "2026-07-27"
+    assert item.next_due_date.isoformat() == "2026-10-27"
+
+
+def test_correcting_latest_completion_clears_linked_appointment(db_session) -> None:
+    _set_timezone(db_session, PACIFIC)
+    item = maintenance_service.create_maintenance(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Dentist",
+        interval_unit=MaintenanceIntervalUnit.MONTHS,
+        interval_value=6,
+    )
+    maintenance_service.complete_maintenance(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-01-15"),
+    )
+    maintenance_service.schedule_appointment(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        title=None,
+        is_all_day=True,
+        start_date=LocalDate.from_iso("2026-07-10"),
+        end_date=LocalDate.from_iso("2026-07-10"),
+        start_time=None,
+        end_time=None,
+        timezone_name=PACIFIC,
+    )
+    completions = maintenance_service.list_completions(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    maintenance_service.correct_completion(
+        db_session,
+        maintenance_id=item.id,
+        completion_id=completions[0].id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-02-01"),
+    )
+    db_session.refresh(item)
+    assert item.last_completed_date.isoformat() == "2026-02-01"
+    assert item.next_due_date.isoformat() == "2026-08-01"
+    assert item.linked_appointment_id is None
+    assert item.next_action is MaintenanceNextActionStatus.NEEDS_SCHEDULING
+
+
+def test_overdue_completion_uses_mark_date_not_original_due(db_session) -> None:
+    item = maintenance_service.create_maintenance(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Oil change",
+        interval_unit=MaintenanceIntervalUnit.MONTHS,
+        interval_value=3,
+    )
+    maintenance_service.add_historical_completion(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-04-01"),
+    )
+    db_session.refresh(item)
+    assert item.next_due_date.isoformat() == "2026-07-01"
+
+    completed = maintenance_service.complete_maintenance(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-07-01"),
+        clock_today=LocalDate.from_iso("2026-07-30"),
+    )
+    assert completed.last_completed_date.isoformat() == "2026-07-30"
+    assert completed.next_due_date.isoformat() == "2026-10-30"
+
+
+def test_overdue_appointment_completion_uses_mark_date(db_session) -> None:
+    _set_timezone(db_session, PACIFIC)
+    item = maintenance_service.create_maintenance(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Dentist",
+        interval_unit=MaintenanceIntervalUnit.MONTHS,
+        interval_value=6,
+    )
+    maintenance_service.complete_maintenance(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        completed_on=LocalDate.from_iso("2026-01-15"),
+        clock_today=LocalDate.from_iso("2026-01-15"),
+    )
+    _, appointment = maintenance_service.schedule_appointment(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        title=None,
+        is_all_day=True,
+        start_date=LocalDate.from_iso("2026-07-01"),
+        end_date=LocalDate.from_iso("2026-07-01"),
+        start_time=None,
+        end_time=None,
+        timezone_name=PACIFIC,
+    )
+    from planforge.services import appointment_service
+
+    appointment_service.complete_appointment(
+        db_session,
+        appointment_id=appointment.id,
+        owner_id=LOCAL_OWNER_ID,
+        clock_today=LocalDate.from_iso("2026-07-30"),
+    )
+    refreshed = maintenance_service.get_maintenance(
+        db_session,
+        maintenance_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    assert refreshed.last_completed_date.isoformat() == "2026-07-30"
+    assert refreshed.next_due_date.isoformat() == "2027-01-30"
 
 
 def test_archive_restore(db_session) -> None:

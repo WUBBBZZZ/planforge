@@ -12,6 +12,28 @@ def is_item_overdue(*, scheduled: LocalDate, today: LocalDate) -> bool:
     return today > scheduled
 
 
+def overdue_evaluation_date(
+    *,
+    reference_date: LocalDate,
+    clock_today: LocalDate,
+) -> LocalDate:
+    """Return the date used for overdue and roll-forward when browsing days.
+
+    When viewing a future day, prior unmarked work is treated as complete, so
+    overdue logic stays anchored to the real current day.
+    """
+    return clock_today if reference_date > clock_today else reference_date
+
+
+def is_browsing_future_day(
+    *,
+    reference_date: LocalDate,
+    clock_today: LocalDate,
+) -> bool:
+    """Return True when the user is viewing a day after the real current day."""
+    return reference_date > clock_today
+
+
 def rolled_display_date(*, due: LocalDate, today: LocalDate) -> LocalDate:
     """Return the calendar day where a pending item should appear.
 

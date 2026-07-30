@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { MobileBottomNav } from "./MobileBottomNav";
+
 export interface AppShellProps {
   currentPath: string;
   title: string;
@@ -24,8 +26,8 @@ export function AppShell({ currentPath, title, children, actions }: AppShellProp
       <header className="pf-header">
         <div className="pf-header__inner">
           <p className="pf-brand">Planforge</p>
-          <nav aria-label="Primary">
-            <ul className="pf-nav">
+          <nav className="pf-nav pf-nav--desktop" aria-label="Primary">
+            <ul className="pf-nav__list">
               <li>
                 <a href="/week" aria-current={navCurrent("/week", currentPath)}>
                   Week
@@ -65,6 +67,11 @@ export function AppShell({ currentPath, title, children, actions }: AppShellProp
                 </a>
               </li>
               <li>
+                <a href="/packing" aria-current={navCurrent("/packing", currentPath)}>
+                  Packing
+                </a>
+              </li>
+              <li>
                 <a href="/settings" aria-current={navCurrent("/settings", currentPath)}>
                   Settings
                 </a>
@@ -81,6 +88,8 @@ export function AppShell({ currentPath, title, children, actions }: AppShellProp
         </div>
         {children}
       </main>
+
+      <MobileBottomNav currentPath={currentPath} />
 
       <footer className="pf-footer">
         <div className="pf-footer__inner">

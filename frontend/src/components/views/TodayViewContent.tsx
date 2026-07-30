@@ -1,6 +1,6 @@
 import { EmptyState } from "../EmptyState";
 import { PlannerItemRow } from "../PlannerItemRow";
-import { formatDisplayDate, type TodayView } from "../../lib/tasks";
+import { type TodayView } from "../../lib/tasks";
 
 export interface TodayViewContentProps {
   view: TodayView;
@@ -27,8 +27,6 @@ export function TodayViewContent({ view, onReload }: TodayViewContentProps) {
 
   return (
     <div className="pf-today-view">
-      <p className="pf-muted">{formatDisplayDate(view.reference_date)}</p>
-
       {overdueItems.length > 0 ? (
         <section className="pf-today-section" aria-labelledby="today-overdue">
           <h2 id="today-overdue">Overdue</h2>
@@ -37,6 +35,7 @@ export function TodayViewContent({ view, onReload }: TodayViewContentProps) {
               <PlannerItemRow
                 key={`${item.kind}-${item.item_id}`}
                 item={item}
+                completedOnDate={view.reference_date}
                 onChanged={onReload}
               />
             ))}
@@ -52,6 +51,7 @@ export function TodayViewContent({ view, onReload }: TodayViewContentProps) {
               <PlannerItemRow
                 key={`${item.kind}-${item.item_id}`}
                 item={item}
+                completedOnDate={view.reference_date}
                 onChanged={onReload}
               />
             ))}

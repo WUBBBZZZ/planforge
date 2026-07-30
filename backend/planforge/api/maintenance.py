@@ -28,30 +28,42 @@ from planforge.schemas.maintenance import (
     MaintenanceUpdateRequest,
 )
 from planforge.services import maintenance_service
+from planforge.services.maintenance_display import schedule_by_date
 from planforge.services.maintenance_service import UNSET
 from planforge.services.settings_service import get_policy_snapshot
 
 router = APIRouter(prefix="/maintenance", tags=["maintenance"])
 
 
+def _format_short_date(value: LocalDate, *, reference_year: int) -> str:
+    if value.year != reference_year:
+        return value.to_date().strftime("%b %d, %Y")
+    return value.to_date().strftime("%b %d")
+
+
 def _current_next_label(
     item: MaintenanceDefinition,
     linked: Appointment | None = None,
+    *,
+    reference_year: int,
 ) -> str:
     from planforge.domain.enums import MaintenanceNextActionStatus
 
     if item.next_action is MaintenanceNextActionStatus.SCHEDULED:
         if linked is not None:
-            return f"Scheduled {linked.start_date.strftime('%b %d')}"
+            linked_date = LocalDate.from_date(linked.start_date)
+            return f"Scheduled {_format_short_date(linked_date, reference_year=reference_year)}"
         return "Scheduled"
-    if item.next_action is MaintenanceNextActionStatus.NEEDS_SCHEDULING:
-        if item.next_due_date:
-            return f"Due {item.next_due_date.strftime('%b %Y')}"
+    if item.next_action in {
+        MaintenanceNextActionStatus.NEEDS_SCHEDULING,
+        MaintenanceNextActionStatus.REMINDER_SET,
+    }:
+        schedule_by = schedule_by_date(item)
+        if schedule_by is not None:
+            return (
+                f"Schedule by {_format_short_date(schedule_by, reference_year=reference_year)}"
+            )
         return "Needs scheduling"
-    if item.next_action is MaintenanceNextActionStatus.REMINDER_SET:
-        if item.scheduling_reminder_date:
-            return f"Remind {item.scheduling_reminder_date.isoformat()}"
-        return "Reminder set"
     if item.next_action is MaintenanceNextActionStatus.NOT_APPLICABLE:
         return "Archived"
     return "No next date"
@@ -104,7 +116,9 @@ def maintenance_history_board_endpoint(
             MaintenanceHistoryRowResponse(
                 maintenance=MaintenanceResponse.from_item(item),
                 current_next_label=_current_next_label(
-                    item, linked if isinstance(linked, Appointment) else None
+                    item,
+                    linked if isinstance(linked, Appointment) else None,
+                    reference_year=clock.today().year,
                 ),
                 completions=[
                     MaintenanceCompletionResponse.from_completion(c)
@@ -231,6 +245,8 @@ def complete_maintenance_endpoint(
     body: MaintenanceCompleteRequest | None = None,
     session: Session = Depends(get_db),
 ) -> MaintenanceResponse:
+    policies = get_policy_snapshot(session, owner_id=LOCAL_OWNER_ID)
+    clock = PlannerClock(policies.timezone)
     completed_on = (
         LocalDate.from_date(body.completed_on)
         if body and body.completed_on is not None
@@ -241,6 +257,7 @@ def complete_maintenance_endpoint(
         maintenance_id=maintenance_id,
         owner_id=LOCAL_OWNER_ID,
         completed_on=completed_on,
+        clock_today=clock.today(),
         notes=body.notes if body else None,
     )
     return MaintenanceResponse.from_item(item)

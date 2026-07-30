@@ -33,6 +33,42 @@ def test_promote_backlog_to_task(db_session) -> None:
     assert task.title == "Example errand"
 
 
+def test_delete_backlog_item(db_session) -> None:
+    from planforge.models.backlog_item import BacklogItem
+
+    item = backlog_service.create_backlog_item(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Remove me",
+    )
+    backlog_service.delete_backlog_item(
+        db_session,
+        item_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+    )
+    assert db_session.get(BacklogItem, item.id) is None
+
+
+def test_delete_promoted_backlog_raises(db_session) -> None:
+    item = backlog_service.create_backlog_item(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Promoted item",
+    )
+    backlog_service.promote_backlog_to_task(
+        db_session,
+        item_id=item.id,
+        owner_id=LOCAL_OWNER_ID,
+        due_date=LocalDate.from_iso("2026-07-24"),
+    )
+    with pytest.raises(BacklogStateError):
+        backlog_service.delete_backlog_item(
+            db_session,
+            item_id=item.id,
+            owner_id=LOCAL_OWNER_ID,
+        )
+
+
 def test_archive_non_active_raises(db_session) -> None:
     item = backlog_service.create_backlog_item(
         db_session,

@@ -323,6 +323,19 @@ def _refresh_future_occurrences(
     session.flush()
 
 
+def _generation_end_date(
+    *,
+    clock_today: LocalDate,
+    horizon_days: int,
+    through_date: LocalDate | None = None,
+) -> LocalDate:
+    """Return the inclusive last date to generate occurrences through."""
+    end = horizon_end(today=clock_today, horizon_days=horizon_days)
+    if through_date is not None and through_date > end:
+        return through_date
+    return end
+
+
 def _generate_occurrences_for_routine(
     session: Session,
     *,
@@ -330,10 +343,15 @@ def _generate_occurrences_for_routine(
     owner_id: str,
     clock_today: LocalDate,
     policies: PolicySnapshot,
+    through_date: LocalDate | None = None,
 ) -> None:
     """Insert missing pending occurrences for one routine."""
     generation_start = _generation_start(routine=routine, clock_today=clock_today)
-    end = horizon_end(today=clock_today, horizon_days=policies.routine_horizon_days)
+    end = _generation_end_date(
+        clock_today=clock_today,
+        horizon_days=policies.routine_horizon_days,
+        through_date=through_date,
+    )
     scheduled_dates = schedule_dates_for_routine(
         routine=routine,
         start=generation_start,
@@ -372,8 +390,13 @@ def ensure_occurrences(
     owner_id: str,
     clock_today: LocalDate,
     policies: PolicySnapshot,
+    through_date: LocalDate | None = None,
 ) -> None:
-    """Generate pending occurrences for active routines within the horizon."""
+    """Generate pending occurrences for active routines within the horizon.
+
+    When ``through_date`` is later than the configured horizon, generation extends
+    through that date so calendar views can show routines in browsed future periods.
+    """
     routines = list_routines(session, owner_id=owner_id, status=RoutineStatus.ACTIVE)
     for routine in routines:
         _cleanup_stale_pending_occurrences(session, routine=routine, owner_id=owner_id)
@@ -383,6 +406,7 @@ def ensure_occurrences(
             owner_id=owner_id,
             clock_today=clock_today,
             policies=policies,
+            through_date=through_date,
         )
     session.flush()
 

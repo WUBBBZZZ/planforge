@@ -97,3 +97,14 @@ class ViewItemKind(StrEnum):
     OCCURRENCE = "occurrence"
     APPOINTMENT = "appointment"
     MAINTENANCE = "maintenance"
+    BACKLOG = "backlog"
+
+
+class PackingEntryType(StrEnum):
+    ITEM = "item"
+    QUESTION = "question"
+
+
+class PackingQuestionAnswer(StrEnum):
+    YES = "yes"
+    NO = "no"

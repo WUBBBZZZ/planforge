@@ -144,3 +144,16 @@ def move_task_to_backlog_endpoint(
         task=TaskResponse.from_task(task),
         backlog_item=BacklogItemResponse.from_item(backlog_item),
     )
+
+
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task_endpoint(
+    task_id: str,
+    session: Session = Depends(get_db),
+) -> None:
+    """Permanently delete a task."""
+    task_service.delete_task(
+        session,
+        task_id=task_id,
+        owner_id=LOCAL_OWNER_ID,
+    )

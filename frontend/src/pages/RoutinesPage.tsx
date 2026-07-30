@@ -8,6 +8,7 @@ import { Input } from "../components/Input";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { Select } from "../components/Select";
 import {
+  archiveRoutine,
   createRoutine,
   createRoutineGroup,
   deleteRoutineGroup,
@@ -18,6 +19,7 @@ import {
   reorderRoutineGroups,
   resumeRoutine,
   updateRoutine,
+  updateRoutineGroup,
   type Routine,
   type RoutineGroupBoard,
 } from "../lib/tasks";
@@ -233,6 +235,40 @@ export function RoutinesPage() {
     }
   };
 
+  const handleGroupVisibility = async (
+    groupId: string,
+    updates: { week_visible?: boolean; month_visible?: boolean },
+  ) => {
+    try {
+      const updated = await updateRoutineGroup(groupId, updates);
+      setBoard((current) =>
+        current
+          ? current.map((group) => (group.id === updated.id ? { ...group, ...updated } : group))
+          : current,
+      );
+    } catch (visibilityError) {
+      setError(
+        visibilityError instanceof Error
+          ? visibilityError.message
+          : "Could not update group visibility",
+      );
+    }
+  };
+
+  const handleDeleteRoutine = async (routine: Routine) => {
+    if (!window.confirm(`Delete "${routine.title}"? This archives the routine.`)) {
+      return;
+    }
+    try {
+      await archiveRoutine(routine.id);
+      await reload();
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error ? deleteError.message : "Could not delete routine",
+      );
+    }
+  };
+
   const handleGroupDrop = async (targetGroupId: string) => {
     if (!draggingGroupId || draggingGroupId === targetGroupId || !board) {
       setDraggingGroupId(null);
@@ -370,8 +406,8 @@ export function RoutinesPage() {
           </div>
         </div>
         <p className="pf-muted">
-          Drag routines between groups to organize them. Control week/month visibility in
-          Settings.
+          Drag routines between groups to organize them. Use the Week and Month
+          checkboxes to choose where each group appears on the planner calendars.
         </p>
       </section>
 
@@ -429,6 +465,32 @@ export function RoutinesPage() {
                       Delete
                     </Button>
                   ) : null}
+                  <div className="pf-routine-group__visibility-options">
+                    <label className="pf-routine-group__visibility">
+                      <input
+                        type="checkbox"
+                        checked={group.week_visible}
+                        onChange={(event) =>
+                          void handleGroupVisibility(group.id, {
+                            week_visible: event.target.checked,
+                          })
+                        }
+                      />
+                      Week
+                    </label>
+                    <label className="pf-routine-group__visibility">
+                      <input
+                        type="checkbox"
+                        checked={group.month_visible}
+                        onChange={(event) =>
+                          void handleGroupVisibility(group.id, {
+                            month_visible: event.target.checked,
+                          })
+                        }
+                      />
+                      Month
+                    </label>
+                  </div>
                 </header>
                 {!isCollapsed ? (
                   <ul className="pf-task-list pf-routine-group__items">
@@ -476,6 +538,14 @@ export function RoutinesPage() {
                           {routine.status !== "archived" ? (
                             <Button variant="ghost" onClick={() => void togglePause(routine)}>
                               {routine.status === "active" ? "Pause" : "Resume"}
+                            </Button>
+                          ) : null}
+                          {routine.status !== "archived" ? (
+                            <Button
+                              variant="ghost"
+                              onClick={() => void handleDeleteRoutine(routine)}
+                            >
+                              Delete
                             </Button>
                           ) : null}
                         </div>

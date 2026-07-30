@@ -278,3 +278,29 @@ def move_task_to_backlog(
     )
     session.flush()
     return task, backlog_item
+
+
+def delete_task(session: Session, *, task_id: str, owner_id: str) -> None:
+    """Permanently delete a task and its completion history."""
+    task = _get_task_or_raise(session, task_id=task_id, owner_id=owner_id)
+    backlog_item = _find_backlog_for_task(
+        session,
+        owner_id=owner_id,
+        task_id=task.id,
+    )
+    if backlog_item is not None and backlog_item.backlog_status is BacklogStatus.ACTIVE:
+        session.delete(backlog_item)
+
+    records = list(
+        session.scalars(
+            select(CompletionRecord).where(
+                CompletionRecord.owner_id == owner_id,
+                CompletionRecord.entity_type == "task",
+                CompletionRecord.entity_id == task.id,
+            )
+        )
+    )
+    for record in records:
+        session.delete(record)
+    session.delete(task)
+    session.flush()

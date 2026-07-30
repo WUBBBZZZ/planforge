@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from planforge.core.exceptions import (
     RoutineGroupNotFoundError,
     RoutineNotFoundError,
@@ -53,6 +55,7 @@ def get_misc_group(session: Session, *, owner_id: str) -> RoutineGroup:
         name=MISC_GROUP_NAME,
         sort_order=(max_sort or -1) + 1,
         week_visible=False,
+        month_visible=False,
         is_system=True,
     )
     session.add(group)
@@ -79,15 +82,23 @@ def ensure_default_groups(session: Session, *, owner_id: str) -> RoutineGroup:
     return misc
 
 
-def visible_routine_ids(session: Session, *, owner_id: str) -> set[str]:
-    """Return routine IDs whose group is visible on week/month planner views."""
+def visible_routine_ids(
+    session: Session,
+    *,
+    owner_id: str,
+    view: Literal["week", "month"] = "week",
+) -> set[str]:
+    """Return routine IDs whose group is visible on a planner calendar view."""
+    visibility_column = (
+        RoutineGroup.week_visible if view == "week" else RoutineGroup.month_visible
+    )
     rows = session.execute(
         select(Routine.id)
         .join(RoutineGroup, RoutineGroup.id == Routine.group_id)
         .where(
             Routine.owner_id == owner_id,
             RoutineGroup.owner_id == owner_id,
-            RoutineGroup.week_visible.is_(True),
+            visibility_column.is_(True),
         )
     )
     return {row[0] for row in rows}
@@ -157,6 +168,7 @@ def create_group(session: Session, *, owner_id: str, name: str) -> RoutineGroup:
         name=cleaned,
         sort_order=(max_sort or -1) + 1,
         week_visible=False,
+        month_visible=False,
         is_system=False,
     )
     session.add(group)
@@ -171,6 +183,7 @@ def update_group(
     owner_id: str,
     name: str | None = None,
     week_visible: bool | None = None,
+    month_visible: bool | None = None,
 ) -> RoutineGroup:
     group = _get_group_or_raise(session, group_id=group_id, owner_id=owner_id)
     if name is not None:
@@ -184,6 +197,8 @@ def update_group(
         group.name = cleaned
     if week_visible is not None:
         group.week_visible = week_visible
+    if month_visible is not None:
+        group.month_visible = month_visible
     session.flush()
     return group
 

@@ -23,15 +23,20 @@ import {
   type MaintenanceItem,
   type MaintenanceListFilter,
 } from "../lib/tasks";
+import { todayIsoLocal } from "../lib/dates";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
-type PageState =
+type MaintenanceTab = "items" | "history";
+
+type ItemsState =
   | { kind: "loading" }
-  | {
-      kind: "ready";
-      items: MaintenanceItem[];
-      board: MaintenanceHistoryBoardData;
-    }
+  | { kind: "ready"; items: MaintenanceItem[] }
+  | { kind: "error"; message: string };
+
+type HistoryState =
+  | { kind: "idle" }
+  | { kind: "loading" }
+  | { kind: "ready"; board: MaintenanceHistoryBoardData }
   | { kind: "error"; message: string };
 
 const FILTERS: Array<{ id: MaintenanceListFilter; label: string }> = [
@@ -43,10 +48,17 @@ const FILTERS: Array<{ id: MaintenanceListFilter; label: string }> = [
   { id: "archived", label: "Archived" },
 ];
 
+const TABS: Array<{ id: MaintenanceTab; label: string }> = [
+  { id: "items", label: "Items" },
+  { id: "history", label: "History" },
+];
+
 export function MaintenancePage() {
+  const [activeTab, setActiveTab] = useState<MaintenanceTab>("items");
   const [filter, setFilter] = useState<MaintenanceListFilter>("active");
   const [historyLimit, setHistoryLimit] = useState(10);
-  const [state, setState] = useState<PageState>({ kind: "loading" });
+  const [itemsState, setItemsState] = useState<ItemsState>({ kind: "loading" });
+  const [historyState, setHistoryState] = useState<HistoryState>({ kind: "idle" });
   const [actionError, setActionError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<MaintenanceItem | null>(null);
@@ -54,18 +66,34 @@ export function MaintenancePage() {
   const [actionsItem, setActionsItem] = useState<MaintenanceItem | null>(null);
   const [actionsMode, setActionsMode] = useState<MaintenanceActionMode>("history");
 
-  const reload = async () => {
+  const loadItems = async (nextFilter = filter) => {
     try {
-      const [items, board] = await Promise.all([
-        listMaintenance({ filter }),
-        fetchMaintenanceHistoryBoard(historyLimit),
-      ]);
-      setState({ kind: "ready", items, board });
+      const items = await listMaintenance({ filter: nextFilter });
+      setItemsState({ kind: "ready", items });
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Could not load maintenance";
-      setState({ kind: "error", message });
+      setItemsState({ kind: "error", message });
     }
+  };
+
+  const loadHistory = async (limit = historyLimit) => {
+    setHistoryState({ kind: "loading" });
+    try {
+      const board = await fetchMaintenanceHistoryBoard(limit);
+      setHistoryState({ kind: "ready", board });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Could not load maintenance history";
+      setHistoryState({ kind: "error", message });
+    }
+  };
+
+  const reload = async () => {
+    await Promise.all([
+      loadItems(),
+      activeTab === "history" ? loadHistory() : Promise.resolve(),
+    ]);
   };
 
   useEffect(() => {
@@ -74,26 +102,31 @@ export function MaintenancePage() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      listMaintenance({ filter }),
-      fetchMaintenanceHistoryBoard(historyLimit),
-    ])
-      .then(([items, board]) => {
+    setItemsState({ kind: "loading" });
+    listMaintenance({ filter })
+      .then((items) => {
         if (!cancelled) {
-          setState({ kind: "ready", items, board });
+          setItemsState({ kind: "ready", items });
         }
       })
       .catch((error: unknown) => {
         if (!cancelled) {
           const message =
             error instanceof Error ? error.message : "Could not load maintenance";
-          setState({ kind: "error", message });
+          setItemsState({ kind: "error", message });
         }
       });
     return () => {
       cancelled = true;
     };
-  }, [filter, historyLimit]);
+  }, [filter]);
+
+  useEffect(() => {
+    if (activeTab !== "history") {
+      return;
+    }
+    void loadHistory(historyLimit);
+  }, [activeTab, historyLimit]);
 
   const runAction = async (action: () => Promise<void>) => {
     setActionError(null);
@@ -129,23 +162,21 @@ export function MaintenancePage() {
         </Button>
       }
     >
-      <div className="pf-schedule-toolbar">
-        <div
-          className="pf-schedule-filters"
-          role="group"
-          aria-label="Maintenance filters"
-        >
-          {FILTERS.map((entry) => (
-            <Button
-              key={entry.id}
-              variant={filter === entry.id ? "secondary" : "ghost"}
-              onClick={() => setFilter(entry.id)}
-              aria-pressed={filter === entry.id}
-            >
-              {entry.label}
-            </Button>
-          ))}
-        </div>
+      <div className="pf-page-tabs" role="tablist" aria-label="Maintenance views">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            className="pf-page-tabs__tab"
+            aria-selected={activeTab === tab.id}
+            aria-controls={`maintenance-panel-${tab.id}`}
+            id={`maintenance-tab-${tab.id}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {actionError ? (
@@ -154,122 +185,163 @@ export function MaintenancePage() {
         </p>
       ) : null}
 
-      {state.kind === "loading" ? (
-        <LoadingIndicator label="Loading maintenance" />
-      ) : null}
-      {state.kind === "error" ? (
-        <p className="pf-form-field__error" role="alert">
-          {state.message}
-        </p>
-      ) : null}
+      {activeTab === "items" ? (
+        <div
+          id="maintenance-panel-items"
+          role="tabpanel"
+          aria-labelledby="maintenance-tab-items"
+          className="pf-maintenance-panel"
+        >
+          <div className="pf-schedule-toolbar">
+            <div
+              className="pf-schedule-filters"
+              role="group"
+              aria-label="Maintenance filters"
+            >
+              {FILTERS.map((entry) => (
+                <Button
+                  key={entry.id}
+                  variant={filter === entry.id ? "secondary" : "ghost"}
+                  onClick={() => setFilter(entry.id)}
+                  aria-pressed={filter === entry.id}
+                >
+                  {entry.label}
+                </Button>
+              ))}
+            </div>
+          </div>
 
-      {state.kind === "ready" ? (
-        <>
-          <MaintenanceHistoryBoard
-            rows={state.board.rows}
-            historyLimit={state.board.history_limit}
-            onHistoryLimitChange={setHistoryLimit}
-            onOpenItem={(item) => openActions(item, "history")}
-          />
-
-          <section className="pf-maintenance-sections" aria-label="Completion history">
-            <h2>Completion history</h2>
-            <p className="pf-muted">
-              Scroll horizontally in the table above to see older records. Select an
-              item below to manage scheduling, reminders, and completions.
+          {itemsState.kind === "loading" ? (
+            <LoadingIndicator label="Loading maintenance" />
+          ) : null}
+          {itemsState.kind === "error" ? (
+            <p className="pf-form-field__error" role="alert">
+              {itemsState.message}
             </p>
-          </section>
+          ) : null}
 
-          <section
-            className="pf-maintenance-sections"
-            aria-label="Filtered maintenance list"
-          >
-            <h2>Filtered items</h2>
-            {state.items.length === 0 ? (
-              <EmptyState
-                title="No maintenance items here"
-                description="Try another filter or create a maintenance definition."
-              />
-            ) : (
-              <ul className="pf-task-list">
-                {state.items.map((item) => (
-                  <li key={item.id} className="pf-task-row">
-                    <div className="pf-task-row__main">
-                      <p className="pf-task-row__title">{item.title}</p>
-                      <div className="pf-task-row__meta">
-                        <Badge>{maintenanceNextActionLabel(item)}</Badge>
-                        {item.category ? <Badge>{item.category}</Badge> : null}
-                        {item.last_completed_date ? (
-                          <Badge>
-                            Last {formatDisplayDate(item.last_completed_date)}
-                          </Badge>
-                        ) : null}
+          {itemsState.kind === "ready" ? (
+            <section aria-label="Filtered maintenance list">
+              {itemsState.items.length === 0 ? (
+                <EmptyState
+                  title="No maintenance items here"
+                  description="Try another filter or create a maintenance definition."
+                />
+              ) : (
+                <ul className="pf-task-list">
+                  {itemsState.items.map((item) => (
+                    <li key={item.id} className="pf-task-row">
+                      <div className="pf-task-row__main">
+                        <p className="pf-task-row__title">{item.title}</p>
+                        <div className="pf-task-row__meta">
+                          <Badge>{maintenanceNextActionLabel(item)}</Badge>
+                          {item.category ? <Badge>{item.category}</Badge> : null}
+                          {item.last_completed_date ? (
+                            <Badge>
+                              Last {formatDisplayDate(item.last_completed_date)}
+                            </Badge>
+                          ) : null}
+                        </div>
                       </div>
-                    </div>
-                    <div className="pf-task-row__actions">
-                      {item.status === "active" ? (
-                        <>
+                      <div className="pf-task-row__actions">
+                        {item.status === "active" ? (
+                          <>
+                            <Button
+                              variant="secondary"
+                              onClick={() =>
+                                void runAction(async () => {
+                                  await completeMaintenance(item.id, {
+                                    completed_on: todayIsoLocal(),
+                                  });
+                                })
+                              }
+                            >
+                              Mark completed
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              onClick={() => openActions(item, "schedule")}
+                            >
+                              Schedule
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              onClick={() => openActions(item, "history")}
+                            >
+                              Manage
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              onClick={() => {
+                                setEditing(item);
+                                setDialogOpen(true);
+                              }}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              onClick={() => {
+                                if (
+                                  window.confirm(
+                                    `Delete "${item.title}"? This archives the maintenance item.`,
+                                  )
+                                ) {
+                                  void runAction(async () => {
+                                    await archiveMaintenance(item.id);
+                                  });
+                                }
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        ) : (
                           <Button
                             variant="secondary"
                             onClick={() =>
                               void runAction(async () => {
-                                await completeMaintenance(item.id);
+                                await restoreMaintenance(item.id);
                               })
                             }
                           >
-                            Mark completed
+                            Restore
                           </Button>
-                          <Button
-                            variant="ghost"
-                            onClick={() => openActions(item, "schedule")}
-                          >
-                            Schedule
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            onClick={() => openActions(item, "history")}
-                          >
-                            Manage
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            onClick={() => {
-                              setEditing(item);
-                              setDialogOpen(true);
-                            }}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            onClick={() =>
-                              void runAction(async () => {
-                                await archiveMaintenance(item.id);
-                              })
-                            }
-                          >
-                            Archive
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          variant="secondary"
-                          onClick={() =>
-                            void runAction(async () => {
-                              await restoreMaintenance(item.id);
-                            })
-                          }
-                        >
-                          Restore
-                        </Button>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        </>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          ) : null}
+        </div>
+      ) : null}
+
+      {activeTab === "history" ? (
+        <div
+          id="maintenance-panel-history"
+          role="tabpanel"
+          aria-labelledby="maintenance-tab-history"
+          className="pf-maintenance-panel"
+        >
+          {historyState.kind === "loading" || historyState.kind === "idle" ? (
+            <LoadingIndicator label="Loading maintenance history" />
+          ) : null}
+          {historyState.kind === "error" ? (
+            <p className="pf-form-field__error" role="alert">
+              {historyState.message}
+            </p>
+          ) : null}
+          {historyState.kind === "ready" ? (
+            <MaintenanceHistoryBoard
+              rows={historyState.board.rows}
+              historyLimit={historyState.board.history_limit}
+              onHistoryLimitChange={setHistoryLimit}
+              onOpenItem={(item) => openActions(item, "history")}
+            />
+          ) : null}
+        </div>
       ) : null}
 
       <MaintenanceEditDialog

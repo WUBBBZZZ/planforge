@@ -6,6 +6,7 @@ from planforge.models.completion_record import CompletionRecord
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.maintenance_completion import MaintenanceCompletion
 from planforge.models.occurrence import Occurrence
+from planforge.models.packing_list import PackingList, PackingListEntry
 from planforge.models.routine import Routine
 from planforge.models.routine_group import RoutineGroup
 from planforge.models.setting import Setting
@@ -19,6 +20,8 @@ __all__ = [
     "MaintenanceDefinition",
     "MaintenanceCompletion",
     "Occurrence",
+    "PackingList",
+    "PackingListEntry",
     "Routine",
     "RoutineGroup",
     "Setting",

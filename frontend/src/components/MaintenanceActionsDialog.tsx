@@ -112,6 +112,7 @@ function MaintenanceActionsForm({
           );
           if (latestCompletion) {
             setCompletionId(latestCompletion.id);
+            setCompletedOn(latestCompletion.completed_on);
           }
           if (detailResult.linked_appointment) {
             const linked = detailResult.linked_appointment;
@@ -294,7 +295,16 @@ function MaintenanceActionsForm({
             <FormField label="Completion to correct">
               <Select
                 value={completionId}
-                onChange={(event) => setCompletionId(event.target.value)}
+                onChange={(event) => {
+                  const nextId = event.target.value;
+                  setCompletionId(nextId);
+                  const selected = activeCompletions.find(
+                    (completion) => completion.id === nextId,
+                  );
+                  if (selected) {
+                    setCompletedOn(selected.completed_on);
+                  }
+                }}
                 options={activeCompletions.map((completion) => ({
                   value: completion.id,
                   label: formatDisplayDate(completion.completed_on),

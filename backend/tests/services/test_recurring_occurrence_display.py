@@ -12,20 +12,22 @@ from planforge.services.recurring_occurrence_display import (
 )
 from planforge.services.month_view import assemble_month_view
 from planforge.services.settings_service import PolicySnapshot
+from planforge.services.today_view import assemble_today_view
 from planforge.services.week_bounds import week_bounds
 from planforge.services.week_view import assemble_week_view
 
 
 def _show_all_routine_groups(db_session) -> None:
-    """Enable week/month visibility for every routine group (hidden by default)."""
+    """Enable week and month visibility for every routine group (hidden by default)."""
     routine_group_service.ensure_default_groups(db_session, owner_id=LOCAL_OWNER_ID)
     for group in routine_group_service.list_groups(db_session, owner_id=LOCAL_OWNER_ID):
-        if not group.week_visible:
+        if not group.week_visible or not group.month_visible:
             routine_group_service.update_group(
                 db_session,
                 group_id=group.id,
                 owner_id=LOCAL_OWNER_ID,
                 week_visible=True,
+                month_visible=True,
             )
 
 
@@ -341,3 +343,73 @@ def test_weekly_routine_appears_on_future_month_calendar(db_session) -> None:
         "2026-08-20",
         "2026-08-27",
     }
+
+
+def test_routines_appear_in_month_beyond_default_horizon(db_session) -> None:
+    today = LocalDate.from_iso("2026-07-30")
+    september = LocalDate.from_iso("2026-09-01")
+    _seed_weekly_routine(db_session, title="Change sheets", today=today)
+    _show_all_routine_groups(db_session)
+
+    view = assemble_month_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=september,
+        clock_today=today,
+        policies=PolicySnapshot(),
+    )
+
+    calendar_routines = [
+        item
+        for group in view.days
+        if group.date is not None
+        for item in group.items
+        if item.kind.value == "occurrence"
+    ]
+    assert len(calendar_routines) == 4
+    assert calendar_routines[0].due_date.to_iso() == "2026-09-03"
+
+
+def test_routines_remain_on_current_views_after_browsing_future_month(
+    db_session,
+) -> None:
+    today = LocalDate.from_iso("2026-07-30")
+    august = LocalDate.from_iso("2026-08-01")
+    _seed_weekly_routine(db_session, title="Change sheets", today=today)
+    _show_all_routine_groups(db_session)
+
+    assemble_month_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=august,
+        clock_today=today,
+        policies=PolicySnapshot(),
+    )
+
+    week_start, _ = week_bounds(reference_date=today, week_start_day="monday")
+    week_view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=today,
+        policies=PolicySnapshot(),
+    )
+    week_routines = [
+        item
+        for group in week_view.days[:7]
+        for item in group.items
+        if item.kind.value == "occurrence"
+    ]
+    assert len(week_routines) == 1
+
+    today_view = assemble_today_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        reference_date=today,
+        clock_today=today,
+        policies=PolicySnapshot(),
+    )
+    today_routines = [
+        item for item in today_view.items if item.kind.value == "occurrence"
+    ]
+    assert len(today_routines) >= 1

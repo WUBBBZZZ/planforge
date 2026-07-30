@@ -40,7 +40,11 @@ export function addMonths(monthKey: string, months: number): string {
 export function formatMonthYear(monthKey: string): string {
   const [year, month] = monthKey.split("-").map(Number);
   const date = new Date(year, month - 1, 1);
-  return date.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  const currentYear = new Date().getFullYear();
+  return date.toLocaleDateString(undefined, {
+    month: "long",
+    ...(year !== currentYear ? { year: "numeric" } : {}),
+  });
 }
 
 export function weekdayLabels(weekStartDay = "monday"): string[] {
@@ -75,4 +79,9 @@ export function setSearchParam(key: string, value: string | null): void {
     ? `${window.location.pathname}?${query}`
     : window.location.pathname;
   window.history.replaceState(null, "", nextUrl);
+}
+
+export function todayIsoLocal(): string {
+  const now = new Date();
+  return toIsoDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
 }

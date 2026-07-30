@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { MaintenancePage } from "./MaintenancePage";
 
@@ -17,11 +18,24 @@ vi.mock("../lib/tasks", () => ({
 }));
 
 describe("MaintenancePage", () => {
-  it("renders maintenance sections", async () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  it("shows items by default and history after switching tabs", async () => {
+    const user = userEvent.setup();
     render(<MaintenancePage />);
+
     expect(await screen.findByText("Overdue")).toBeInTheDocument();
     expect(
-      screen.getByRole("table", { name: "Maintenance history table" }),
+      screen.queryByRole("table", { name: "Maintenance history table" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "History" }));
+
+    expect(
+      await screen.findByRole("table", { name: "Maintenance history table" }),
     ).toBeInTheDocument();
+    expect(screen.queryByText("Overdue")).not.toBeInTheDocument();
   });
 });

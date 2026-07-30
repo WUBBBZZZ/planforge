@@ -24,6 +24,7 @@ class RoutineGroup(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     week_visible: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    month_visible: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_system: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     routines: Mapped[list["Routine"]] = relationship(back_populates="group")

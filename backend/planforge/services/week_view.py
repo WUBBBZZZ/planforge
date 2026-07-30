@@ -18,7 +18,8 @@ from planforge.domain.local_date import LocalDate
 from planforge.models.appointment import Appointment
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
-from planforge.services import routine_group_service, routine_service, weekly_target_service
+from planforge.services import backlog_service, routine_group_service, routine_service, weekly_target_service
+from planforge.services.maintenance_display import placements_for_maintenance
 from planforge.services.completion_display import completed_items_for_local_day
 from planforge.services.display_date import is_item_overdue, rolled_display_date
 from planforge.services.recurring_occurrence_display import (
@@ -82,6 +83,13 @@ def assemble_week_view(
 ) -> WeekView:
     """Assemble pending items grouped by due date for a week."""
     week_end = week_start.add_days(6)
+    routine_service.ensure_occurrences(
+        session,
+        owner_id=owner_id,
+        clock_today=today,
+        policies=policies,
+        through_date=week_end,
+    )
     start_date = week_start.to_date()
     end_date = week_end.to_date()
 
@@ -111,6 +119,8 @@ def assemble_week_view(
         )
 
         if display_date > end_date:
+            if due > today.add_days(90):
+                return
             upcoming.append(
                 WeekItem(
                     kind=kind,
@@ -166,6 +176,7 @@ def assemble_week_view(
     visible_routine_ids = routine_group_service.visible_routine_ids(
         session,
         owner_id=owner_id,
+        view="week",
     )
     pending_routine_rows = routine_service.list_pending_occurrences(
         session,
@@ -206,22 +217,37 @@ def assemble_week_view(
         )
     )
     for maintenance in maintenance_items:
-        assert maintenance.next_due_date is not None
-        due = LocalDate.from_date(maintenance.next_due_date)
-        due_date = due.to_date()
-        item = WeekItem(
-            kind=ViewItemKind.MAINTENANCE,
-            item_id=maintenance.id,
-            title=maintenance.title,
-            due_date=due,
-            starts_at=None,
-            ends_at=None,
-            is_overdue=is_item_overdue(scheduled=due, today=today),
-        )
-        if start_date <= due_date <= end_date:
-            day_map[due].append(item)
-        elif due_date > end_date:
-            upcoming.append(item)
+        for placement in placements_for_maintenance(
+            maintenance,
+            period_start=week_start,
+            period_end=week_end,
+            clock_today=today,
+            view="week",
+        ):
+            if placement.target == "upcoming":
+                upcoming.append(
+                    WeekItem(
+                        kind=placement.kind,
+                        item_id=placement.item_id,
+                        title=placement.title,
+                        due_date=placement.due_date,
+                        starts_at=None,
+                        ends_at=None,
+                        is_overdue=placement.is_overdue,
+                    )
+                )
+            elif placement.display_date is not None:
+                day_map[placement.display_date].append(
+                    WeekItem(
+                        kind=placement.kind,
+                        item_id=placement.item_id,
+                        title=placement.title,
+                        due_date=placement.due_date,
+                        starts_at=None,
+                        ends_at=None,
+                        is_overdue=placement.is_overdue,
+                    )
+                )
 
     appointments = list(
         session.scalars(
@@ -248,6 +274,8 @@ def assemble_week_view(
                 day_map[display].append(item)
         if not placed:
             start = LocalDate.from_date(appointment.start_date)
+            if start.to_date() <= end_date:
+                continue
             starts_at, ends_at = appointment_times_iso(
                 is_all_day=appointment.is_all_day,
                 starts_at=appointment.starts_at,
@@ -364,12 +392,43 @@ def assemble_week_view(
             )
         )
 
+    days = append_backlog_bucket(
+        session,
+        owner_id=owner_id,
+        days=days,
+    )
+
     return WeekView(
         week_start=week_start,
         week_end=week_end,
         days=days,
         targets=targets,
     )
+
+
+def append_backlog_bucket(
+    session: Session,
+    *,
+    owner_id: str,
+    days: list[WeekDayGroup],
+) -> list[WeekDayGroup]:
+    """Append active backlog items as a dedicated bucket."""
+    backlog_items = backlog_service.list_backlog_items(session, owner_id=owner_id)
+    if not backlog_items:
+        return days
+    bucket_items = [
+        WeekItem(
+            kind=ViewItemKind.BACKLOG,
+            item_id=item.id,
+            title=item.title,
+            due_date=None,
+            starts_at=None,
+            ends_at=None,
+            is_overdue=False,
+        )
+        for item in backlog_items
+    ]
+    return [*days, WeekDayGroup(date=None, items=bucket_items, label="backlog")]
 
 
 def week_items_for_appointment(

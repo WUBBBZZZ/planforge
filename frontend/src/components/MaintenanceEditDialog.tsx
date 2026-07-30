@@ -45,9 +45,6 @@ function MaintenanceForm({
   );
   const [intervalValue, setIntervalValue] = useState(String(item?.interval_value ?? 6));
   const [leadTimeDays, setLeadTimeDays] = useState(String(item?.lead_time_days ?? 30));
-  const [reminderOffsetDays, setReminderOffsetDays] = useState(
-    item?.reminder_offset_days?.toString() ?? "",
-  );
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -63,7 +60,6 @@ function MaintenanceForm({
         interval_unit: intervalUnit,
         interval_value: intervalUnit === "manual" ? null : Number(intervalValue || "1"),
         lead_time_days: Number(leadTimeDays || "30"),
-        reminder_offset_days: reminderOffsetDays ? Number(reminderOffsetDays) : null,
       };
       if (isEdit && item) {
         await updateMaintenance(item.id, payload);
@@ -119,20 +115,12 @@ function MaintenanceForm({
           />
         </FormField>
       ) : null}
-      <FormField label="Lead time warning (days)">
+      <FormField label="Schedule by / show in Upcoming (days before due)">
         <Input
           type="number"
           min={0}
           value={leadTimeDays}
           onChange={(e) => setLeadTimeDays(e.target.value)}
-        />
-      </FormField>
-      <FormField label="Reminder offset after completion (days)">
-        <Input
-          type="number"
-          min={0}
-          value={reminderOffsetDays}
-          onChange={(e) => setReminderOffsetDays(e.target.value)}
         />
       </FormField>
       {error ? (

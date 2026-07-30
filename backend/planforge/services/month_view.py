@@ -16,6 +16,7 @@ from planforge.models.task import Task
 from planforge.services import routine_group_service, routine_service
 from planforge.services.completion_display import completed_items_for_local_day
 from planforge.services.display_date import is_item_overdue, rolled_display_date
+from planforge.services.maintenance_display import placements_for_maintenance
 from planforge.services.month_bounds import month_bounds
 from planforge.services.recurring_occurrence_display import (
     list_routine_occurrences_for_calendar_window,
@@ -24,6 +25,7 @@ from planforge.services.settings_service import PolicySnapshot
 from planforge.services.week_view import (
     WeekDayGroup,
     WeekItem,
+    append_backlog_bucket,
     week_items_for_appointment,
 )
 from sqlalchemy import select
@@ -49,6 +51,13 @@ def assemble_month_view(
 ) -> MonthView:
     """Assemble pending items grouped by due date for a calendar month."""
     month_start, month_end = month_bounds(reference_date=reference_date)
+    routine_service.ensure_occurrences(
+        session,
+        owner_id=owner_id,
+        clock_today=clock_today,
+        policies=policies,
+        through_date=month_end,
+    )
     start_date = month_start.to_date()
     end_date = month_end.to_date()
     month = f"{month_start.year:04d}-{month_start.month:02d}"
@@ -101,6 +110,7 @@ def assemble_month_view(
     visible_routine_ids = routine_group_service.visible_routine_ids(
         session,
         owner_id=owner_id,
+        view="month",
     )
     pending_routine_rows = routine_service.list_pending_occurrences(
         session,
@@ -185,33 +195,37 @@ def assemble_month_view(
         )
     )
     for maintenance in maintenance_items:
-        assert maintenance.next_due_date is not None
-        due = LocalDate.from_date(maintenance.next_due_date)
-        due_date = due.to_date()
-        if start_date <= due_date <= end_date:
-            day_map[due].append(
-                WeekItem(
-                    kind=ViewItemKind.MAINTENANCE,
-                    item_id=maintenance.id,
-                    title=maintenance.title,
-                    due_date=due,
-                    starts_at=None,
-                    ends_at=None,
-                    is_overdue=is_item_overdue(scheduled=due, today=clock_today),
+        for placement in placements_for_maintenance(
+            maintenance,
+            period_start=month_start,
+            period_end=month_end,
+            clock_today=clock_today,
+            view="month",
+        ):
+            if placement.target == "upcoming":
+                upcoming.append(
+                    WeekItem(
+                        kind=placement.kind,
+                        item_id=placement.item_id,
+                        title=placement.title,
+                        due_date=placement.due_date,
+                        starts_at=None,
+                        ends_at=None,
+                        is_overdue=placement.is_overdue,
+                    )
                 )
-            )
-        elif due_date > end_date:
-            upcoming.append(
-                WeekItem(
-                    kind=ViewItemKind.MAINTENANCE,
-                    item_id=maintenance.id,
-                    title=maintenance.title,
-                    due_date=due,
-                    starts_at=None,
-                    ends_at=None,
-                    is_overdue=False,
+            elif placement.display_date is not None:
+                day_map[placement.display_date].append(
+                    WeekItem(
+                        kind=placement.kind,
+                        item_id=placement.item_id,
+                        title=placement.title,
+                        due_date=placement.due_date,
+                        starts_at=None,
+                        ends_at=None,
+                        is_overdue=placement.is_overdue,
+                    )
                 )
-            )
 
     for day_items in day_map.values():
         day_items.sort(key=lambda item: item.title.lower())
@@ -283,6 +297,12 @@ def assemble_month_view(
         ]
         if upcoming:
             days.append(WeekDayGroup(date=None, items=upcoming, label="upcoming"))
+
+    days = append_backlog_bucket(
+        session,
+        owner_id=owner_id,
+        days=days,
+    )
 
     return MonthView(
         month=month,

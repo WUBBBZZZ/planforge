@@ -2,12 +2,16 @@ import { useState } from "react";
 
 import {
   archiveAppointment,
+  archiveMaintenance,
   cancelAppointment,
   cancelTask,
   completeAppointment,
   completeMaintenance,
   completeOccurrence,
   completeTask,
+  deleteAppointment,
+  deleteBacklogItem,
+  deleteTask,
   formatDisplayDate,
   formatTimeRange,
   getAppointment,
@@ -18,6 +22,7 @@ import {
   type Appointment,
   type PlannerItem,
 } from "../lib/tasks";
+import { todayIsoLocal } from "../lib/dates";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { AppointmentEditDialog } from "./AppointmentEditDialog";
@@ -27,6 +32,11 @@ export interface PlannerItemRowProps {
   item: PlannerItem;
   onChanged: () => Promise<void>;
   compact?: boolean;
+  /** Date to record when marking maintenance complete (defaults to today). */
+  completedOnDate?: string;
+  /** Week/month preview: title only, no actions. */
+  readOnly?: boolean;
+  previewSize?: "week" | "month";
 }
 
 function confirmAction(message: string): boolean {
@@ -46,11 +56,40 @@ function occurrenceRoleLabel(role: PlannerItem["occurrence_role"]): string | nul
   }
 }
 
+function PlannerWeekPreviewItem({
+  item,
+  previewSize = "week",
+}: {
+  item: PlannerItem;
+  previewSize?: "week" | "month";
+}) {
+  return (
+    <li
+      className={`pf-task-row pf-task-row--week-preview${
+        previewSize === "month" ? " pf-task-row--month-preview" : ""
+      }${item.is_completed ? " pf-task-row--completed" : ""}${
+        item.is_overdue && !item.is_completed ? " pf-task-row--overdue" : ""
+      }`}
+      data-kind={item.kind}
+      title={`${itemKindLabel(item.kind)}: ${item.title}`}
+    >
+      <p className="pf-task-row__title">{item.title}</p>
+    </li>
+  );
+}
+
 export function PlannerItemRow({
   item,
   onChanged,
   compact = false,
+  completedOnDate,
+  readOnly = false,
+  previewSize = "week",
 }: PlannerItemRowProps) {
+  if (readOnly) {
+    return <PlannerWeekPreviewItem item={item} previewSize={previewSize} />;
+  }
+
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -88,6 +127,42 @@ export function PlannerItemRow({
     }
     await runAction("cancel", async () => {
       await cancelTask(item.item_id);
+    });
+  };
+
+  const handleDeleteTask = async () => {
+    if (!confirmAction("Delete this task permanently? This cannot be undone.")) {
+      return;
+    }
+    await runAction("delete", async () => {
+      await deleteTask(item.item_id);
+    });
+  };
+
+  const handleDeleteBacklog = async () => {
+    if (!confirmAction("Delete this backlog item permanently?")) {
+      return;
+    }
+    await runAction("delete", async () => {
+      await deleteBacklogItem(item.item_id);
+    });
+  };
+
+  const handleDeleteAppointment = async () => {
+    if (!confirmAction("Delete this appointment permanently?")) {
+      return;
+    }
+    await runAction("delete", async () => {
+      await deleteAppointment(item.item_id);
+    });
+  };
+
+  const handleDeleteMaintenance = async () => {
+    if (!confirmAction("Delete this maintenance item?")) {
+      return;
+    }
+    await runAction("delete", async () => {
+      await archiveMaintenance(item.item_id);
     });
   };
 
@@ -208,7 +283,23 @@ export function PlannerItemRow({
               >
                 {busyAction === "move-to-backlog" ? "Moving…" : "Move to backlog"}
               </Button>
+              <Button
+                variant="ghost"
+                disabled={busyAction !== null}
+                onClick={() => void handleDeleteTask()}
+              >
+                {busyAction === "delete" ? "Deleting…" : "Delete"}
+              </Button>
             </>
+          ) : null}
+          {item.kind === "backlog" ? (
+            <Button
+              variant="ghost"
+              disabled={busyAction !== null}
+              onClick={() => void handleDeleteBacklog()}
+            >
+              {busyAction === "delete" ? "Deleting…" : "Delete"}
+            </Button>
           ) : null}
           {item.kind === "occurrence" && !item.is_completed ? (
             <>
@@ -278,20 +369,38 @@ export function PlannerItemRow({
               >
                 Archive
               </Button>
+              <Button
+                variant="ghost"
+                disabled={busyAction !== null}
+                onClick={() => void handleDeleteAppointment()}
+              >
+                {busyAction === "delete" ? "Deleting…" : "Delete"}
+              </Button>
             </>
           ) : null}
           {item.kind === "maintenance" && !item.is_completed ? (
-            <Button
-              variant="secondary"
-              disabled={busyAction !== null}
-              onClick={() =>
-                void runAction("complete", async () => {
-                  await completeMaintenance(item.item_id);
-                })
-              }
-            >
-              Complete
-            </Button>
+            <>
+              <Button
+                variant="secondary"
+                disabled={busyAction !== null}
+                onClick={() =>
+                  void runAction("complete", async () => {
+                    await completeMaintenance(item.item_id, {
+                      completed_on: completedOnDate ?? todayIsoLocal(),
+                    });
+                  })
+                }
+              >
+                Complete
+              </Button>
+              <Button
+                variant="ghost"
+                disabled={busyAction !== null}
+                onClick={() => void handleDeleteMaintenance()}
+              >
+                {busyAction === "delete" ? "Deleting…" : "Delete"}
+              </Button>
+            </>
           ) : null}
         </div>
       </li>

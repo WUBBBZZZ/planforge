@@ -10,18 +10,19 @@ from planforge.domain.appointment_scheduling import (
 )
 from planforge.domain.enums import (
     AppointmentStatus,
+    MaintenanceStatus,
     TaskStatus,
     ViewItemKind,
 )
 from planforge.domain.local_date import LocalDate
-from planforge.domain.recurring_display import DEFAULT_RECURRING_DISPLAY_POLICY
 from planforge.models.appointment import Appointment
+from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
-from planforge.services import routine_service, weekly_target_service
+from planforge.services import routine_group_service, routine_service, weekly_target_service
 from planforge.services.completion_display import completed_items_for_local_day
 from planforge.services.display_date import is_item_overdue, rolled_display_date
 from planforge.services.recurring_occurrence_display import (
-    select_visible_routine_occurrences,
+    list_routine_occurrences_for_calendar_window,
 )
 from planforge.services.settings_service import PolicySnapshot
 from sqlalchemy import select
@@ -87,7 +88,6 @@ def assemble_week_view(
     day_map: dict[LocalDate, list[WeekItem]] = {
         week_start.add_days(offset): [] for offset in range(7)
     }
-    unscheduled: list[WeekItem] = []
     upcoming: list[WeekItem] = []
 
     def _place_item(
@@ -151,17 +151,6 @@ def assemble_week_view(
     )
     for task in tasks:
         if task.due_date is None:
-            unscheduled.append(
-                WeekItem(
-                    kind=ViewItemKind.TASK,
-                    item_id=task.id,
-                    title=task.title,
-                    due_date=None,
-                    starts_at=None,
-                    ends_at=None,
-                    is_overdue=False,
-                )
-            )
             continue
 
         due = LocalDate.from_date(task.due_date)
@@ -174,30 +163,65 @@ def assemble_week_view(
             ends_at=None,
         )
 
-    recurring_policy = DEFAULT_RECURRING_DISPLAY_POLICY
-    horizon_start, horizon_end = recurring_policy.horizon_bounds(
-        today=today,
-        week_start_day=policies.week_start_day,
+    visible_routine_ids = routine_group_service.visible_routine_ids(
+        session,
+        owner_id=owner_id,
     )
-    for visible in select_visible_routine_occurrences(
-        routine_service.list_pending_occurrences(session, owner_id=owner_id),
+    pending_routine_rows = routine_service.list_pending_occurrences(
+        session,
+        owner_id=owner_id,
+    )
+    for calendar_occurrence in list_routine_occurrences_for_calendar_window(
+        pending_routine_rows,
         today=today,
-        horizon_start=horizon_start,
-        horizon_end=horizon_end,
-        policy=recurring_policy,
+        window_start=week_start,
+        window_end=week_end,
         missed_behavior=policies.routine_missed_behavior,
     ):
-        _place_item(
-            kind=ViewItemKind.OCCURRENCE,
-            item_id=visible.occurrence.id,
-            title=visible.routine.title,
-            due=visible.scheduled,
+        if calendar_occurrence.routine.id not in visible_routine_ids:
+            continue
+        day_map[calendar_occurrence.display].append(
+            WeekItem(
+                kind=ViewItemKind.OCCURRENCE,
+                item_id=calendar_occurrence.occurrence.id,
+                title=calendar_occurrence.routine.title,
+                due_date=calendar_occurrence.scheduled,
+                starts_at=None,
+                ends_at=None,
+                is_overdue=calendar_occurrence.is_overdue,
+                routine_title=calendar_occurrence.routine.title,
+                occurrence_role=(
+                    "overdue" if calendar_occurrence.is_overdue else None
+                ),
+            )
+        )
+
+    maintenance_items = list(
+        session.scalars(
+            select(MaintenanceDefinition).where(
+                MaintenanceDefinition.owner_id == owner_id,
+                MaintenanceDefinition.status == MaintenanceStatus.ACTIVE.value,
+                MaintenanceDefinition.next_due_date.is_not(None),
+            )
+        )
+    )
+    for maintenance in maintenance_items:
+        assert maintenance.next_due_date is not None
+        due = LocalDate.from_date(maintenance.next_due_date)
+        due_date = due.to_date()
+        item = WeekItem(
+            kind=ViewItemKind.MAINTENANCE,
+            item_id=maintenance.id,
+            title=maintenance.title,
+            due_date=due,
             starts_at=None,
             ends_at=None,
-            routine_title=visible.routine.title,
-            is_overdue=visible.is_overdue,
-            occurrence_role=visible.role.value,
+            is_overdue=is_item_overdue(scheduled=due, today=today),
         )
+        if start_date <= due_date <= end_date:
+            day_map[due].append(item)
+        elif due_date > end_date:
+            upcoming.append(item)
 
     appointments = list(
         session.scalars(
@@ -249,7 +273,6 @@ def assemble_week_view(
 
     for day_items in day_map.values():
         day_items.sort(key=lambda item: item.title.lower())
-    unscheduled.sort(key=lambda item: item.title.lower())
     upcoming.sort(
         key=lambda item: (
             item.due_date.to_date() if item.due_date else start_date,
@@ -266,8 +289,6 @@ def assemble_week_view(
     ]
     if upcoming:
         days.append(WeekDayGroup(date=None, items=upcoming, label="upcoming"))
-    if unscheduled:
-        days.append(WeekDayGroup(date=None, items=unscheduled, label="unscheduled"))
 
     if policies.week_show_completed:
         pending_ids = {
@@ -320,8 +341,6 @@ def assemble_week_view(
         ]
         if upcoming:
             days.append(WeekDayGroup(date=None, items=upcoming, label="upcoming"))
-        if unscheduled:
-            days.append(WeekDayGroup(date=None, items=unscheduled, label="unscheduled"))
 
     targets: list[WeekTargetSummary] = []
     for target in weekly_target_service.list_weekly_targets(

@@ -10,7 +10,7 @@ describe("WeekPage", () => {
     vi.restoreAllMocks();
   });
 
-  it("shows loading then empty state", async () => {
+  it("shows loading then week day columns when empty", async () => {
     vi.spyOn(tasksApi, "syncRoutineOccurrences").mockResolvedValue();
     vi.spyOn(tasksApi, "fetchWeekView").mockResolvedValue({
       week_start: "2026-07-20",
@@ -27,7 +27,7 @@ describe("WeekPage", () => {
     expect(screen.getByText("Loading week view")).toBeVisible();
 
     await waitFor(() => {
-      expect(screen.getByRole("heading", { name: "No items this week" })).toBeVisible();
+      expect(screen.getAllByText("No items")).toHaveLength(7);
     });
   });
 

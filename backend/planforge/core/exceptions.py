@@ -47,6 +47,10 @@ class RoutineNotFoundError(NotFoundError):
     """Routine does not exist."""
 
 
+class RoutineGroupNotFoundError(NotFoundError):
+    """Routine group does not exist."""
+
+
 class RoutineStateError(StateError):
     """Invalid routine state transition."""
 

@@ -3,7 +3,7 @@
 from datetime import date
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Date, Index, Integer, String, Text
+from sqlalchemy import Date, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from planforge.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -11,6 +11,7 @@ from planforge.domain.enums import RoutineStatus
 
 if TYPE_CHECKING:
     from planforge.models.occurrence import Occurrence
+    from planforge.models.routine_group import RoutineGroup
 
 
 class Routine(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -40,8 +41,15 @@ class Routine(Base, UUIDPrimaryKeyMixin, TimestampMixin):
         nullable=False,
         default=RoutineStatus.ACTIVE.value,
     )
+    group_id: Mapped[str | None] = mapped_column(
+        String(36),
+        ForeignKey("routine_groups.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     occurrences: Mapped[list[Occurrence]] = relationship(back_populates="routine")
+    group: Mapped["RoutineGroup | None"] = relationship(back_populates="routines")
 
     @property
     def routine_status(self) -> RoutineStatus:

@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { Button } from "../Button";
-import { EmptyState } from "../EmptyState";
 import { PeriodNav } from "../PeriodNav";
 import { PlannerItemRow } from "../PlannerItemRow";
 import { WeeklyTargetDialog, type WeeklyTargetDraft } from "../WeeklyTargetDialog";
@@ -37,7 +36,6 @@ export function WeekViewContent({
   const bucketGroups = view.days.filter(
     (group) => group.date === null && group.items.length > 0,
   );
-  const isEmpty = view.days.every((group) => group.items.length === 0);
 
   const openCreateTarget = () => {
     setTargetDraft({ title: "", targetCount: 1 });
@@ -118,51 +116,44 @@ export function WeekViewContent({
         )}
       </section>
 
-      {isEmpty ? (
-        <EmptyState
-          title="No items this week"
-          description="Capture a task, backlog item, appointment, or routine to populate this view."
-        />
-      ) : (
-        <div className="pf-week-board">
-          {calendarDays.map((group) => {
-            const sectionKey = group.date ?? "day";
-            const dayNumber = group.date?.split("-")[2];
-            const weekday = group.date
-              ? formatDisplayDate(group.date).split(",")[0]
-              : "";
+      <div className="pf-week-board">
+        {calendarDays.map((group) => {
+          const sectionKey = group.date ?? "day";
+          const dayNumber = group.date?.split("-")[2];
+          const weekday = group.date
+            ? formatDisplayDate(group.date).split(",")[0]
+            : "";
 
-            return (
-              <section
-                key={sectionKey}
-                className="pf-week-column"
-                aria-labelledby={`week-day-${sectionKey}`}
-              >
-                <header className="pf-week-column__header">
-                  <h2 id={`week-day-${sectionKey}`}>
-                    <span className="pf-week-column__weekday">{weekday}</span>
-                    <span className="pf-week-column__date">{dayNumber}</span>
-                  </h2>
-                </header>
-                {group.items.length === 0 ? (
-                  <p className="pf-muted pf-week-column__empty">No items</p>
-                ) : (
-                  <ul className="pf-task-list pf-week-column__items">
-                    {group.items.map((item) => (
-                      <PlannerItemRow
-                        key={`${item.kind}-${item.item_id}`}
-                        item={item}
-                        compact
-                        onChanged={onReload}
-                      />
-                    ))}
-                  </ul>
-                )}
-              </section>
-            );
-          })}
-        </div>
-      )}
+          return (
+            <section
+              key={sectionKey}
+              className="pf-week-column"
+              aria-labelledby={`week-day-${sectionKey}`}
+            >
+              <header className="pf-week-column__header">
+                <h2 id={`week-day-${sectionKey}`}>
+                  <span className="pf-week-column__weekday">{weekday}</span>
+                  <span className="pf-week-column__date">{dayNumber}</span>
+                </h2>
+              </header>
+              {group.items.length === 0 ? (
+                <p className="pf-muted pf-week-column__empty">No items</p>
+              ) : (
+                <ul className="pf-task-list pf-week-column__items">
+                  {group.items.map((item) => (
+                    <PlannerItemRow
+                      key={`${item.kind}-${item.item_id}`}
+                      item={item}
+                      compact
+                      onChanged={onReload}
+                    />
+                  ))}
+                </ul>
+              )}
+            </section>
+          );
+        })}
+      </div>
 
       {bucketGroups.length > 0 ? (
         <div className="pf-week-buckets">

@@ -683,6 +683,123 @@ a {
   gap: 0.5rem;
 }
 
+.pf-settings__routine-groups h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.pf-settings__routine-group-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.pf-settings__routine-group-item label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.pf-routine-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.pf-routine-groups__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pf-routine-groups__toolbar input[type="text"] {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.pf-routine-group {
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius);
+  background: var(--pf-surface);
+}
+
+.pf-routine-group__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--pf-border);
+}
+
+.pf-routine-group__header h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 1rem;
+}
+
+.pf-routine-group__drag {
+  cursor: grab;
+  color: var(--pf-muted);
+  user-select: none;
+}
+
+.pf-routine-group__toggle {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+.pf-routine-group__body {
+  padding: 0.5rem 0.75rem 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.pf-routine-group__body--collapsed {
+  display: none;
+}
+
+.pf-routine-group__empty {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.pf-routine-group__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--pf-border);
+  border-radius: var(--pf-radius-sm);
+  background: var(--pf-bg);
+}
+
+.pf-routine-group__item--dragging {
+  opacity: 0.5;
+}
+
+.pf-routine-group__item-drag {
+  cursor: grab;
+  color: var(--pf-muted);
+  user-select: none;
+}
+
+.pf-routine-group__item-title {
+  flex: 1;
+  font-weight: 500;
+}
+
+.pf-routine-group__item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
 .pf-target-list {
   list-style: none;
   margin: 0;

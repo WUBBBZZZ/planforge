@@ -51,6 +51,9 @@ backups/
 docs/current-state-handoff.md
 docs/private-audits/
 
+# === Personal local seed scripts (machine-specific data) ===
+backend/scripts/local/
+
 # === OS and editor noise ===
 Thumbs.db
 Desktop.ini

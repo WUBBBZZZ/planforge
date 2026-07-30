@@ -16,6 +16,7 @@ from planforge.domain.local_date import LocalDate
 from planforge.models.completion_record import CompletionRecord
 from planforge.models.occurrence import Occurrence
 from planforge.models.routine import Routine
+from planforge.services import routine_group_service
 from planforge.services.occurrence_generator import (
     SCHEDULE_MONTHLY,
     SCHEDULE_WEEKLY,
@@ -24,7 +25,7 @@ from planforge.services.occurrence_generator import (
     schedule_dates_for_routine,
 )
 from planforge.services.settings_service import PolicySnapshot
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -135,6 +136,10 @@ def create_routine(
     )
 
     effective_start = starts_on or clock_today
+    misc = routine_group_service.get_misc_group(session, owner_id=owner_id)
+    max_sort = session.scalar(
+        select(func.max(Routine.sort_order)).where(Routine.group_id == misc.id)
+    )
     routine = Routine(
         owner_id=owner_id,
         title=cleaned_title,
@@ -145,6 +150,8 @@ def create_routine(
         interval_weeks=interval_weeks,
         starts_on=effective_start.to_date() if effective_start else None,
         status=RoutineStatus.ACTIVE.value,
+        group_id=misc.id,
+        sort_order=(max_sort or -1) + 1,
     )
     session.add(routine)
     session.flush()
@@ -224,7 +231,12 @@ def list_routines(
     status: RoutineStatus | None = None,
 ) -> list[Routine]:
     """List routines for an owner."""
-    query = select(Routine).where(Routine.owner_id == owner_id).order_by(Routine.title)
+    routine_group_service.ensure_default_groups(session, owner_id=owner_id)
+    query = (
+        select(Routine)
+        .where(Routine.owner_id == owner_id)
+        .order_by(Routine.sort_order, Routine.title)
+    )
     if status is not None:
         query = query.where(Routine.status == status.value)
     return list(session.scalars(query))

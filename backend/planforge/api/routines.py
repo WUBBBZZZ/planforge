@@ -50,6 +50,8 @@ class RoutineResponse(BaseModel):
     interval_weeks: int
     starts_on: date | None
     status: RoutineStatus
+    group_id: str | None
+    sort_order: int
 
     @classmethod
     def from_routine(cls, routine: Routine) -> RoutineResponse:
@@ -65,6 +67,8 @@ class RoutineResponse(BaseModel):
             interval_weeks=routine.interval_weeks,
             starts_on=routine.starts_on,
             status=routine.routine_status,
+            group_id=routine.group_id,
+            sort_order=routine.sort_order,
         )
 
 

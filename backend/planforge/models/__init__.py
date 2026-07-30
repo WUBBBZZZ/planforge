@@ -7,6 +7,7 @@ from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.maintenance_completion import MaintenanceCompletion
 from planforge.models.occurrence import Occurrence
 from planforge.models.routine import Routine
+from planforge.models.routine_group import RoutineGroup
 from planforge.models.setting import Setting
 from planforge.models.task import Task
 from planforge.models.weekly_target import WeeklyTarget
@@ -19,6 +20,7 @@ __all__ = [
     "MaintenanceCompletion",
     "Occurrence",
     "Routine",
+    "RoutineGroup",
     "Setting",
     "Task",
     "WeeklyTarget",

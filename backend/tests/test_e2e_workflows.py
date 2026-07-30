@@ -38,6 +38,12 @@ async def test_routine_occurrence_completion_flow(test_app) -> None:
                 "interval_weeks": 1,
             },
         )
+        groups = (await client.get("/api/routine-groups")).json()
+        misc_group = next(group for group in groups if group["name"] == "Misc")
+        await client.patch(
+            f"/api/routine-groups/{misc_group['id']}",
+            json={"week_visible": True},
+        )
         await client.post("/api/routines/sync-occurrences")
         week = (await client.get("/api/views/week")).json()
         occurrence_item = next(

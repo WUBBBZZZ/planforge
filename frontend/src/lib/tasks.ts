@@ -295,6 +295,87 @@ export async function skipOccurrence(id: string): Promise<void> {
   await parseApiJson(response);
 }
 
+export type RoutineGroup = {
+  id: string;
+  name: string;
+  sort_order: number;
+  week_visible: boolean;
+  is_system: boolean;
+};
+
+export type RoutineGroupBoard = RoutineGroup & {
+  routines: Routine[];
+};
+
+export async function fetchRoutineGroupBoard(): Promise<RoutineGroupBoard[]> {
+  const response = await fetch("/api/routine-groups/board");
+  return parseApiJson<RoutineGroupBoard[]>(response);
+}
+
+export async function listRoutineGroups(): Promise<RoutineGroup[]> {
+  const response = await fetch("/api/routine-groups");
+  return parseApiJson<RoutineGroup[]>(response);
+}
+
+export async function createRoutineGroup(name: string): Promise<RoutineGroup> {
+  const response = await fetch("/api/routine-groups", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  return parseApiJson<RoutineGroup>(response);
+}
+
+export async function updateRoutineGroup(
+  id: string,
+  body: { name?: string; week_visible?: boolean },
+): Promise<RoutineGroup> {
+  const response = await fetch(`/api/routine-groups/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<RoutineGroup>(response);
+}
+
+export async function deleteRoutineGroup(id: string): Promise<void> {
+  const response = await fetch(`/api/routine-groups/${id}`, { method: "DELETE" });
+  await parseApiJson(response);
+}
+
+export async function reorderRoutineGroups(groupIds: string[]): Promise<RoutineGroup[]> {
+  const response = await fetch("/api/routine-groups/reorder", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ group_ids: groupIds }),
+  });
+  return parseApiJson<RoutineGroup[]>(response);
+}
+
+export async function reorderRoutinesInGroup(
+  groupId: string,
+  routineIds: string[],
+): Promise<Routine[]> {
+  const response = await fetch(`/api/routine-groups/${groupId}/routines/reorder`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ routine_ids: routineIds }),
+  });
+  return parseApiJson<Routine[]>(response);
+}
+
+export async function moveRoutineToGroup(
+  routineId: string,
+  body: { group_id: string; sort_order: number },
+): Promise<Routine> {
+  const response = await fetch(`/api/routine-groups/routines/${routineId}/move`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return parseApiJson<Routine>(response);
+}
+
 export async function listAppointments(options?: {
   filter?: AppointmentListFilter;
   status?: Appointment["status"];

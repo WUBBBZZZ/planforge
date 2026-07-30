@@ -10,7 +10,7 @@ from planforge.domain.recurring_display import (
 )
 from planforge.models.occurrence import Occurrence
 from planforge.models.routine import Routine
-from planforge.services.display_date import is_item_overdue
+from planforge.services.display_date import is_item_overdue, rolled_display_date
 
 
 @dataclass(frozen=True)
@@ -22,6 +22,49 @@ class VisibleRoutineOccurrence:
     scheduled: LocalDate
     is_overdue: bool
     role: OccurrenceDisplayRole
+
+
+@dataclass(frozen=True)
+class CalendarRoutineOccurrence:
+    """Routine occurrence placed on a calendar day within a view window."""
+
+    occurrence: Occurrence
+    routine: Routine
+    scheduled: LocalDate
+    display: LocalDate
+    is_overdue: bool
+
+
+def list_routine_occurrences_for_calendar_window(
+    rows: list[tuple[Occurrence, Routine]],
+    *,
+    today: LocalDate,
+    window_start: LocalDate,
+    window_end: LocalDate,
+    missed_behavior: str = "prompt",
+) -> list[CalendarRoutineOccurrence]:
+    """Return routine occurrences whose rolled display date falls in the view window."""
+    include_overdue = missed_behavior in {"prompt", "roll_forward"}
+    items: list[CalendarRoutineOccurrence] = []
+    for occurrence, routine in rows:
+        scheduled = LocalDate.from_date(occurrence.scheduled_date)
+        is_overdue = is_item_overdue(scheduled=scheduled, today=today)
+        if is_overdue and not include_overdue:
+            continue
+        display = rolled_display_date(due=scheduled, today=today)
+        if display < window_start or display > window_end:
+            continue
+        items.append(
+            CalendarRoutineOccurrence(
+                occurrence=occurrence,
+                routine=routine,
+                scheduled=scheduled,
+                display=display,
+                is_overdue=is_overdue,
+            )
+        )
+    items.sort(key=lambda item: (item.display, item.routine.title.lower()))
+    return items
 
 
 def select_visible_routine_occurrences(

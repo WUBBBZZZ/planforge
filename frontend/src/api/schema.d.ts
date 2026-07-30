@@ -1334,6 +1334,8 @@ export interface components {
       day_of_month: number | null;
       /** Days Of Week */
       days_of_week: number[];
+      /** Group Id */
+      group_id: string | null;
       /** Id */
       id: string;
       /** Interval Weeks */
@@ -1342,6 +1344,8 @@ export interface components {
       notes: string | null;
       /** Schedule Type */
       schedule_type: string;
+      /** Sort Order */
+      sort_order: number;
       /** Starts On */
       starts_on: string | null;
       status: components["schemas"]["RoutineStatus"];

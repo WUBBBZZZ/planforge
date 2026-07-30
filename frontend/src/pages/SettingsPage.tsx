@@ -6,7 +6,14 @@ import { FormField } from "../components/FormField";
 import { Input } from "../components/Input";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { Select } from "../components/Select";
-import { createWeeklyTarget, fetchSettings, updateSetting } from "../lib/tasks";
+import {
+  createWeeklyTarget,
+  fetchSettings,
+  listRoutineGroups,
+  updateRoutineGroup,
+  updateSetting,
+  type RoutineGroup,
+} from "../lib/tasks";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
 const POLICY_FIELDS = [
@@ -57,6 +64,7 @@ const POLICY_FIELDS = [
 
 export function SettingsPage() {
   const [settings, setSettings] = useState<Record<string, string> | null>(null);
+  const [routineGroups, setRoutineGroups] = useState<RoutineGroup[] | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -77,6 +85,17 @@ export function SettingsPage() {
           setError(
             loadError instanceof Error ? loadError.message : "Could not load settings",
           );
+        }
+      });
+    listRoutineGroups()
+      .then((groups) => {
+        if (!cancelled) {
+          setRoutineGroups(groups);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setRoutineGroups([]);
         }
       });
     return () => {
@@ -100,6 +119,17 @@ export function SettingsPage() {
       const updated = await updateSetting(key, value);
       setSettings(updated);
     }, "Settings updated.");
+  };
+
+  const handleGroupVisibility = async (groupId: string, weekVisible: boolean) => {
+    await runAction(async () => {
+      const updated = await updateRoutineGroup(groupId, { week_visible: weekVisible });
+      setRoutineGroups((current) =>
+        current
+          ? current.map((group) => (group.id === updated.id ? updated : group))
+          : current,
+      );
+    }, "Routine group visibility updated.");
   };
 
   const seedWeeklyTarget = async () => {
@@ -145,6 +175,31 @@ export function SettingsPage() {
               />
             </FormField>
           ))}
+          {routineGroups && routineGroups.length > 0 ? (
+            <section className="pf-settings__routine-groups" aria-labelledby="routine-group-visibility">
+              <h2 id="routine-group-visibility">Routine groups on Week &amp; Month</h2>
+              <p className="pf-muted">
+                Hidden groups stay off the week and month calendars. Today always shows all
+                routines due that day.
+              </p>
+              <ul className="pf-settings__routine-group-list">
+                {routineGroups.map((group) => (
+                  <li key={group.id} className="pf-settings__routine-group-item">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={group.week_visible}
+                        onChange={(event) =>
+                          void handleGroupVisibility(group.id, event.target.checked)
+                        }
+                      />
+                      {group.name}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
           <div className="pf-settings__actions">
             <Button variant="secondary" onClick={() => void seedWeeklyTarget()}>
               Add demo weekly target

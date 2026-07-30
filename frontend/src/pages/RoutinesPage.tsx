@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { AppShell } from "../components/AppShell";
 import { Button } from "../components/Button";
@@ -9,12 +9,17 @@ import { LoadingIndicator } from "../components/LoadingIndicator";
 import { Select } from "../components/Select";
 import {
   createRoutine,
+  createRoutineGroup,
+  deleteRoutineGroup,
+  fetchRoutineGroupBoard,
   fetchTodayView,
-  listRoutines,
+  moveRoutineToGroup,
   pauseRoutine,
+  reorderRoutineGroups,
   resumeRoutine,
   updateRoutine,
   type Routine,
+  type RoutineGroupBoard,
 } from "../lib/tasks";
 import { formatDayOfMonth } from "../lib/ordinal";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
@@ -33,8 +38,14 @@ function formatRoutineSchedule(routine: Routine): string {
   return `${interval} on ${days}`;
 }
 
+type DragState = {
+  routineId: string;
+  sourceGroupId: string;
+} | null;
+
 export function RoutinesPage() {
-  const [routines, setRoutines] = useState<Routine[] | null>(null);
+  const [board, setBoard] = useState<RoutineGroupBoard[] | null>(null);
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [title, setTitle] = useState("");
   const [scheduleType, setScheduleType] = useState<"weekly" | "monthly">("weekly");
   const [selectedDays, setSelectedDays] = useState<number[]>([4]);
@@ -43,11 +54,14 @@ export function RoutinesPage() {
   const [startsOn, setStartsOn] = useState("");
   const [plannerToday, setPlannerToday] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [newGroupName, setNewGroupName] = useState("");
+  const [dragState, setDragState] = useState<DragState>(null);
+  const [draggingGroupId, setDraggingGroupId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const reload = async () => {
-    setRoutines(await listRoutines());
-  };
+  const reload = useCallback(async () => {
+    setBoard(await fetchRoutineGroupBoard());
+  }, []);
 
   useEffect(() => {
     applyTheme(getStoredThemePreference());
@@ -62,9 +76,7 @@ export function RoutinesPage() {
           setPlannerToday(view.reference_date);
         }
       })
-      .catch(() => {
-        // Leave starts_on empty when the planner reference date is unavailable.
-      });
+      .catch(() => undefined);
     return () => {
       cancelled = true;
     };
@@ -72,10 +84,10 @@ export function RoutinesPage() {
 
   useEffect(() => {
     let cancelled = false;
-    listRoutines()
-      .then((items) => {
+    fetchRoutineGroupBoard()
+      .then((groups) => {
         if (!cancelled) {
-          setRoutines(items);
+          setBoard(groups);
         }
       })
       .catch((loadError: unknown) => {
@@ -170,6 +182,86 @@ export function RoutinesPage() {
     }
   };
 
+  const handleCreateGroup = async () => {
+    if (!newGroupName.trim()) {
+      return;
+    }
+    setError(null);
+    try {
+      await createRoutineGroup(newGroupName.trim());
+      setNewGroupName("");
+      await reload();
+    } catch (groupError) {
+      setError(groupError instanceof Error ? groupError.message : "Could not create group");
+    }
+  };
+
+  const handleDeleteGroup = async (group: RoutineGroupBoard) => {
+    if (group.is_system) {
+      return;
+    }
+    if (!window.confirm(`Delete group "${group.name}"? Routines move to Misc.`)) {
+      return;
+    }
+    setError(null);
+    try {
+      await deleteRoutineGroup(group.id);
+      await reload();
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error ? deleteError.message : "Could not delete group",
+      );
+    }
+  };
+
+  const handleRoutineDrop = async (
+    targetGroupId: string,
+    targetIndex: number,
+    routineId: string,
+  ) => {
+    setError(null);
+    try {
+      await moveRoutineToGroup(routineId, {
+        group_id: targetGroupId,
+        sort_order: targetIndex,
+      });
+      await reload();
+    } catch (moveError) {
+      setError(moveError instanceof Error ? moveError.message : "Could not move routine");
+    } finally {
+      setDragState(null);
+    }
+  };
+
+  const handleGroupDrop = async (targetGroupId: string) => {
+    if (!draggingGroupId || draggingGroupId === targetGroupId || !board) {
+      setDraggingGroupId(null);
+      return;
+    }
+    const ids = board.map((group) => group.id);
+    const fromIndex = ids.indexOf(draggingGroupId);
+    const toIndex = ids.indexOf(targetGroupId);
+    if (fromIndex < 0 || toIndex < 0) {
+      return;
+    }
+    ids.splice(fromIndex, 1);
+    ids.splice(toIndex, 0, draggingGroupId);
+    setError(null);
+    try {
+      await reorderRoutineGroups(ids);
+      await reload();
+    } catch (reorderError) {
+      setError(
+        reorderError instanceof Error ? reorderError.message : "Could not reorder groups",
+      );
+    } finally {
+      setDraggingGroupId(null);
+    }
+  };
+
+  const totalRoutines =
+    board?.reduce((count, group) => count + group.routines.length, 0) ?? 0;
+
   return (
     <AppShell currentPath="/routines" title="Routines">
       <section className="pf-panel">
@@ -263,38 +355,138 @@ export function RoutinesPage() {
         {error ? <p className="pf-form-field__error">{error}</p> : null}
       </section>
 
-      {routines === null ? <LoadingIndicator label="Loading routines" /> : null}
-      {routines && routines.length === 0 ? (
+      <section className="pf-panel pf-routine-groups-panel">
+        <div className="pf-routine-groups-panel__header">
+          <h2>Groups</h2>
+          <div className="pf-routine-groups-panel__create">
+            <Input
+              value={newGroupName}
+              onChange={(event) => setNewGroupName(event.target.value)}
+              placeholder="New group name"
+            />
+            <Button variant="secondary" onClick={() => void handleCreateGroup()}>
+              Add group
+            </Button>
+          </div>
+        </div>
+        <p className="pf-muted">
+          Drag routines between groups to organize them. Control week/month visibility in
+          Settings.
+        </p>
+      </section>
+
+      {board === null ? <LoadingIndicator label="Loading routines" /> : null}
+      {board && totalRoutines === 0 ? (
         <EmptyState
           title="No routines yet"
           description="Create a weekly or monthly routine to generate occurrences in Week and Today."
         />
       ) : null}
-      {routines && routines.length > 0 ? (
-        <ul className="pf-task-list">
-          {routines.map((routine) => (
-            <li key={routine.id} className="pf-task-row">
-              <div className="pf-task-row__main">
-                <p className="pf-task-row__title">{routine.title}</p>
-                <p className="pf-muted">
-                  {formatRoutineSchedule(routine)}
-                  {routine.starts_on ? ` · starts ${routine.starts_on}` : ""} ·{" "}
-                  {routine.status}
-                </p>
-              </div>
-              <div className="pf-task-row__actions">
-                <Button variant="secondary" onClick={() => loadRoutineForEdit(routine)}>
-                  Edit
-                </Button>
-                {routine.status !== "archived" ? (
-                  <Button variant="ghost" onClick={() => void togglePause(routine)}>
-                    {routine.status === "active" ? "Pause" : "Resume"}
-                  </Button>
+      {board && totalRoutines > 0 ? (
+        <div className="pf-routine-groups">
+          {board.map((group) => {
+            const isCollapsed = collapsed[group.id] ?? false;
+            return (
+              <section
+                key={group.id}
+                className="pf-routine-group"
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  if (dragState) {
+                    void handleRoutineDrop(
+                      group.id,
+                      group.routines.length,
+                      dragState.routineId,
+                    );
+                    return;
+                  }
+                  void handleGroupDrop(group.id);
+                }}
+              >
+                <header
+                  className="pf-routine-group__header"
+                  draggable
+                  onDragStart={() => setDraggingGroupId(group.id)}
+                  onDragEnd={() => setDraggingGroupId(null)}
+                >
+                  <button
+                    type="button"
+                    className="pf-routine-group__toggle"
+                    aria-expanded={!isCollapsed}
+                    onClick={() =>
+                      setCollapsed((current) => ({
+                        ...current,
+                        [group.id]: !isCollapsed,
+                      }))
+                    }
+                  >
+                    {isCollapsed ? "▸" : "▾"} {group.name}
+                    <span className="pf-muted">({group.routines.length})</span>
+                  </button>
+                  {!group.is_system ? (
+                    <Button variant="ghost" onClick={() => void handleDeleteGroup(group)}>
+                      Delete
+                    </Button>
+                  ) : null}
+                </header>
+                {!isCollapsed ? (
+                  <ul className="pf-task-list pf-routine-group__items">
+                    {group.routines.map((routine, index) => (
+                      <li
+                        key={routine.id}
+                        className={`pf-task-row pf-routine-row${
+                          dragState?.routineId === routine.id
+                            ? " pf-routine-row--dragging"
+                            : ""
+                        }`}
+                        draggable
+                        onDragStart={() =>
+                          setDragState({
+                            routineId: routine.id,
+                            sourceGroupId: group.id,
+                          })
+                        }
+                        onDragEnd={() => setDragState(null)}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDrop={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          if (!dragState) {
+                            return;
+                          }
+                          void handleRoutineDrop(group.id, index, dragState.routineId);
+                        }}
+                      >
+                        <div className="pf-task-row__main">
+                          <p className="pf-task-row__title">{routine.title}</p>
+                          <p className="pf-muted">
+                            {formatRoutineSchedule(routine)}
+                            {routine.starts_on ? ` · starts ${routine.starts_on}` : ""} ·{" "}
+                            {routine.status}
+                          </p>
+                        </div>
+                        <div className="pf-task-row__actions">
+                          <Button
+                            variant="secondary"
+                            onClick={() => loadRoutineForEdit(routine)}
+                          >
+                            Edit
+                          </Button>
+                          {routine.status !== "archived" ? (
+                            <Button variant="ghost" onClick={() => void togglePause(routine)}>
+                              {routine.status === "active" ? "Pause" : "Resume"}
+                            </Button>
+                          ) : null}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 ) : null}
-              </div>
-            </li>
-          ))}
-        </ul>
+              </section>
+            );
+          })}
+        </div>
       ) : null}
     </AppShell>
   );

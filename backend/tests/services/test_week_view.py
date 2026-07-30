@@ -48,7 +48,7 @@ def test_tasks_grouped_by_due_date(db_session) -> None:
     assert monday_items[0].kind is ViewItemKind.TASK
 
 
-def test_unscheduled_bucket(db_session) -> None:
+def test_undated_tasks_omitted_from_week_view(db_session) -> None:
     week_start = LocalDate.from_iso("2026-07-20")
     _add_task(db_session, title="Someday", due_date=None)
 
@@ -60,11 +60,12 @@ def test_unscheduled_bucket(db_session) -> None:
         policies=PolicySnapshot(),
     )
 
-    unscheduled = view.days[-1]
-    assert unscheduled.date is None
-    assert unscheduled.label == "unscheduled"
-    assert len(unscheduled.items) == 1
-    assert unscheduled.items[0].title == "Someday"
+    assert all(group.label != "unscheduled" for group in view.days)
+    assert all(
+        item.title != "Someday"
+        for group in view.days
+        for item in group.items
+    )
 
 
 def test_upcoming_bucket(db_session) -> None:

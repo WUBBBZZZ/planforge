@@ -47,9 +47,8 @@ backups/
 *.crt
 *.cer
 
-# === Local-only documentation (machine-specific audits) ===
-docs/current-state-handoff.md
-docs/private-audits/
+# === Local documentation (not published) ===
+docs/
 
 # === Personal local seed scripts (machine-specific data) ===
 backend/scripts/local/

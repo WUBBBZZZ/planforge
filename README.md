@@ -36,15 +36,13 @@ flowchart LR
 | **Recurrence** | Calendar-aware occurrence generation |
 | **Persistence** | SQLite + Alembic migrations |
 
-See [docs/architecture.md](docs/architecture.md) for detail.
-
 ## Technical highlights
 
 - **Calendar-aware recurrence** — monthly routines clamp to month-end (Jan 31 → Feb 28); maintenance intervals use month/year semantics, not fixed day counts.
 - **Separate maintenance model** — completions, scheduling reminders, and linked appointments are distinct but linkable records.
 - **Appointment spans** — all-day and multi-day events appear on every occupied day in planner views.
 - **OpenAPI-typed frontend** — committed `openapi.json` generates `schema.d.ts`; API client uses typed responses.
-- **Verified backups** — SQLite `backup()` API, `integrity_check`, and isolated copy verification ([docs/backup.md](docs/backup.md)).
+- **Verified backups** — SQLite `backup()` API, `integrity_check`, and isolated copy verification (`scripts/backup-sqlite.ps1`).
 
 ## Local-first privacy
 
@@ -84,20 +82,6 @@ Copy `.env.example` to `.env` for local configuration.
 4. Add maintenance (e.g. "Dentist demo") → mark completed → schedule next visit.
 5. Run a verified backup: `.\scripts\backup-sqlite.ps1`
 
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Architecture](docs/architecture.md) | System design |
-| [Development setup](docs/development-setup.md) | Prerequisites and commands |
-| [Security](docs/security.md) | Threat model and rules |
-| [Testing](docs/testing.md) | Test suites and coverage |
-| [Backup](docs/backup.md) | Safe SQLite backup |
-| [Feature status](docs/feature-status.md) | Implemented vs planned |
-| [Roadmap](docs/roadmap.md) | Future work |
-| [Git workflow](docs/git-workflow.md) | Branching and PRs |
-| [ADRs](docs/decisions/) | Architecture decisions |
-
 ## Screenshots
 
 Capture locally with fabricated data only:
@@ -106,8 +90,6 @@ Capture locally with fabricated data only:
 # Start backend + frontend, then open each route and screenshot:
 # /today  /week  /schedule  /maintenance
 ```
-
-Placeholder references live in [docs/portfolio/screenshots.md](docs/portfolio/screenshots.md).
 
 ## Known limitations
 

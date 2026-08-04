@@ -82,6 +82,7 @@ export function TodayPage() {
     <AppShell
       currentPath="/today"
       title={isTodaySelected ? "Today" : "Day"}
+      onCaptureCreated={() => void reloadToday(dateParam)}
       actions={<Button onClick={() => setModalOpen(true)}>Capture</Button>}
     >
       {todayState.kind === "loading" ? (

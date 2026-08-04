@@ -2,8 +2,10 @@
   "name": "Planforge",
   "short_name": "Planforge",
   "description": "Self-hosted personal planning platform",
-  "start_url": "/",
+  "start_url": "/today",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#f8fafc",
   "theme_color": "#2563eb",
   "icons": [

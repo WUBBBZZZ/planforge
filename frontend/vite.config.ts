@@ -7,6 +7,8 @@ export default defineConfig({
   server: {
     host: "127.0.0.1",
     port: 5173,
+    // Tailscale Serve uses *.ts.net hostnames when proxying to loopback.
+    allowedHosts: [".ts.net"],
     proxy: {
       "/api": {
         target: "http://127.0.0.1:8000",

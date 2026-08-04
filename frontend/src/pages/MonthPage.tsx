@@ -118,6 +118,7 @@ export function MonthPage() {
     <AppShell
       currentPath="/month"
       title="Month"
+      onCaptureCreated={() => void reloadMonth(monthParam)}
       actions={<Button onClick={() => setModalOpen(true)}>Capture</Button>}
     >
       {monthState.kind === "loading" ? (

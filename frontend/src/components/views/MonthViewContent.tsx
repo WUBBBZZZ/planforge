@@ -2,6 +2,7 @@ import { EmptyState } from "../EmptyState";
 import { PeriodNav } from "../PeriodNav";
 import { PlannerItemRow } from "../PlannerItemRow";
 import { todayIsoLocal, weekdayLabels } from "../../lib/dates";
+import { useNarrowViewport } from "../../lib/viewport";
 import { type MonthView, type PlannerItem } from "../../lib/tasks";
 
 export interface MonthViewContentProps {
@@ -91,6 +92,7 @@ export function MonthViewContent({
   onToday,
   onReload,
 }: MonthViewContentProps) {
+  const isNarrow = useNarrowViewport();
   const isEmpty =
     calendar.every((cell) => cell.kind === "pad" || cell.items.length === 0) &&
     extraBuckets.every((group) => group.items.length === 0);
@@ -167,7 +169,7 @@ export function MonthViewContent({
                     <PlannerItemRow
                       key={`${item.kind}-${item.item_id}`}
                       item={item}
-                      readOnly
+                      readOnly={!isNarrow}
                       onChanged={onReload}
                     />
                   ))}

@@ -1,12 +1,14 @@
 import type { ReactNode } from "react";
 
 import { MobileBottomNav } from "./MobileBottomNav";
+import { MobileCaptureFab } from "./MobileCaptureFab";
 
 export interface AppShellProps {
   currentPath: string;
   title: string;
   children: ReactNode;
   actions?: ReactNode;
+  onCaptureCreated?: () => void;
 }
 
 function navCurrent(path: string, currentPath: string): "page" | undefined {
@@ -16,7 +18,13 @@ function navCurrent(path: string, currentPath: string): "page" | undefined {
   return currentPath === path ? "page" : undefined;
 }
 
-export function AppShell({ currentPath, title, children, actions }: AppShellProps) {
+export function AppShell({
+  currentPath,
+  title,
+  children,
+  actions,
+  onCaptureCreated,
+}: AppShellProps) {
   return (
     <div className="pf-app">
       <a className="pf-skip-link" href="#main-content">
@@ -90,6 +98,7 @@ export function AppShell({ currentPath, title, children, actions }: AppShellProp
       </main>
 
       <MobileBottomNav currentPath={currentPath} />
+      <MobileCaptureFab onCreated={onCaptureCreated} />
 
       <footer className="pf-footer">
         <div className="pf-footer__inner">

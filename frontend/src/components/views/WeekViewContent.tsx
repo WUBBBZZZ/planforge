@@ -72,7 +72,7 @@ export function WeekViewContent({
     setTargetDialogOpen(true);
   };
 
-  const renderDayColumn = (group: WeekView["days"][number]) => {
+  const renderDayColumn = (group: WeekView["days"][number], interactive: boolean) => {
     const sectionKey = group.date ?? "day";
     const dayNumber = group.date?.split("-")[2];
     const weekday = group.date ? formatDisplayDate(group.date).split(",")[0] : "";
@@ -97,7 +97,8 @@ export function WeekViewContent({
               <PlannerItemRow
                 key={`${item.kind}-${item.item_id}`}
                 item={item}
-                readOnly
+                readOnly={!interactive}
+                completedOnDate={group.date ?? undefined}
                 onChanged={onReload}
               />
             ))}
@@ -229,13 +230,13 @@ export function WeekViewContent({
           </div>
           {selectedDay ? (
             <div className="pf-week-board pf-week-board--single">
-              {renderDayColumn(selectedDay)}
+              {renderDayColumn(selectedDay, true)}
             </div>
           ) : null}
         </>
       ) : (
         <div className="pf-week-board">
-          {calendarDays.map((group) => renderDayColumn(group))}
+          {calendarDays.map((group) => renderDayColumn(group, false))}
         </div>
       )}
 
@@ -255,7 +256,7 @@ export function WeekViewContent({
                     <PlannerItemRow
                       key={`${item.kind}-${item.item_id}`}
                       item={item}
-                      readOnly
+                      readOnly={!isNarrow}
                       onChanged={onReload}
                     />
                   ))}

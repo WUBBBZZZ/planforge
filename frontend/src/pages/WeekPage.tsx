@@ -98,6 +98,7 @@ export function WeekPage() {
     <AppShell
       currentPath="/week"
       title="Week"
+      onCaptureCreated={() => void reloadWeek(weekStartParam)}
       actions={<Button onClick={() => setModalOpen(true)}>Capture</Button>}
     >
       {weekState.kind === "loading" ? (

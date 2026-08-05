@@ -79,7 +79,9 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("ix_packing_list_entries_list_sort", table_name="packing_list_entries")
+    op.drop_index(
+        "ix_packing_list_entries_list_sort", table_name="packing_list_entries"
+    )
     op.drop_table("packing_list_entries")
     op.drop_index("ix_packing_lists_owner_sort", table_name="packing_lists")
     op.drop_table("packing_lists")

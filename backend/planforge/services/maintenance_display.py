@@ -44,7 +44,9 @@ def upcoming_horizon_days(*, view: Literal["week", "month"]) -> int:
     return MONTH_UPCOMING_HORIZON_DAYS
 
 
-def _is_browsing_future_period(*, period_end: LocalDate, clock_today: LocalDate) -> bool:
+def _is_browsing_future_period(
+    *, period_end: LocalDate, clock_today: LocalDate
+) -> bool:
     return period_end > clock_today
 
 

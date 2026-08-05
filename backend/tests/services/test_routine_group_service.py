@@ -2,8 +2,8 @@
 
 from planforge.core.exceptions import ValidationError
 from planforge.core.owner import LOCAL_OWNER_ID
-from planforge.services import routine_group_service, routine_service
 from planforge.domain.local_date import LocalDate
+from planforge.services import routine_group_service, routine_service
 
 
 def test_ensure_default_groups_creates_misc(db_session) -> None:
@@ -40,16 +40,22 @@ def test_visible_routine_ids_respects_week_and_month_visibility(db_session) -> N
         days_of_week=[0],
         clock_today=today,
     )
-    assert routine_group_service.visible_routine_ids(
-        db_session,
-        owner_id=LOCAL_OWNER_ID,
-        view="week",
-    ) == set()
-    assert routine_group_service.visible_routine_ids(
-        db_session,
-        owner_id=LOCAL_OWNER_ID,
-        view="month",
-    ) == set()
+    assert (
+        routine_group_service.visible_routine_ids(
+            db_session,
+            owner_id=LOCAL_OWNER_ID,
+            view="week",
+        )
+        == set()
+    )
+    assert (
+        routine_group_service.visible_routine_ids(
+            db_session,
+            owner_id=LOCAL_OWNER_ID,
+            view="month",
+        )
+        == set()
+    )
 
     misc = routine_group_service.get_misc_group(db_session, owner_id=LOCAL_OWNER_ID)
     routine_group_service.update_group(
@@ -63,11 +69,14 @@ def test_visible_routine_ids_respects_week_and_month_visibility(db_session) -> N
         owner_id=LOCAL_OWNER_ID,
         view="week",
     ) == {routine.id}
-    assert routine_group_service.visible_routine_ids(
-        db_session,
-        owner_id=LOCAL_OWNER_ID,
-        view="month",
-    ) == set()
+    assert (
+        routine_group_service.visible_routine_ids(
+            db_session,
+            owner_id=LOCAL_OWNER_ID,
+            view="month",
+        )
+        == set()
+    )
 
     routine_group_service.update_group(
         db_session,

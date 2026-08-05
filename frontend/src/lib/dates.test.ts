@@ -1,7 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { formatMonthYear } from "./dates";
-import { formatDisplayDate, maintenanceNextActionLabel, maintenanceScheduleByDate } from "./tasks";
+import {
+  formatDisplayDate,
+  maintenanceNextActionLabel,
+  maintenanceScheduleByDate,
+} from "./tasks";
 
 describe("formatDisplayDate", () => {
   beforeEach(() => {

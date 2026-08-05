@@ -1,7 +1,8 @@
 """Add routine groups and routine ordering."""
 
-import sqlalchemy as sa
 import uuid
+
+import sqlalchemy as sa
 from alembic import op
 
 revision = "0009_routine_groups"

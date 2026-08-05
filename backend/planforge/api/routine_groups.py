@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from planforge.api.deps import get_db
 from planforge.api.routines import RoutineResponse
 from planforge.core.owner import LOCAL_OWNER_ID
+from planforge.models.routine_group import RoutineGroup
 from planforge.services import routine_group_service
 
 router = APIRouter(prefix="/routine-groups", tags=["routine-groups"])
@@ -21,7 +22,7 @@ class RoutineGroupResponse(BaseModel):
     is_system: bool
 
     @classmethod
-    def from_group(cls, group) -> "RoutineGroupResponse":
+    def from_group(cls, group: RoutineGroup) -> RoutineGroupResponse:
         return cls(
             id=group.id,
             name=group.name,
@@ -60,7 +61,9 @@ class MoveRoutineRequest(BaseModel):
 
 
 @router.get("", response_model=list[RoutineGroupResponse])
-def list_groups_endpoint(session: Session = Depends(get_db)) -> list[RoutineGroupResponse]:
+def list_groups_endpoint(
+    session: Session = Depends(get_db),
+) -> list[RoutineGroupResponse]:
     groups = routine_group_service.list_groups(session, owner_id=LOCAL_OWNER_ID)
     return [RoutineGroupResponse.from_group(group) for group in groups]
 
@@ -87,7 +90,9 @@ def grouped_routines_endpoint(
     ]
 
 
-@router.post("", response_model=RoutineGroupResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "", response_model=RoutineGroupResponse, status_code=status.HTTP_201_CREATED
+)
 def create_group_endpoint(
     body: RoutineGroupCreateRequest,
     session: Session = Depends(get_db),

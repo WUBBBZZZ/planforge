@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Button } from "../Button";
 import { PeriodNav } from "../PeriodNav";
@@ -45,18 +45,28 @@ export function WeekViewContent({
   const [targetDialogOpen, setTargetDialogOpen] = useState(false);
   const [targetDraft, setTargetDraft] = useState<WeeklyTargetDraft | null>(null);
   const isNarrow = useNarrowViewport();
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const weekKey = `${view.week_start}:${view.week_end}`;
+  const [selection, setSelection] = useState<{
+    weekKey: string;
+    date: string | null;
+  } | null>(null);
 
   const calendarDays = view.days.filter((group) => group.date !== null);
   const bucketGroups = view.days.filter(
     (group) => group.date === null && group.items.length > 0,
   );
 
-  useEffect(() => {
+  const defaultSelectedDate = useMemo(() => {
     const today = todayIsoLocal();
     const todayInWeek = calendarDays.find((group) => group.date === today);
-    setSelectedDate(todayInWeek?.date ?? calendarDays[0]?.date ?? null);
-  }, [view.week_start, view.week_end]);
+    return todayInWeek?.date ?? calendarDays[0]?.date ?? null;
+  }, [calendarDays]);
+
+  const selectedDate =
+    (selection?.weekKey === weekKey ? selection.date : null) ?? defaultSelectedDate;
+  const setSelectedDate = (date: string | null) => {
+    setSelection({ weekKey, date });
+  };
 
   const openCreateTarget = () => {
     setTargetDraft({ title: "", targetCount: 1 });
@@ -109,7 +119,9 @@ export function WeekViewContent({
   };
 
   const selectedDay = calendarDays.find((group) => group.date === selectedDate) ?? null;
-  const selectedDayIndex = calendarDays.findIndex((group) => group.date === selectedDate);
+  const selectedDayIndex = calendarDays.findIndex(
+    (group) => group.date === selectedDate,
+  );
 
   const selectRelativeDay = (offset: number) => {
     const nextIndex = selectedDayIndex + offset;
@@ -199,7 +211,9 @@ export function WeekViewContent({
             </Button>
             <Button
               variant="secondary"
-              disabled={selectedDayIndex < 0 || selectedDayIndex >= calendarDays.length - 1}
+              disabled={
+                selectedDayIndex < 0 || selectedDayIndex >= calendarDays.length - 1
+              }
               onClick={() => selectRelativeDay(1)}
             >
               Next day

@@ -61,11 +61,7 @@ def test_undated_tasks_omitted_from_week_view(db_session) -> None:
     )
 
     assert all(group.label != "unscheduled" for group in view.days)
-    assert all(
-        item.title != "Someday"
-        for group in view.days
-        for item in group.items
-    )
+    assert all(item.title != "Someday" for group in view.days for item in group.items)
 
 
 def test_upcoming_bucket(db_session) -> None:

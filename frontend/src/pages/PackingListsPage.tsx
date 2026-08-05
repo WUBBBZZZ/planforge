@@ -25,6 +25,7 @@ export function PackingListsPage() {
   const [summaries, setSummaries] = useState<PackingListSummary[] | null>(null);
   const [selectedListId, setSelectedListId] = useState<string | null>(null);
   const [detail, setDetail] = useState<PackingListDetail | null>(null);
+  const [loadedListId, setLoadedListId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [newListTitle, setNewListTitle] = useState("");
   const [newItemTitle, setNewItemTitle] = useState("");
@@ -46,6 +47,7 @@ export function PackingListsPage() {
   const loadDetail = useCallback(async (listId: string) => {
     const nextDetail = await fetchPackingList(listId);
     setDetail(nextDetail);
+    setLoadedListId(listId);
     return nextDetail;
   }, []);
 
@@ -60,7 +62,9 @@ export function PackingListsPage() {
         setDetail(null);
       }
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "Could not load packing lists");
+      setError(
+        loadError instanceof Error ? loadError.message : "Could not load packing lists",
+      );
     }
   }, [loadDetail, loadSummaries, selectedListId]);
 
@@ -70,42 +74,58 @@ export function PackingListsPage() {
 
   useEffect(() => {
     let cancelled = false;
-    loadSummaries()
+    listPackingLists()
       .then((lists) => {
-        if (!cancelled && lists[0]) {
-          return loadDetail(lists[0].id);
+        if (cancelled) {
+          return;
         }
-        return undefined;
+        setSummaries(lists);
+        setSelectedListId((current) => {
+          if (current && lists.some((list) => list.id === current)) {
+            return current;
+          }
+          return lists[0]?.id ?? null;
+        });
       })
       .catch((loadError: unknown) => {
         if (!cancelled) {
           setError(
-            loadError instanceof Error ? loadError.message : "Could not load packing lists",
+            loadError instanceof Error
+              ? loadError.message
+              : "Could not load packing lists",
           );
         }
       });
     return () => {
       cancelled = true;
     };
-  }, [loadDetail, loadSummaries]);
+  }, []);
 
   useEffect(() => {
     if (!selectedListId) {
-      setDetail(null);
       return;
     }
     let cancelled = false;
-    loadDetail(selectedListId).catch((loadError: unknown) => {
-      if (!cancelled) {
-        setError(
-          loadError instanceof Error ? loadError.message : "Could not load packing list",
-        );
-      }
-    });
+    fetchPackingList(selectedListId)
+      .then((nextDetail) => {
+        if (!cancelled) {
+          setDetail(nextDetail);
+          setLoadedListId(selectedListId);
+        }
+      })
+      .catch((loadError: unknown) => {
+        if (!cancelled) {
+          setError(
+            loadError instanceof Error
+              ? loadError.message
+              : "Could not load packing list",
+          );
+        }
+      });
     return () => {
       cancelled = true;
     };
-  }, [loadDetail, selectedListId]);
+  }, [selectedListId]);
 
   const runAction = async (action: () => Promise<void>) => {
     setError(null);
@@ -132,8 +152,11 @@ export function PackingListsPage() {
       await loadSummaries();
       setSelectedListId(created.id);
       setDetail(created);
+      setLoadedListId(created.id);
     } catch (createError) {
-      setError(createError instanceof Error ? createError.message : "Could not create list");
+      setError(
+        createError instanceof Error ? createError.message : "Could not create list",
+      );
     } finally {
       setCreatingList(false);
     }
@@ -161,9 +184,13 @@ export function PackingListsPage() {
     });
   };
 
-  const items = detail?.entries.filter((entry) => entry.entry_type === "item") ?? [];
+  const shownDetail = selectedListId && detail?.id === selectedListId ? detail : null;
+  const detailLoading = selectedListId !== null && loadedListId !== selectedListId;
+
+  const items =
+    shownDetail?.entries.filter((entry) => entry.entry_type === "item") ?? [];
   const questions =
-    detail?.entries.filter((entry) => entry.entry_type === "question") ?? [];
+    shownDetail?.entries.filter((entry) => entry.entry_type === "question") ?? [];
 
   return (
     <AppShell currentPath="/packing" title="Packing lists">
@@ -178,7 +205,10 @@ export function PackingListsPage() {
 
       <section className="pf-panel pf-packing-create">
         <h2>New list</h2>
-        <form className="pf-task-form" onSubmit={(event) => void handleCreateList(event)}>
+        <form
+          className="pf-task-form"
+          onSubmit={(event) => void handleCreateList(event)}
+        >
           <FormField label="Trip or event name">
             <Input
               value={newListTitle}
@@ -212,23 +242,27 @@ export function PackingListsPage() {
             ))}
           </div>
 
-          {detail ? (
+          {detailLoading ? <LoadingIndicator label="Loading packing list" /> : null}
+
+          {shownDetail ? (
             <div className="pf-packing-detail">
               <header className="pf-packing-detail__header">
                 <div>
-                  <h2>{detail.title}</h2>
-                  {detail.notes ? <p className="pf-muted">{detail.notes}</p> : null}
+                  <h2>{shownDetail.title}</h2>
+                  {shownDetail.notes ? (
+                    <p className="pf-muted">{shownDetail.notes}</p>
+                  ) : null}
                 </div>
                 <Button
                   variant="ghost"
                   onClick={() => {
                     if (
                       window.confirm(
-                        `Delete "${detail.title}" and all of its items and questions?`,
+                        `Delete "${shownDetail.title}" and all of its items and questions?`,
                       )
                     ) {
                       void runAction(async () => {
-                        await deletePackingList(detail.id);
+                        await deletePackingList(shownDetail.id);
                         setSelectedListId(null);
                       });
                     }
@@ -244,7 +278,9 @@ export function PackingListsPage() {
                   className="pf-packing-add-row"
                   onSubmit={(event) => {
                     event.preventDefault();
-                    void handleAddEntry("item", newItemTitle, () => setNewItemTitle(""));
+                    void handleAddEntry("item", newItemTitle, () =>
+                      setNewItemTitle(""),
+                    );
                   }}
                 >
                   <Input
@@ -284,7 +320,8 @@ export function PackingListsPage() {
               <section className="pf-panel pf-packing-section">
                 <h3>Trip questions</h3>
                 <p className="pf-muted">
-                  Answer planning questions like whether you need formal clothes or swim gear.
+                  Answer planning questions like whether you need formal clothes or swim
+                  gear.
                 </p>
                 <form
                   className="pf-packing-add-row"
@@ -363,7 +400,9 @@ function PackingItemRow({
           checked={entry.is_checked}
           onChange={(event) => onToggle(event.target.checked)}
         />
-        <span className={entry.is_checked ? "pf-packing-entry__title--done" : undefined}>
+        <span
+          className={entry.is_checked ? "pf-packing-entry__title--done" : undefined}
+        >
           {entry.title}
         </span>
       </label>

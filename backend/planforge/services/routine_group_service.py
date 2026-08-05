@@ -134,7 +134,7 @@ def list_grouped_routines(
     by_group: dict[str, list[Routine]] = {group.id: [] for group in groups}
     misc = next(group for group in groups if group.is_system)
     for routine in routines:
-        bucket = by_group.get(routine.group_id or "", None)
+        bucket = by_group.get(routine.group_id or "")
         if bucket is None:
             routine.group_id = misc.id
             bucket = by_group[misc.id]
@@ -193,7 +193,9 @@ def update_group(
         if group.is_system and cleaned != MISC_GROUP_NAME:
             raise ValidationError("The Misc group cannot be renamed")
         if not group.is_system and cleaned.casefold() == MISC_GROUP_NAME.casefold():
-            raise ValidationError(f'"{MISC_GROUP_NAME}" is reserved for the default group')
+            raise ValidationError(
+                f'"{MISC_GROUP_NAME}" is reserved for the default group'
+            )
         group.name = cleaned
     if week_visible is not None:
         group.week_visible = week_visible

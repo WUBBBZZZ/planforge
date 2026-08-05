@@ -7,7 +7,12 @@ import { LoadingIndicator } from "../components/LoadingIndicator";
 import { PeriodNav } from "../components/PeriodNav";
 import { TodayViewContent } from "../components/views/TodayViewContent";
 import { addDays, getSearchParam, setSearchParam, todayIsoLocal } from "../lib/dates";
-import { fetchTodayView, formatDisplayDate, syncRoutineOccurrences, type TodayView } from "../lib/tasks";
+import {
+  fetchTodayView,
+  formatDisplayDate,
+  syncRoutineOccurrences,
+  type TodayView,
+} from "../lib/tasks";
 import { applyTheme, getStoredThemePreference } from "../lib/theme";
 
 type TodayState =
@@ -52,8 +57,7 @@ export function TodayPage() {
       })
       .catch((error: unknown) => {
         if (!cancelled) {
-          const message =
-            error instanceof Error ? error.message : "Could not load day";
+          const message = error instanceof Error ? error.message : "Could not load day";
           setTodayState({ kind: "error", message });
         }
       });
@@ -75,8 +79,7 @@ export function TodayPage() {
       : "Loading…";
 
   const isTodaySelected =
-    todayState.kind === "ready" &&
-    todayState.view.reference_date === todayIsoLocal();
+    todayState.kind === "ready" && todayState.view.reference_date === todayIsoLocal();
 
   return (
     <AppShell
@@ -102,9 +105,7 @@ export function TodayPage() {
             previousLabel="Previous day"
             nextLabel="Next day"
             todayLabel="Today"
-            onPrevious={() =>
-              navigateDay(addDays(todayState.view.reference_date, -1))
-            }
+            onPrevious={() => navigateDay(addDays(todayState.view.reference_date, -1))}
             onNext={() => navigateDay(addDays(todayState.view.reference_date, 1))}
             onToday={() => navigateDay(undefined)}
           />

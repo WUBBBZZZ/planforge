@@ -52,7 +52,8 @@ def _current_next_label(
     if item.next_action is MaintenanceNextActionStatus.SCHEDULED:
         if linked is not None:
             linked_date = LocalDate.from_date(linked.start_date)
-            return f"Scheduled {_format_short_date(linked_date, reference_year=reference_year)}"
+            scheduled = _format_short_date(linked_date, reference_year=reference_year)
+            return f"Scheduled {scheduled}"
         return "Scheduled"
     if item.next_action in {
         MaintenanceNextActionStatus.NEEDS_SCHEDULING,
@@ -60,9 +61,11 @@ def _current_next_label(
     }:
         schedule_by = schedule_by_date(item)
         if schedule_by is not None:
-            return (
-                f"Schedule by {_format_short_date(schedule_by, reference_year=reference_year)}"
+            schedule_label = _format_short_date(
+                schedule_by,
+                reference_year=reference_year,
             )
+            return f"Schedule by {schedule_label}"
         return "Needs scheduling"
     if item.next_action is MaintenanceNextActionStatus.NOT_APPLICABLE:
         return "Archived"

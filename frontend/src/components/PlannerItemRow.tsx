@@ -86,14 +86,14 @@ export function PlannerItemRow({
   readOnly = false,
   previewSize = "week",
 }: PlannerItemRowProps) {
-  if (readOnly) {
-    return <PlannerWeekPreviewItem item={item} previewSize={previewSize} />;
-  }
-
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [appointmentEdit, setAppointmentEdit] = useState<Appointment | null>(null);
+
+  if (readOnly) {
+    return <PlannerWeekPreviewItem item={item} previewSize={previewSize} />;
+  }
 
   const runAction = async (actionKey: string, action: () => Promise<void>) => {
     setBusyAction(actionKey);

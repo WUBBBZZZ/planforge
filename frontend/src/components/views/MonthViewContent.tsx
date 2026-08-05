@@ -26,13 +26,7 @@ function monthDayItems(items: PlannerItem[]): PlannerItem[] {
   );
 }
 
-function MonthDayCell({
-  date,
-  items,
-}: {
-  date: string;
-  items: PlannerItem[];
-}) {
+function MonthDayCell({ date, items }: { date: string; items: PlannerItem[] }) {
   const displayItems = monthDayItems(items);
   const visibleItems = displayItems.slice(0, MONTH_DAY_ITEM_LIMIT);
   const hiddenCount = displayItems.length - visibleItems.length;

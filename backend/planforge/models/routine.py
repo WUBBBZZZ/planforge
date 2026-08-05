@@ -49,7 +49,7 @@ class Routine(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     occurrences: Mapped[list[Occurrence]] = relationship(back_populates="routine")
-    group: Mapped["RoutineGroup | None"] = relationship(back_populates="routines")
+    group: Mapped[RoutineGroup | None] = relationship(back_populates="routines")
 
     @property
     def routine_status(self) -> RoutineStatus:

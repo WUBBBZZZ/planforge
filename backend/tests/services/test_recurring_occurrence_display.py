@@ -7,10 +7,10 @@ from planforge.domain.recurring_display import (
     OccurrenceDisplayRole,
 )
 from planforge.services import routine_group_service, routine_service
+from planforge.services.month_view import assemble_month_view
 from planforge.services.recurring_occurrence_display import (
     select_visible_routine_occurrences,
 )
-from planforge.services.month_view import assemble_month_view
 from planforge.services.settings_service import PolicySnapshot
 from planforge.services.today_view import assemble_today_view
 from planforge.services.week_bounds import week_bounds

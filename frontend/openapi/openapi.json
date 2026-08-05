@@ -1294,6 +1294,22 @@
         "title": "MonthViewResponse",
         "type": "object"
       },
+      "MoveRoutineRequest": {
+        "properties": {
+          "group_id": {
+            "title": "Group Id",
+            "type": "string"
+          },
+          "sort_order": {
+            "minimum": 0.0,
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": ["group_id", "sort_order"],
+        "title": "MoveRoutineRequest",
+        "type": "object"
+      },
       "MoveTaskToBacklogResponse": {
         "properties": {
           "backlog_item": {
@@ -1334,6 +1350,261 @@
         "title": "OccurrenceStatus",
         "type": "string"
       },
+      "PackingEntryCreateRequest": {
+        "properties": {
+          "entry_type": {
+            "$ref": "#/components/schemas/PackingEntryType"
+          },
+          "title": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": ["entry_type", "title"],
+        "title": "PackingEntryCreateRequest",
+        "type": "object"
+      },
+      "PackingEntryType": {
+        "enum": ["item", "question"],
+        "title": "PackingEntryType",
+        "type": "string"
+      },
+      "PackingEntryUpdateRequest": {
+        "properties": {
+          "answer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PackingQuestionAnswer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "clear_answer": {
+            "default": false,
+            "title": "Clear Answer",
+            "type": "boolean"
+          },
+          "is_checked": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Checked"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "title": "PackingEntryUpdateRequest",
+        "type": "object"
+      },
+      "PackingListCreateRequest": {
+        "properties": {
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": ["title"],
+        "title": "PackingListCreateRequest",
+        "type": "object"
+      },
+      "PackingListDetailResponse": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/PackingListEntryResponse"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": ["id", "title", "notes", "sort_order", "entries"],
+        "title": "PackingListDetailResponse",
+        "type": "object"
+      },
+      "PackingListEntryResponse": {
+        "properties": {
+          "answer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PackingQuestionAnswer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "entry_type": {
+            "$ref": "#/components/schemas/PackingEntryType"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_checked": {
+            "title": "Is Checked",
+            "type": "boolean"
+          },
+          "list_id": {
+            "title": "List Id",
+            "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "list_id",
+          "entry_type",
+          "title",
+          "sort_order",
+          "is_checked",
+          "answer"
+        ],
+        "title": "PackingListEntryResponse",
+        "type": "object"
+      },
+      "PackingListSummaryResponse": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "item_count": {
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "question_count": {
+            "title": "Question Count",
+            "type": "integer"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "notes",
+          "sort_order",
+          "item_count",
+          "question_count"
+        ],
+        "title": "PackingListSummaryResponse",
+        "type": "object"
+      },
+      "PackingListUpdateRequest": {
+        "properties": {
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "title": "PackingListUpdateRequest",
+        "type": "object"
+      },
+      "PackingQuestionAnswer": {
+        "enum": ["yes", "no"],
+        "title": "PackingQuestionAnswer",
+        "type": "string"
+      },
       "PromoteBacklogRequest": {
         "properties": {
           "due_date": {
@@ -1357,6 +1628,36 @@
         },
         "required": ["backlog", "task"],
         "title": "PromoteBacklogResponse",
+        "type": "object"
+      },
+      "ReorderGroupsRequest": {
+        "properties": {
+          "group_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Group Ids",
+            "type": "array"
+          }
+        },
+        "required": ["group_ids"],
+        "title": "ReorderGroupsRequest",
+        "type": "object"
+      },
+      "ReorderRoutinesRequest": {
+        "properties": {
+          "routine_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Routine Ids",
+            "type": "array"
+          }
+        },
+        "required": ["routine_ids"],
+        "title": "ReorderRoutinesRequest",
         "type": "object"
       },
       "RoutineCreateRequest": {
@@ -1434,6 +1735,144 @@
         "title": "RoutineCreateRequest",
         "type": "object"
       },
+      "RoutineGroupCreateRequest": {
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": ["name"],
+        "title": "RoutineGroupCreateRequest",
+        "type": "object"
+      },
+      "RoutineGroupResponse": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_system": {
+            "title": "Is System",
+            "type": "boolean"
+          },
+          "month_visible": {
+            "title": "Month Visible",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "week_visible": {
+            "title": "Week Visible",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "sort_order",
+          "week_visible",
+          "month_visible",
+          "is_system"
+        ],
+        "title": "RoutineGroupResponse",
+        "type": "object"
+      },
+      "RoutineGroupUpdateRequest": {
+        "properties": {
+          "month_visible": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Month Visible"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "week_visible": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Week Visible"
+          }
+        },
+        "title": "RoutineGroupUpdateRequest",
+        "type": "object"
+      },
+      "RoutineGroupWithRoutinesResponse": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_system": {
+            "title": "Is System",
+            "type": "boolean"
+          },
+          "month_visible": {
+            "title": "Month Visible",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "routines": {
+            "items": {
+              "$ref": "#/components/schemas/RoutineResponse"
+            },
+            "title": "Routines",
+            "type": "array"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "week_visible": {
+            "title": "Week Visible",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "sort_order",
+          "week_visible",
+          "month_visible",
+          "is_system",
+          "routines"
+        ],
+        "title": "RoutineGroupWithRoutinesResponse",
+        "type": "object"
+      },
       "RoutineResponse": {
         "properties": {
           "day_of_month": {
@@ -1453,6 +1892,17 @@
             },
             "title": "Days Of Week",
             "type": "array"
+          },
+          "group_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group Id"
           },
           "id": {
             "title": "Id",
@@ -1476,6 +1926,10 @@
           "schedule_type": {
             "title": "Schedule Type",
             "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
           },
           "starts_on": {
             "anyOf": [
@@ -1506,7 +1960,9 @@
           "day_of_month",
           "interval_weeks",
           "starts_on",
-          "status"
+          "status",
+          "group_id",
+          "sort_order"
         ],
         "title": "RoutineResponse",
         "type": "object"
@@ -1997,7 +2453,7 @@
         "type": "object"
       },
       "ViewItemKind": {
-        "enum": ["task", "occurrence", "appointment", "maintenance"],
+        "enum": ["task", "occurrence", "appointment", "maintenance", "backlog"],
         "title": "ViewItemKind",
         "type": "string"
       },
@@ -2878,6 +3334,39 @@
           }
         },
         "summary": "Create Backlog Endpoint",
+        "tags": ["backlog"]
+      }
+    },
+    "/api/backlog/{item_id}": {
+      "delete": {
+        "operationId": "delete_backlog_endpoint_api_backlog__item_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "item_id",
+            "required": true,
+            "schema": {
+              "title": "Item Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Backlog Endpoint",
         "tags": ["backlog"]
       }
     },
@@ -3766,6 +4255,627 @@
         "tags": ["maintenance"]
       }
     },
+    "/api/packing-lists": {
+      "get": {
+        "operationId": "list_packing_lists_endpoint_api_packing_lists_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PackingListSummaryResponse"
+                  },
+                  "title": "Response List Packing Lists Endpoint Api Packing Lists Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Packing Lists Endpoint",
+        "tags": ["packing-lists"]
+      },
+      "post": {
+        "operationId": "create_packing_list_endpoint_api_packing_lists_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackingListCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackingListDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Packing List Endpoint",
+        "tags": ["packing-lists"]
+      }
+    },
+    "/api/packing-lists/entries/{entry_id}": {
+      "delete": {
+        "operationId": "delete_entry_endpoint_api_packing_lists_entries__entry_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "title": "Entry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Entry Endpoint",
+        "tags": ["packing-lists"]
+      },
+      "patch": {
+        "operationId": "update_entry_endpoint_api_packing_lists_entries__entry_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "title": "Entry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackingEntryUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackingListEntryResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Entry Endpoint",
+        "tags": ["packing-lists"]
+      }
+    },
+    "/api/packing-lists/{list_id}": {
+      "delete": {
+        "operationId": "delete_packing_list_endpoint_api_packing_lists__list_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "list_id",
+            "required": true,
+            "schema": {
+              "title": "List Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Packing List Endpoint",
+        "tags": ["packing-lists"]
+      },
+      "get": {
+        "operationId": "get_packing_list_endpoint_api_packing_lists__list_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "list_id",
+            "required": true,
+            "schema": {
+              "title": "List Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackingListDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Packing List Endpoint",
+        "tags": ["packing-lists"]
+      },
+      "patch": {
+        "operationId": "update_packing_list_endpoint_api_packing_lists__list_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "list_id",
+            "required": true,
+            "schema": {
+              "title": "List Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackingListUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackingListDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Packing List Endpoint",
+        "tags": ["packing-lists"]
+      }
+    },
+    "/api/packing-lists/{list_id}/entries": {
+      "post": {
+        "operationId": "create_entry_endpoint_api_packing_lists__list_id__entries_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "list_id",
+            "required": true,
+            "schema": {
+              "title": "List Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackingEntryCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackingListEntryResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Entry Endpoint",
+        "tags": ["packing-lists"]
+      }
+    },
+    "/api/routine-groups": {
+      "get": {
+        "operationId": "list_groups_endpoint_api_routine_groups_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RoutineGroupResponse"
+                  },
+                  "title": "Response List Groups Endpoint Api Routine Groups Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Groups Endpoint",
+        "tags": ["routine-groups"]
+      },
+      "post": {
+        "operationId": "create_group_endpoint_api_routine_groups_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoutineGroupCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutineGroupResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Group Endpoint",
+        "tags": ["routine-groups"]
+      }
+    },
+    "/api/routine-groups/board": {
+      "get": {
+        "operationId": "grouped_routines_endpoint_api_routine_groups_board_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RoutineGroupWithRoutinesResponse"
+                  },
+                  "title": "Response Grouped Routines Endpoint Api Routine Groups Board Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Grouped Routines Endpoint",
+        "tags": ["routine-groups"]
+      }
+    },
+    "/api/routine-groups/reorder": {
+      "put": {
+        "operationId": "reorder_groups_endpoint_api_routine_groups_reorder_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderGroupsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RoutineGroupResponse"
+                  },
+                  "title": "Response Reorder Groups Endpoint Api Routine Groups Reorder Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reorder Groups Endpoint",
+        "tags": ["routine-groups"]
+      }
+    },
+    "/api/routine-groups/routines/{routine_id}/move": {
+      "post": {
+        "operationId": "move_routine_endpoint_api_routine_groups_routines__routine_id__move_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "routine_id",
+            "required": true,
+            "schema": {
+              "title": "Routine Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveRoutineRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutineResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Move Routine Endpoint",
+        "tags": ["routine-groups"]
+      }
+    },
+    "/api/routine-groups/{group_id}": {
+      "delete": {
+        "operationId": "delete_group_endpoint_api_routine_groups__group_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "group_id",
+            "required": true,
+            "schema": {
+              "title": "Group Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Group Endpoint",
+        "tags": ["routine-groups"]
+      },
+      "patch": {
+        "operationId": "update_group_endpoint_api_routine_groups__group_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "group_id",
+            "required": true,
+            "schema": {
+              "title": "Group Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoutineGroupUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutineGroupResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Group Endpoint",
+        "tags": ["routine-groups"]
+      }
+    },
+    "/api/routine-groups/{group_id}/routines/reorder": {
+      "put": {
+        "operationId": "reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "group_id",
+            "required": true,
+            "schema": {
+              "title": "Group Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderRoutinesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RoutineResponse"
+                  },
+                  "title": "Response Reorder Routines Endpoint Api Routine Groups  Group Id  Routines Reorder Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reorder Routines Endpoint",
+        "tags": ["routine-groups"]
+      }
+    },
     "/api/routines": {
       "get": {
         "operationId": "list_routines_endpoint_api_routines_get",
@@ -4249,6 +5359,38 @@
       }
     },
     "/api/tasks/{task_id}": {
+      "delete": {
+        "description": "Permanently delete a task.",
+        "operationId": "delete_task_endpoint_api_tasks__task_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "schema": {
+              "title": "Task Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Task Endpoint",
+        "tags": ["tasks"]
+      },
       "get": {
         "description": "Return a single task by id.",
         "operationId": "get_task_endpoint_api_tasks__task_id__get",

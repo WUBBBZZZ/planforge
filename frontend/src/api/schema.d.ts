@@ -161,6 +161,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/backlog/{item_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Backlog Endpoint */
+    delete: operations["delete_backlog_endpoint_api_backlog__item_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/backlog/{item_id}/archive": {
     parameters: {
       query?: never;
@@ -439,6 +456,182 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/packing-lists": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Packing Lists Endpoint */
+    get: operations["list_packing_lists_endpoint_api_packing_lists_get"];
+    put?: never;
+    /** Create Packing List Endpoint */
+    post: operations["create_packing_list_endpoint_api_packing_lists_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/packing-lists/entries/{entry_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Entry Endpoint */
+    delete: operations["delete_entry_endpoint_api_packing_lists_entries__entry_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Entry Endpoint */
+    patch: operations["update_entry_endpoint_api_packing_lists_entries__entry_id__patch"];
+    trace?: never;
+  };
+  "/api/packing-lists/{list_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Packing List Endpoint */
+    get: operations["get_packing_list_endpoint_api_packing_lists__list_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Packing List Endpoint */
+    delete: operations["delete_packing_list_endpoint_api_packing_lists__list_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Packing List Endpoint */
+    patch: operations["update_packing_list_endpoint_api_packing_lists__list_id__patch"];
+    trace?: never;
+  };
+  "/api/packing-lists/{list_id}/entries": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create Entry Endpoint */
+    post: operations["create_entry_endpoint_api_packing_lists__list_id__entries_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/routine-groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Groups Endpoint */
+    get: operations["list_groups_endpoint_api_routine_groups_get"];
+    put?: never;
+    /** Create Group Endpoint */
+    post: operations["create_group_endpoint_api_routine_groups_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/routine-groups/board": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Grouped Routines Endpoint */
+    get: operations["grouped_routines_endpoint_api_routine_groups_board_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/routine-groups/reorder": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Reorder Groups Endpoint */
+    put: operations["reorder_groups_endpoint_api_routine_groups_reorder_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/routine-groups/routines/{routine_id}/move": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Move Routine Endpoint */
+    post: operations["move_routine_endpoint_api_routine_groups_routines__routine_id__move_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/routine-groups/{group_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Group Endpoint */
+    delete: operations["delete_group_endpoint_api_routine_groups__group_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Group Endpoint */
+    patch: operations["update_group_endpoint_api_routine_groups__group_id__patch"];
+    trace?: never;
+  };
+  "/api/routine-groups/{group_id}/routines/reorder": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Reorder Routines Endpoint */
+    put: operations["reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/routines": {
     parameters: {
       query?: never;
@@ -651,7 +844,11 @@ export interface paths {
     get: operations["get_task_endpoint_api_tasks__task_id__get"];
     put?: never;
     post?: never;
-    delete?: never;
+    /**
+     * Delete Task Endpoint
+     * @description Permanently delete a task.
+     */
+    delete: operations["delete_task_endpoint_api_tasks__task_id__delete"];
     options?: never;
     head?: never;
     /**
@@ -1272,6 +1469,13 @@ export interface components {
       /** Week Start Day */
       week_start_day: string;
     };
+    /** MoveRoutineRequest */
+    MoveRoutineRequest: {
+      /** Group Id */
+      group_id: string;
+      /** Sort Order */
+      sort_order: number;
+    };
     /** MoveTaskToBacklogResponse */
     MoveTaskToBacklogResponse: {
       backlog_item: components["schemas"]["BacklogItemResponse"];
@@ -1292,6 +1496,92 @@ export interface components {
      * @enum {string}
      */
     OccurrenceStatus: "pending" | "completed" | "skipped" | "missed";
+    /** PackingEntryCreateRequest */
+    PackingEntryCreateRequest: {
+      entry_type: components["schemas"]["PackingEntryType"];
+      /** Title */
+      title: string;
+    };
+    /**
+     * PackingEntryType
+     * @enum {string}
+     */
+    PackingEntryType: "item" | "question";
+    /** PackingEntryUpdateRequest */
+    PackingEntryUpdateRequest: {
+      answer?: components["schemas"]["PackingQuestionAnswer"] | null;
+      /**
+       * Clear Answer
+       * @default false
+       */
+      clear_answer: boolean;
+      /** Is Checked */
+      is_checked?: boolean | null;
+      /** Title */
+      title?: string | null;
+    };
+    /** PackingListCreateRequest */
+    PackingListCreateRequest: {
+      /** Notes */
+      notes?: string | null;
+      /** Title */
+      title: string;
+    };
+    /** PackingListDetailResponse */
+    PackingListDetailResponse: {
+      /** Entries */
+      entries: components["schemas"]["PackingListEntryResponse"][];
+      /** Id */
+      id: string;
+      /** Notes */
+      notes: string | null;
+      /** Sort Order */
+      sort_order: number;
+      /** Title */
+      title: string;
+    };
+    /** PackingListEntryResponse */
+    PackingListEntryResponse: {
+      answer: components["schemas"]["PackingQuestionAnswer"] | null;
+      entry_type: components["schemas"]["PackingEntryType"];
+      /** Id */
+      id: string;
+      /** Is Checked */
+      is_checked: boolean;
+      /** List Id */
+      list_id: string;
+      /** Sort Order */
+      sort_order: number;
+      /** Title */
+      title: string;
+    };
+    /** PackingListSummaryResponse */
+    PackingListSummaryResponse: {
+      /** Id */
+      id: string;
+      /** Item Count */
+      item_count: number;
+      /** Notes */
+      notes: string | null;
+      /** Question Count */
+      question_count: number;
+      /** Sort Order */
+      sort_order: number;
+      /** Title */
+      title: string;
+    };
+    /** PackingListUpdateRequest */
+    PackingListUpdateRequest: {
+      /** Notes */
+      notes?: string | null;
+      /** Title */
+      title?: string | null;
+    };
+    /**
+     * PackingQuestionAnswer
+     * @enum {string}
+     */
+    PackingQuestionAnswer: "yes" | "no";
     /** PromoteBacklogRequest */
     PromoteBacklogRequest: {
       /**
@@ -1304,6 +1594,16 @@ export interface components {
     PromoteBacklogResponse: {
       backlog: components["schemas"]["BacklogItemResponse"];
       task: components["schemas"]["TaskResponse"];
+    };
+    /** ReorderGroupsRequest */
+    ReorderGroupsRequest: {
+      /** Group Ids */
+      group_ids: string[];
+    };
+    /** ReorderRoutinesRequest */
+    ReorderRoutinesRequest: {
+      /** Routine Ids */
+      routine_ids: string[];
     };
     /** RoutineCreateRequest */
     RoutineCreateRequest: {
@@ -1327,6 +1627,52 @@ export interface components {
       starts_on?: string | null;
       /** Title */
       title: string;
+    };
+    /** RoutineGroupCreateRequest */
+    RoutineGroupCreateRequest: {
+      /** Name */
+      name: string;
+    };
+    /** RoutineGroupResponse */
+    RoutineGroupResponse: {
+      /** Id */
+      id: string;
+      /** Is System */
+      is_system: boolean;
+      /** Month Visible */
+      month_visible: boolean;
+      /** Name */
+      name: string;
+      /** Sort Order */
+      sort_order: number;
+      /** Week Visible */
+      week_visible: boolean;
+    };
+    /** RoutineGroupUpdateRequest */
+    RoutineGroupUpdateRequest: {
+      /** Month Visible */
+      month_visible?: boolean | null;
+      /** Name */
+      name?: string | null;
+      /** Week Visible */
+      week_visible?: boolean | null;
+    };
+    /** RoutineGroupWithRoutinesResponse */
+    RoutineGroupWithRoutinesResponse: {
+      /** Id */
+      id: string;
+      /** Is System */
+      is_system: boolean;
+      /** Month Visible */
+      month_visible: boolean;
+      /** Name */
+      name: string;
+      /** Routines */
+      routines: components["schemas"]["RoutineResponse"][];
+      /** Sort Order */
+      sort_order: number;
+      /** Week Visible */
+      week_visible: boolean;
     };
     /** RoutineResponse */
     RoutineResponse: {
@@ -1500,7 +1846,7 @@ export interface components {
      * ViewItemKind
      * @enum {string}
      */
-    ViewItemKind: "task" | "occurrence" | "appointment" | "maintenance";
+    ViewItemKind: "task" | "occurrence" | "appointment" | "maintenance" | "backlog";
     /** WeekDayGroupResponse */
     WeekDayGroupResponse: {
       /** Date */
@@ -2011,6 +2357,35 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["BacklogItemResponse"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_backlog_endpoint_api_backlog__item_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {
@@ -2645,6 +3020,493 @@ export interface operations {
       };
     };
   };
+  list_packing_lists_endpoint_api_packing_lists_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PackingListSummaryResponse"][];
+        };
+      };
+    };
+  };
+  create_packing_list_endpoint_api_packing_lists_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PackingListCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PackingListDetailResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_entry_endpoint_api_packing_lists_entries__entry_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        entry_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_entry_endpoint_api_packing_lists_entries__entry_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        entry_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PackingEntryUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PackingListEntryResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_packing_list_endpoint_api_packing_lists__list_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PackingListDetailResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_packing_list_endpoint_api_packing_lists__list_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_packing_list_endpoint_api_packing_lists__list_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PackingListUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PackingListDetailResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_entry_endpoint_api_packing_lists__list_id__entries_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PackingEntryCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PackingListEntryResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_groups_endpoint_api_routine_groups_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineGroupResponse"][];
+        };
+      };
+    };
+  };
+  create_group_endpoint_api_routine_groups_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RoutineGroupCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineGroupResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  grouped_routines_endpoint_api_routine_groups_board_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineGroupWithRoutinesResponse"][];
+        };
+      };
+    };
+  };
+  reorder_groups_endpoint_api_routine_groups_reorder_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReorderGroupsRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineGroupResponse"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  move_routine_endpoint_api_routine_groups_routines__routine_id__move_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        routine_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MoveRoutineRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_group_endpoint_api_routine_groups__group_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        group_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_group_endpoint_api_routine_groups__group_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        group_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RoutineGroupUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineGroupResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        group_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReorderRoutinesRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoutineResponse"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   list_routines_endpoint_api_routines_get: {
     parameters: {
       query?: never;
@@ -3044,6 +3906,35 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["TaskResponse"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_task_endpoint_api_tasks__task_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        task_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {

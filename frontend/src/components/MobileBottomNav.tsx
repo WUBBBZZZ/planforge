@@ -57,7 +57,9 @@ export function MobileBottomNav({ currentPath }: MobileBottomNavProps) {
               <a
                 href={link.href}
                 className="pf-mobile-nav__link"
-                aria-current={isPrimaryActive(link.href, currentPath) ? "page" : undefined}
+                aria-current={
+                  isPrimaryActive(link.href, currentPath) ? "page" : undefined
+                }
               >
                 {link.label}
               </a>

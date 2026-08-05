@@ -179,7 +179,10 @@ export function SettingsPage() {
             </FormField>
           ))}
           {routineGroups && routineGroups.length > 0 ? (
-            <section className="pf-settings__routine-groups" aria-labelledby="routine-group-visibility">
+            <section
+              className="pf-settings__routine-groups"
+              aria-labelledby="routine-group-visibility"
+            >
               <h2 id="routine-group-visibility">Routine groups on Week &amp; Month</h2>
               <p className="pf-muted">
                 Choose separately which groups appear on the week and month calendars.
@@ -188,7 +191,9 @@ export function SettingsPage() {
               <ul className="pf-settings__routine-group-list">
                 {routineGroups.map((group) => (
                   <li key={group.id} className="pf-settings__routine-group-item">
-                    <span className="pf-settings__routine-group-name">{group.name}</span>
+                    <span className="pf-settings__routine-group-name">
+                      {group.name}
+                    </span>
                     <div className="pf-settings__routine-group-checks">
                       <label>
                         <input

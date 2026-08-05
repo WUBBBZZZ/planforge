@@ -194,7 +194,9 @@ export function RoutinesPage() {
       setNewGroupName("");
       await reload();
     } catch (groupError) {
-      setError(groupError instanceof Error ? groupError.message : "Could not create group");
+      setError(
+        groupError instanceof Error ? groupError.message : "Could not create group",
+      );
     }
   };
 
@@ -229,7 +231,9 @@ export function RoutinesPage() {
       });
       await reload();
     } catch (moveError) {
-      setError(moveError instanceof Error ? moveError.message : "Could not move routine");
+      setError(
+        moveError instanceof Error ? moveError.message : "Could not move routine",
+      );
     } finally {
       setDragState(null);
     }
@@ -243,7 +247,9 @@ export function RoutinesPage() {
       const updated = await updateRoutineGroup(groupId, updates);
       setBoard((current) =>
         current
-          ? current.map((group) => (group.id === updated.id ? { ...group, ...updated } : group))
+          ? current.map((group) =>
+              group.id === updated.id ? { ...group, ...updated } : group,
+            )
           : current,
       );
     } catch (visibilityError) {
@@ -288,7 +294,9 @@ export function RoutinesPage() {
       await reload();
     } catch (reorderError) {
       setError(
-        reorderError instanceof Error ? reorderError.message : "Could not reorder groups",
+        reorderError instanceof Error
+          ? reorderError.message
+          : "Could not reorder groups",
       );
     } finally {
       setDraggingGroupId(null);
@@ -461,7 +469,10 @@ export function RoutinesPage() {
                     <span className="pf-muted">({group.routines.length})</span>
                   </button>
                   {!group.is_system ? (
-                    <Button variant="ghost" onClick={() => void handleDeleteGroup(group)}>
+                    <Button
+                      variant="ghost"
+                      onClick={() => void handleDeleteGroup(group)}
+                    >
                       Delete
                     </Button>
                   ) : null}
@@ -524,8 +535,10 @@ export function RoutinesPage() {
                           <p className="pf-task-row__title">{routine.title}</p>
                           <p className="pf-muted">
                             {formatRoutineSchedule(routine)}
-                            {routine.starts_on ? ` · starts ${routine.starts_on}` : ""} ·{" "}
-                            {routine.status}
+                            {routine.starts_on
+                              ? ` · starts ${routine.starts_on}`
+                              : ""}{" "}
+                            · {routine.status}
                           </p>
                         </div>
                         <div className="pf-task-row__actions">
@@ -536,7 +549,10 @@ export function RoutinesPage() {
                             Edit
                           </Button>
                           {routine.status !== "archived" ? (
-                            <Button variant="ghost" onClick={() => void togglePause(routine)}>
+                            <Button
+                              variant="ghost"
+                              onClick={() => void togglePause(routine)}
+                            >
                               {routine.status === "active" ? "Pause" : "Resume"}
                             </Button>
                           ) : null}

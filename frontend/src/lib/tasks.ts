@@ -18,11 +18,7 @@ import { addDays } from "./dates";
 export { ApiError } from "../api/client";
 
 export type ViewItemKind =
-  | "task"
-  | "occurrence"
-  | "appointment"
-  | "maintenance"
-  | "backlog";
+  "task" | "occurrence" | "appointment" | "maintenance" | "backlog";
 
 export type TaskStatus = TaskResponse["status"];
 
@@ -479,7 +475,9 @@ export async function deleteRoutineGroup(id: string): Promise<void> {
   await parseApiJson(response);
 }
 
-export async function reorderRoutineGroups(groupIds: string[]): Promise<RoutineGroup[]> {
+export async function reorderRoutineGroups(
+  groupIds: string[],
+): Promise<RoutineGroup[]> {
   const response = await fetch("/api/routine-groups/reorder", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

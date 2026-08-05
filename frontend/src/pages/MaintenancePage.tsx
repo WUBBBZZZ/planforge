@@ -58,7 +58,9 @@ export function MaintenancePage() {
   const [filter, setFilter] = useState<MaintenanceListFilter>("active");
   const [historyLimit, setHistoryLimit] = useState(10);
   const [itemsState, setItemsState] = useState<ItemsState>({ kind: "loading" });
+  const [loadedFilter, setLoadedFilter] = useState<MaintenanceListFilter | null>(null);
   const [historyState, setHistoryState] = useState<HistoryState>({ kind: "idle" });
+  const [loadedHistoryLimit, setLoadedHistoryLimit] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<MaintenanceItem | null>(null);
@@ -70,10 +72,12 @@ export function MaintenancePage() {
     try {
       const items = await listMaintenance({ filter: nextFilter });
       setItemsState({ kind: "ready", items });
+      setLoadedFilter(nextFilter);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Could not load maintenance";
       setItemsState({ kind: "error", message });
+      setLoadedFilter(nextFilter);
     }
   };
 
@@ -82,10 +86,12 @@ export function MaintenancePage() {
     try {
       const board = await fetchMaintenanceHistoryBoard(limit);
       setHistoryState({ kind: "ready", board });
+      setLoadedHistoryLimit(limit);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Could not load maintenance history";
       setHistoryState({ kind: "error", message });
+      setLoadedHistoryLimit(limit);
     }
   };
 
@@ -102,11 +108,11 @@ export function MaintenancePage() {
 
   useEffect(() => {
     let cancelled = false;
-    setItemsState({ kind: "loading" });
     listMaintenance({ filter })
       .then((items) => {
         if (!cancelled) {
           setItemsState({ kind: "ready", items });
+          setLoadedFilter(filter);
         }
       })
       .catch((error: unknown) => {
@@ -114,6 +120,7 @@ export function MaintenancePage() {
           const message =
             error instanceof Error ? error.message : "Could not load maintenance";
           setItemsState({ kind: "error", message });
+          setLoadedFilter(filter);
         }
       });
     return () => {
@@ -125,8 +132,37 @@ export function MaintenancePage() {
     if (activeTab !== "history") {
       return;
     }
-    void loadHistory(historyLimit);
+    let cancelled = false;
+    fetchMaintenanceHistoryBoard(historyLimit)
+      .then((board) => {
+        if (!cancelled) {
+          setHistoryState({ kind: "ready", board });
+          setLoadedHistoryLimit(historyLimit);
+        }
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Could not load maintenance history";
+          setHistoryState({ kind: "error", message });
+          setLoadedHistoryLimit(historyLimit);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [activeTab, historyLimit]);
+
+  const displayItemsState: ItemsState =
+    loadedFilter === filter ? itemsState : { kind: "loading" };
+  const displayHistoryState: HistoryState =
+    activeTab !== "history"
+      ? historyState
+      : loadedHistoryLimit === historyLimit && historyState.kind !== "idle"
+        ? historyState
+        : { kind: "loading" };
 
   const runAction = async (action: () => Promise<void>) => {
     setActionError(null);
@@ -211,25 +247,25 @@ export function MaintenancePage() {
             </div>
           </div>
 
-          {itemsState.kind === "loading" ? (
+          {displayItemsState.kind === "loading" ? (
             <LoadingIndicator label="Loading maintenance" />
           ) : null}
-          {itemsState.kind === "error" ? (
+          {displayItemsState.kind === "error" ? (
             <p className="pf-form-field__error" role="alert">
-              {itemsState.message}
+              {displayItemsState.message}
             </p>
           ) : null}
 
-          {itemsState.kind === "ready" ? (
+          {displayItemsState.kind === "ready" ? (
             <section aria-label="Filtered maintenance list">
-              {itemsState.items.length === 0 ? (
+              {displayItemsState.items.length === 0 ? (
                 <EmptyState
                   title="No maintenance items here"
                   description="Try another filter or create a maintenance definition."
                 />
               ) : (
                 <ul className="pf-task-list">
-                  {itemsState.items.map((item) => (
+                  {displayItemsState.items.map((item) => (
                     <li key={item.id} className="pf-task-row">
                       <div className="pf-task-row__main">
                         <p className="pf-task-row__title">{item.title}</p>
@@ -325,18 +361,18 @@ export function MaintenancePage() {
           aria-labelledby="maintenance-tab-history"
           className="pf-maintenance-panel"
         >
-          {historyState.kind === "loading" || historyState.kind === "idle" ? (
+          {displayHistoryState.kind === "loading" ? (
             <LoadingIndicator label="Loading maintenance history" />
           ) : null}
-          {historyState.kind === "error" ? (
+          {displayHistoryState.kind === "error" ? (
             <p className="pf-form-field__error" role="alert">
-              {historyState.message}
+              {displayHistoryState.message}
             </p>
           ) : null}
-          {historyState.kind === "ready" ? (
+          {displayHistoryState.kind === "ready" ? (
             <MaintenanceHistoryBoard
-              rows={historyState.board.rows}
-              historyLimit={historyState.board.history_limit}
+              rows={displayHistoryState.board.rows}
+              historyLimit={displayHistoryState.board.history_limit}
               onHistoryLimitChange={setHistoryLimit}
               onOpenItem={(item) => openActions(item, "history")}
             />

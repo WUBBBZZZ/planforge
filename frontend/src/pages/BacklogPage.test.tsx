@@ -27,16 +27,18 @@ describe("BacklogPage", () => {
           promoted_entity_id: null,
         },
       ]);
-    const createBacklogItem = vi.spyOn(tasksApi, "createBacklogItem").mockResolvedValue({
-      id: "backlog-1",
-      title: "Read the docs",
-      notes: null,
-      status: "active",
-      source_entity_type: null,
-      source_entity_id: null,
-      promoted_entity_type: null,
-      promoted_entity_id: null,
-    });
+    const createBacklogItem = vi
+      .spyOn(tasksApi, "createBacklogItem")
+      .mockResolvedValue({
+        id: "backlog-1",
+        title: "Read the docs",
+        notes: null,
+        status: "active",
+        source_entity_type: null,
+        source_entity_id: null,
+        promoted_entity_type: null,
+        promoted_entity_id: null,
+      });
 
     render(<BacklogPage />);
 

@@ -139,9 +139,7 @@ def _reset_scheduling_state_after_due_change(item: MaintenanceDefinition) -> Non
     """Clear booked-forward state when derived due dates change."""
     item.linked_appointment_id = None
     item.scheduling_reminder_date = None
-    if item.interval is MaintenanceIntervalUnit.MANUAL:
-        item.next_action_status = MaintenanceNextActionStatus.NO_NEXT_DATE.value
-    elif item.next_due_date is None:
+    if item.interval is MaintenanceIntervalUnit.MANUAL or item.next_due_date is None:
         item.next_action_status = MaintenanceNextActionStatus.NO_NEXT_DATE.value
     else:
         item.next_action_status = MaintenanceNextActionStatus.NEEDS_SCHEDULING.value

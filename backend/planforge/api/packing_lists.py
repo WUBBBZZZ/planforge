@@ -24,7 +24,9 @@ def list_packing_lists_endpoint(
     session: Session = Depends(get_db),
 ) -> list[PackingListSummaryResponse]:
     lists = packing_list_service.list_packing_lists(session, owner_id=LOCAL_OWNER_ID)
-    return [PackingListSummaryResponse.from_list(packing_list) for packing_list in lists]
+    return [
+        PackingListSummaryResponse.from_list(packing_list) for packing_list in lists
+    ]
 
 
 @router.post(

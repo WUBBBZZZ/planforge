@@ -8,7 +8,9 @@ import { TodayPage } from "../pages/TodayPage";
 import { WeekPage } from "../pages/WeekPage";
 
 vi.mock("../lib/tasks", () => ({
-  fetchTodayView: vi.fn().mockResolvedValue({ reference_date: "2026-07-21", items: [] }),
+  fetchTodayView: vi
+    .fn()
+    .mockResolvedValue({ reference_date: "2026-07-21", items: [] }),
   fetchWeekView: vi.fn().mockResolvedValue({
     week_start: "2026-07-20",
     week_end: "2026-07-26",

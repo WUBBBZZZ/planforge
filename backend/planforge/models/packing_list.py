@@ -18,7 +18,7 @@ class PackingList(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
-    entries: Mapped[list["PackingListEntry"]] = relationship(
+    entries: Mapped[list[PackingListEntry]] = relationship(
         back_populates="packing_list",
         cascade="all, delete-orphan",
         order_by="PackingListEntry.sort_order",

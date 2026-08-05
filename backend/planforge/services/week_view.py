@@ -18,10 +18,15 @@ from planforge.domain.local_date import LocalDate
 from planforge.models.appointment import Appointment
 from planforge.models.maintenance import MaintenanceDefinition
 from planforge.models.task import Task
-from planforge.services import backlog_service, routine_group_service, routine_service, weekly_target_service
-from planforge.services.maintenance_display import placements_for_maintenance
+from planforge.services import (
+    backlog_service,
+    routine_group_service,
+    routine_service,
+    weekly_target_service,
+)
 from planforge.services.completion_display import completed_items_for_local_day
 from planforge.services.display_date import is_item_overdue, rolled_display_date
+from planforge.services.maintenance_display import placements_for_maintenance
 from planforge.services.recurring_occurrence_display import (
     list_routine_occurrences_for_calendar_window,
 )
@@ -201,9 +206,7 @@ def assemble_week_view(
                 ends_at=None,
                 is_overdue=calendar_occurrence.is_overdue,
                 routine_title=calendar_occurrence.routine.title,
-                occurrence_role=(
-                    "overdue" if calendar_occurrence.is_overdue else None
-                ),
+                occurrence_role=("overdue" if calendar_occurrence.is_overdue else None),
             )
         )
 

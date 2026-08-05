@@ -112,7 +112,9 @@ export function BacklogPage() {
       setNotes("");
       await reload();
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : "Could not add backlog item");
+      setActionError(
+        error instanceof Error ? error.message : "Could not add backlog item",
+      );
     } finally {
       setCreating(false);
     }

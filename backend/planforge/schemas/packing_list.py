@@ -15,7 +15,7 @@ class PackingListEntryResponse(BaseModel):
     answer: PackingQuestionAnswer | None
 
     @classmethod
-    def from_entry(cls, entry: PackingListEntry) -> "PackingListEntryResponse":
+    def from_entry(cls, entry: PackingListEntry) -> PackingListEntryResponse:
         return cls(
             id=entry.id,
             list_id=entry.list_id,
@@ -36,7 +36,7 @@ class PackingListSummaryResponse(BaseModel):
     question_count: int
 
     @classmethod
-    def from_list(cls, packing_list: PackingList) -> "PackingListSummaryResponse":
+    def from_list(cls, packing_list: PackingList) -> PackingListSummaryResponse:
         items = [
             entry
             for entry in packing_list.entries
@@ -65,14 +65,15 @@ class PackingListDetailResponse(BaseModel):
     entries: list[PackingListEntryResponse]
 
     @classmethod
-    def from_list(cls, packing_list: PackingList) -> "PackingListDetailResponse":
+    def from_list(cls, packing_list: PackingList) -> PackingListDetailResponse:
         return cls(
             id=packing_list.id,
             title=packing_list.title,
             notes=packing_list.notes,
             sort_order=packing_list.sort_order,
             entries=[
-                PackingListEntryResponse.from_entry(entry) for entry in packing_list.entries
+                PackingListEntryResponse.from_entry(entry)
+                for entry in packing_list.entries
             ],
         )
 

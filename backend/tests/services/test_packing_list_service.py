@@ -104,4 +104,7 @@ def test_delete_list_cascades_entries(db_session) -> None:
         list_id=packing_list.id,
         owner_id=LOCAL_OWNER_ID,
     )
-    assert packing_list_service.list_packing_lists(db_session, owner_id=LOCAL_OWNER_ID) == []
+    assert (
+        packing_list_service.list_packing_lists(db_session, owner_id=LOCAL_OWNER_ID)
+        == []
+    )

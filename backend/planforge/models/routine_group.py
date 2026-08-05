@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy import Boolean, Index, Integer, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from planforge.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -27,4 +27,4 @@ class RoutineGroup(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     month_visible: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_system: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    routines: Mapped[list["Routine"]] = relationship(back_populates="group")
+    routines: Mapped[list[Routine]] = relationship(back_populates="group")

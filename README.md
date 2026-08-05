@@ -4,8 +4,9 @@
 
 Self-hosted, **local-first** personal planning platform. Your tasks, routines,
 appointments, and long-term maintenance live in a SQLite database on your
-machine — not in a shared cloud service. Services bind to **127.0.0.1** only;
-phone access and external networking are **not enabled**.
+machine — not in a shared cloud service. Services bind to **127.0.0.1** by
+default. Optional **Tailscale Serve** on your private tailnet can expose the dev
+UI to your phone; there is no public internet exposure.
 
 **Stack:** FastAPI · SQLAlchemy · Alembic · SQLite · React · TypeScript · Vite
 
@@ -94,8 +95,11 @@ Capture locally with fabricated data only:
 ## Known limitations
 
 - Single-user only (no authentication yet).
-- Loopback binding only — not reachable from phone or LAN.
-- No offline PWA caching (service worker deferred).
+- Backend and frontend bind to loopback by default — not reachable from LAN or the
+  public internet. Optional Tailscale Serve on your tailnet is the supported
+  private phone-access path.
+- Mobile-friendly shell and installable PWA manifest are supported; offline
+  caching is not (service worker deferred).
 - No arbitrary database import.
 - Maintenance history board may require horizontal scroll for long histories.
 

@@ -105,7 +105,11 @@
             "type": "string"
           }
         },
-        "required": ["title", "start_date", "end_date"],
+        "required": [
+          "title",
+          "start_date",
+          "end_date"
+        ],
         "title": "AppointmentCreateRequest",
         "type": "object"
       },
@@ -163,7 +167,11 @@
             "title": "Start Time"
           }
         },
-        "required": ["is_all_day", "start_date", "end_date"],
+        "required": [
+          "is_all_day",
+          "start_date",
+          "end_date"
+        ],
         "title": "AppointmentRescheduleRequest",
         "type": "object"
       },
@@ -305,7 +313,12 @@
         "type": "object"
       },
       "AppointmentStatus": {
-        "enum": ["scheduled", "completed", "cancelled", "archived"],
+        "enum": [
+          "scheduled",
+          "completed",
+          "cancelled",
+          "archived"
+        ],
         "title": "AppointmentStatus",
         "type": "string"
       },
@@ -404,7 +417,9 @@
             "type": "string"
           }
         },
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "title": "BacklogCreateRequest",
         "type": "object"
       },
@@ -491,7 +506,11 @@
         "type": "object"
       },
       "BacklogStatus": {
-        "enum": ["active", "promoted", "archived"],
+        "enum": [
+          "active",
+          "promoted",
+          "archived"
+        ],
         "title": "BacklogStatus",
         "type": "string"
       },
@@ -575,7 +594,13 @@
             "title": "Superseded By Id"
           }
         },
-        "required": ["id", "completed_on", "notes", "is_voided", "superseded_by_id"],
+        "required": [
+          "id",
+          "completed_on",
+          "notes",
+          "is_voided",
+          "superseded_by_id"
+        ],
         "title": "MaintenanceCompletionResponse",
         "type": "object"
       },
@@ -609,7 +634,9 @@
             "title": "Void Reason"
           }
         },
-        "required": ["completed_on"],
+        "required": [
+          "completed_on"
+        ],
         "title": "MaintenanceCorrectCompletionRequest",
         "type": "object"
       },
@@ -679,7 +706,9 @@
             "type": "string"
           }
         },
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "title": "MaintenanceCreateRequest",
         "type": "object"
       },
@@ -853,7 +882,9 @@
             "title": "Notes"
           }
         },
-        "required": ["completed_on"],
+        "required": [
+          "completed_on"
+        ],
         "title": "MaintenanceHistoricalCompletionRequest",
         "type": "object"
       },
@@ -871,7 +902,10 @@
             "type": "array"
           }
         },
-        "required": ["rows", "history_limit"],
+        "required": [
+          "rows",
+          "history_limit"
+        ],
         "title": "MaintenanceHistoryBoardResponse",
         "type": "object"
       },
@@ -902,12 +936,22 @@
             "$ref": "#/components/schemas/MaintenanceResponse"
           }
         },
-        "required": ["maintenance", "current_next_label", "completions"],
+        "required": [
+          "maintenance",
+          "current_next_label",
+          "completions"
+        ],
         "title": "MaintenanceHistoryRowResponse",
         "type": "object"
       },
       "MaintenanceIntervalUnit": {
-        "enum": ["days", "weeks", "months", "years", "manual"],
+        "enum": [
+          "days",
+          "weeks",
+          "months",
+          "years",
+          "manual"
+        ],
         "title": "MaintenanceIntervalUnit",
         "type": "string"
       },
@@ -918,7 +962,9 @@
             "type": "string"
           }
         },
-        "required": ["appointment_id"],
+        "required": [
+          "appointment_id"
+        ],
         "title": "MaintenanceLinkAppointmentRequest",
         "type": "object"
       },
@@ -1154,7 +1200,10 @@
             "title": "Title"
           }
         },
-        "required": ["start_date", "end_date"],
+        "required": [
+          "start_date",
+          "end_date"
+        ],
         "title": "MaintenanceScheduleAppointmentRequest",
         "type": "object"
       },
@@ -1166,12 +1215,17 @@
             "type": "string"
           }
         },
-        "required": ["reminder_date"],
+        "required": [
+          "reminder_date"
+        ],
         "title": "MaintenanceSchedulingReminderRequest",
         "type": "object"
       },
       "MaintenanceStatus": {
-        "enum": ["active", "archived"],
+        "enum": [
+          "active",
+          "archived"
+        ],
         "title": "MaintenanceStatus",
         "type": "string"
       },
@@ -1290,7 +1344,13 @@
             "type": "string"
           }
         },
-        "required": ["month", "month_start", "month_end", "week_start_day", "days"],
+        "required": [
+          "month",
+          "month_start",
+          "month_end",
+          "week_start_day",
+          "days"
+        ],
         "title": "MonthViewResponse",
         "type": "object"
       },
@@ -1306,7 +1366,10 @@
             "type": "integer"
           }
         },
-        "required": ["group_id", "sort_order"],
+        "required": [
+          "group_id",
+          "sort_order"
+        ],
         "title": "MoveRoutineRequest",
         "type": "object"
       },
@@ -1319,7 +1382,10 @@
             "$ref": "#/components/schemas/TaskResponse"
           }
         },
-        "required": ["task", "backlog_item"],
+        "required": [
+          "task",
+          "backlog_item"
+        ],
         "title": "MoveTaskToBacklogResponse",
         "type": "object"
       },
@@ -1341,12 +1407,22 @@
             "$ref": "#/components/schemas/OccurrenceStatus"
           }
         },
-        "required": ["id", "routine_id", "scheduled_date", "status"],
+        "required": [
+          "id",
+          "routine_id",
+          "scheduled_date",
+          "status"
+        ],
         "title": "OccurrenceResponse",
         "type": "object"
       },
       "OccurrenceStatus": {
-        "enum": ["pending", "completed", "skipped", "missed"],
+        "enum": [
+          "pending",
+          "completed",
+          "skipped",
+          "missed"
+        ],
         "title": "OccurrenceStatus",
         "type": "string"
       },
@@ -1362,12 +1438,18 @@
             "type": "string"
           }
         },
-        "required": ["entry_type", "title"],
+        "required": [
+          "entry_type",
+          "title"
+        ],
         "title": "PackingEntryCreateRequest",
         "type": "object"
       },
       "PackingEntryType": {
-        "enum": ["item", "question"],
+        "enum": [
+          "item",
+          "question"
+        ],
         "title": "PackingEntryType",
         "type": "string"
       },
@@ -1436,7 +1518,9 @@
             "type": "string"
           }
         },
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "title": "PackingListCreateRequest",
         "type": "object"
       },
@@ -1473,7 +1557,13 @@
             "type": "string"
           }
         },
-        "required": ["id", "title", "notes", "sort_order", "entries"],
+        "required": [
+          "id",
+          "title",
+          "notes",
+          "sort_order",
+          "entries"
+        ],
         "title": "PackingListDetailResponse",
         "type": "object"
       },
@@ -1601,7 +1691,10 @@
         "type": "object"
       },
       "PackingQuestionAnswer": {
-        "enum": ["yes", "no"],
+        "enum": [
+          "yes",
+          "no"
+        ],
         "title": "PackingQuestionAnswer",
         "type": "string"
       },
@@ -1613,7 +1706,9 @@
             "type": "string"
           }
         },
-        "required": ["due_date"],
+        "required": [
+          "due_date"
+        ],
         "title": "PromoteBacklogRequest",
         "type": "object"
       },
@@ -1626,7 +1721,10 @@
             "$ref": "#/components/schemas/TaskResponse"
           }
         },
-        "required": ["backlog", "task"],
+        "required": [
+          "backlog",
+          "task"
+        ],
         "title": "PromoteBacklogResponse",
         "type": "object"
       },
@@ -1641,7 +1739,9 @@
             "type": "array"
           }
         },
-        "required": ["group_ids"],
+        "required": [
+          "group_ids"
+        ],
         "title": "ReorderGroupsRequest",
         "type": "object"
       },
@@ -1656,7 +1756,9 @@
             "type": "array"
           }
         },
-        "required": ["routine_ids"],
+        "required": [
+          "routine_ids"
+        ],
         "title": "ReorderRoutinesRequest",
         "type": "object"
       },
@@ -1731,7 +1833,9 @@
             "type": "string"
           }
         },
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "title": "RoutineCreateRequest",
         "type": "object"
       },
@@ -1744,7 +1848,9 @@
             "type": "string"
           }
         },
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "RoutineGroupCreateRequest",
         "type": "object"
       },
@@ -1968,7 +2074,11 @@
         "type": "object"
       },
       "RoutineStatus": {
-        "enum": ["active", "paused", "archived"],
+        "enum": [
+          "active",
+          "paused",
+          "archived"
+        ],
         "title": "RoutineStatus",
         "type": "string"
       },
@@ -2072,7 +2182,9 @@
             "type": "string"
           }
         },
-        "required": ["value"],
+        "required": [
+          "value"
+        ],
         "title": "SettingUpdateRequest",
         "type": "object"
       },
@@ -2086,7 +2198,9 @@
             "type": "object"
           }
         },
-        "required": ["settings"],
+        "required": [
+          "settings"
+        ],
         "title": "SettingsResponse",
         "type": "object"
       },
@@ -2122,7 +2236,9 @@
             "type": "string"
           }
         },
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "title": "TaskCreateRequest",
         "type": "object"
       },
@@ -2186,7 +2302,12 @@
         "type": "object"
       },
       "TaskStatus": {
-        "enum": ["pending", "completed", "cancelled", "moved_to_backlog"],
+        "enum": [
+          "pending",
+          "completed",
+          "cancelled",
+          "moved_to_backlog"
+        ],
         "title": "TaskStatus",
         "type": "string"
       },
@@ -2412,7 +2533,10 @@
             "type": "string"
           }
         },
-        "required": ["reference_date", "items"],
+        "required": [
+          "reference_date",
+          "items"
+        ],
         "title": "TodayViewResponse",
         "type": "object"
       },
@@ -2448,12 +2572,22 @@
             "type": "string"
           }
         },
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError",
         "type": "object"
       },
       "ViewItemKind": {
-        "enum": ["task", "occurrence", "appointment", "maintenance", "backlog"],
+        "enum": [
+          "task",
+          "occurrence",
+          "appointment",
+          "maintenance",
+          "backlog"
+        ],
         "title": "ViewItemKind",
         "type": "string"
       },
@@ -2490,7 +2624,10 @@
             "title": "Label"
           }
         },
-        "required": ["date", "items"],
+        "required": [
+          "date",
+          "items"
+        ],
         "title": "WeekDayGroupResponse",
         "type": "object"
       },
@@ -2666,7 +2803,12 @@
             "type": "string"
           }
         },
-        "required": ["target_id", "title", "completed_count", "target_count"],
+        "required": [
+          "target_id",
+          "title",
+          "completed_count",
+          "target_count"
+        ],
         "title": "WeekTargetSummaryResponse",
         "type": "object"
       },
@@ -2697,7 +2839,12 @@
             "type": "string"
           }
         },
-        "required": ["week_start", "week_end", "days", "targets"],
+        "required": [
+          "week_start",
+          "week_end",
+          "days",
+          "targets"
+        ],
         "title": "WeekViewResponse",
         "type": "object"
       },
@@ -2716,7 +2863,9 @@
             "type": "string"
           }
         },
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "title": "WeeklyTargetCreateRequest",
         "type": "object"
       },
@@ -2738,12 +2887,21 @@
             "type": "string"
           }
         },
-        "required": ["id", "title", "target_count", "status"],
+        "required": [
+          "id",
+          "title",
+          "target_count",
+          "status"
+        ],
         "title": "WeeklyTargetResponse",
         "type": "object"
       },
       "WeeklyTargetStatus": {
-        "enum": ["active", "met", "unmet"],
+        "enum": [
+          "active",
+          "met",
+          "unmet"
+        ],
         "title": "WeeklyTargetStatus",
         "type": "string"
       },
@@ -2868,7 +3026,9 @@
           }
         },
         "summary": "List Appointments Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       },
       "post": {
         "operationId": "create_appointment_endpoint_api_appointments_post",
@@ -2905,7 +3065,9 @@
           }
         },
         "summary": "Create Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}": {
@@ -2938,7 +3100,9 @@
           }
         },
         "summary": "Delete Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       },
       "get": {
         "operationId": "get_appointment_endpoint_api_appointments__appointment_id__get",
@@ -2976,7 +3140,9 @@
           }
         },
         "summary": "Get Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       },
       "patch": {
         "operationId": "update_appointment_endpoint_api_appointments__appointment_id__patch",
@@ -3024,7 +3190,9 @@
           }
         },
         "summary": "Update Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}/archive": {
@@ -3064,7 +3232,9 @@
           }
         },
         "summary": "Archive Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}/cancel": {
@@ -3104,7 +3274,9 @@
           }
         },
         "summary": "Cancel Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}/complete": {
@@ -3144,7 +3316,9 @@
           }
         },
         "summary": "Complete Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}/reopen": {
@@ -3184,7 +3358,9 @@
           }
         },
         "summary": "Reopen Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}/reschedule": {
@@ -3234,7 +3410,9 @@
           }
         },
         "summary": "Reschedule Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/appointments/{appointment_id}/restore": {
@@ -3274,7 +3452,9 @@
           }
         },
         "summary": "Restore Appointment Endpoint",
-        "tags": ["appointments"]
+        "tags": [
+          "appointments"
+        ]
       }
     },
     "/api/backlog": {
@@ -3297,7 +3477,9 @@
           }
         },
         "summary": "List Backlog Endpoint",
-        "tags": ["backlog"]
+        "tags": [
+          "backlog"
+        ]
       },
       "post": {
         "operationId": "create_backlog_endpoint_api_backlog_post",
@@ -3334,7 +3516,9 @@
           }
         },
         "summary": "Create Backlog Endpoint",
-        "tags": ["backlog"]
+        "tags": [
+          "backlog"
+        ]
       }
     },
     "/api/backlog/{item_id}": {
@@ -3367,7 +3551,9 @@
           }
         },
         "summary": "Delete Backlog Endpoint",
-        "tags": ["backlog"]
+        "tags": [
+          "backlog"
+        ]
       }
     },
     "/api/backlog/{item_id}/archive": {
@@ -3407,7 +3593,9 @@
           }
         },
         "summary": "Archive Backlog Endpoint",
-        "tags": ["backlog"]
+        "tags": [
+          "backlog"
+        ]
       }
     },
     "/api/backlog/{item_id}/promote": {
@@ -3457,7 +3645,9 @@
           }
         },
         "summary": "Promote Backlog Endpoint",
-        "tags": ["backlog"]
+        "tags": [
+          "backlog"
+        ]
       }
     },
     "/api/health": {
@@ -3481,7 +3671,9 @@
           }
         },
         "summary": "Health",
-        "tags": ["health"]
+        "tags": [
+          "health"
+        ]
       }
     },
     "/api/maintenance": {
@@ -3548,7 +3740,9 @@
           }
         },
         "summary": "List Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       },
       "post": {
         "operationId": "create_maintenance_endpoint_api_maintenance_post",
@@ -3585,7 +3779,9 @@
           }
         },
         "summary": "Create Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/history-board": {
@@ -3628,7 +3824,9 @@
           }
         },
         "summary": "Maintenance History Board Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}": {
@@ -3680,7 +3878,9 @@
           }
         },
         "summary": "Get Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       },
       "patch": {
         "operationId": "update_maintenance_endpoint_api_maintenance__maintenance_id__patch",
@@ -3728,7 +3928,9 @@
           }
         },
         "summary": "Update Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/archive": {
@@ -3768,7 +3970,9 @@
           }
         },
         "summary": "Archive Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/clear-next-action": {
@@ -3808,7 +4012,9 @@
           }
         },
         "summary": "Clear Next Action Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/complete": {
@@ -3865,7 +4071,9 @@
           }
         },
         "summary": "Complete Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/completions": {
@@ -3915,7 +4123,9 @@
           }
         },
         "summary": "Add Historical Completion Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/completions/{completion_id}/correct": {
@@ -3974,7 +4184,9 @@
           }
         },
         "summary": "Correct Completion Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/link-appointment": {
@@ -4024,7 +4236,9 @@
           }
         },
         "summary": "Link Appointment Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/reschedule-appointment": {
@@ -4074,7 +4288,9 @@
           }
         },
         "summary": "Reschedule Linked Appointment Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/restore": {
@@ -4114,7 +4330,9 @@
           }
         },
         "summary": "Restore Maintenance Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/schedule-appointment": {
@@ -4164,7 +4382,9 @@
           }
         },
         "summary": "Schedule Appointment Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/maintenance/{maintenance_id}/scheduling-reminder": {
@@ -4204,7 +4424,9 @@
           }
         },
         "summary": "Clear Scheduling Reminder Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       },
       "post": {
         "operationId": "set_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_post",
@@ -4252,7 +4474,9 @@
           }
         },
         "summary": "Set Scheduling Reminder Endpoint",
-        "tags": ["maintenance"]
+        "tags": [
+          "maintenance"
+        ]
       }
     },
     "/api/packing-lists": {
@@ -4275,7 +4499,9 @@
           }
         },
         "summary": "List Packing Lists Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       },
       "post": {
         "operationId": "create_packing_list_endpoint_api_packing_lists_post",
@@ -4312,7 +4538,9 @@
           }
         },
         "summary": "Create Packing List Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       }
     },
     "/api/packing-lists/entries/{entry_id}": {
@@ -4345,7 +4573,9 @@
           }
         },
         "summary": "Delete Entry Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       },
       "patch": {
         "operationId": "update_entry_endpoint_api_packing_lists_entries__entry_id__patch",
@@ -4393,7 +4623,9 @@
           }
         },
         "summary": "Update Entry Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       }
     },
     "/api/packing-lists/{list_id}": {
@@ -4426,7 +4658,9 @@
           }
         },
         "summary": "Delete Packing List Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       },
       "get": {
         "operationId": "get_packing_list_endpoint_api_packing_lists__list_id__get",
@@ -4464,7 +4698,9 @@
           }
         },
         "summary": "Get Packing List Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       },
       "patch": {
         "operationId": "update_packing_list_endpoint_api_packing_lists__list_id__patch",
@@ -4512,7 +4748,9 @@
           }
         },
         "summary": "Update Packing List Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       }
     },
     "/api/packing-lists/{list_id}/entries": {
@@ -4562,7 +4800,9 @@
           }
         },
         "summary": "Create Entry Endpoint",
-        "tags": ["packing-lists"]
+        "tags": [
+          "packing-lists"
+        ]
       }
     },
     "/api/routine-groups": {
@@ -4585,7 +4825,9 @@
           }
         },
         "summary": "List Groups Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       },
       "post": {
         "operationId": "create_group_endpoint_api_routine_groups_post",
@@ -4622,7 +4864,9 @@
           }
         },
         "summary": "Create Group Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       }
     },
     "/api/routine-groups/board": {
@@ -4645,7 +4889,9 @@
           }
         },
         "summary": "Grouped Routines Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       }
     },
     "/api/routine-groups/reorder": {
@@ -4688,7 +4934,9 @@
           }
         },
         "summary": "Reorder Groups Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       }
     },
     "/api/routine-groups/routines/{routine_id}/move": {
@@ -4738,7 +4986,9 @@
           }
         },
         "summary": "Move Routine Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       }
     },
     "/api/routine-groups/{group_id}": {
@@ -4771,7 +5021,9 @@
           }
         },
         "summary": "Delete Group Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       },
       "patch": {
         "operationId": "update_group_endpoint_api_routine_groups__group_id__patch",
@@ -4819,7 +5071,9 @@
           }
         },
         "summary": "Update Group Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       }
     },
     "/api/routine-groups/{group_id}/routines/reorder": {
@@ -4873,7 +5127,9 @@
           }
         },
         "summary": "Reorder Routines Endpoint",
-        "tags": ["routine-groups"]
+        "tags": [
+          "routine-groups"
+        ]
       }
     },
     "/api/routines": {
@@ -4896,7 +5152,9 @@
           }
         },
         "summary": "List Routines Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       },
       "post": {
         "operationId": "create_routine_endpoint_api_routines_post",
@@ -4933,7 +5191,9 @@
           }
         },
         "summary": "Create Routine Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/occurrences/{occurrence_id}/complete": {
@@ -4973,7 +5233,9 @@
           }
         },
         "summary": "Complete Occurrence Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/occurrences/{occurrence_id}/skip": {
@@ -5013,7 +5275,9 @@
           }
         },
         "summary": "Skip Occurrence Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/sync-occurrences": {
@@ -5026,7 +5290,9 @@
           }
         },
         "summary": "Sync Occurrences Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/{routine_id}": {
@@ -5076,7 +5342,9 @@
           }
         },
         "summary": "Update Routine Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/{routine_id}/archive": {
@@ -5116,7 +5384,9 @@
           }
         },
         "summary": "Archive Routine Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/{routine_id}/pause": {
@@ -5156,7 +5426,9 @@
           }
         },
         "summary": "Pause Routine Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/routines/{routine_id}/resume": {
@@ -5196,7 +5468,9 @@
           }
         },
         "summary": "Resume Routine Endpoint",
-        "tags": ["routines"]
+        "tags": [
+          "routines"
+        ]
       }
     },
     "/api/settings": {
@@ -5215,7 +5489,9 @@
           }
         },
         "summary": "Get Settings Endpoint",
-        "tags": ["settings"]
+        "tags": [
+          "settings"
+        ]
       }
     },
     "/api/settings/{key}": {
@@ -5265,7 +5541,9 @@
           }
         },
         "summary": "Update Setting Endpoint",
-        "tags": ["settings"]
+        "tags": [
+          "settings"
+        ]
       }
     },
     "/api/tasks": {
@@ -5317,7 +5595,9 @@
           }
         },
         "summary": "List Tasks Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       },
       "post": {
         "description": "Create a pending task.",
@@ -5355,7 +5635,9 @@
           }
         },
         "summary": "Create Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       }
     },
     "/api/tasks/{task_id}": {
@@ -5389,7 +5671,9 @@
           }
         },
         "summary": "Delete Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       },
       "get": {
         "description": "Return a single task by id.",
@@ -5428,7 +5712,9 @@
           }
         },
         "summary": "Get Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       },
       "patch": {
         "description": "Update a pending task.",
@@ -5477,7 +5763,9 @@
           }
         },
         "summary": "Update Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       }
     },
     "/api/tasks/{task_id}/cancel": {
@@ -5518,7 +5806,9 @@
           }
         },
         "summary": "Cancel Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       }
     },
     "/api/tasks/{task_id}/complete": {
@@ -5559,7 +5849,9 @@
           }
         },
         "summary": "Complete Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       }
     },
     "/api/tasks/{task_id}/move-to-backlog": {
@@ -5600,7 +5892,9 @@
           }
         },
         "summary": "Move Task To Backlog Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       }
     },
     "/api/tasks/{task_id}/reopen": {
@@ -5641,7 +5935,9 @@
           }
         },
         "summary": "Reopen Task Endpoint",
-        "tags": ["tasks"]
+        "tags": [
+          "tasks"
+        ]
       }
     },
     "/api/views/month": {
@@ -5689,7 +5985,9 @@
           }
         },
         "summary": "Month View Endpoint",
-        "tags": ["views"]
+        "tags": [
+          "views"
+        ]
       }
     },
     "/api/views/today": {
@@ -5738,7 +6036,9 @@
           }
         },
         "summary": "Today View Endpoint",
-        "tags": ["views"]
+        "tags": [
+          "views"
+        ]
       }
     },
     "/api/views/week": {
@@ -5787,7 +6087,9 @@
           }
         },
         "summary": "Week View Endpoint",
-        "tags": ["views"]
+        "tags": [
+          "views"
+        ]
       }
     },
     "/api/weekly-targets": {
@@ -5810,7 +6112,9 @@
           }
         },
         "summary": "List Weekly Targets Endpoint",
-        "tags": ["weekly-targets"]
+        "tags": [
+          "weekly-targets"
+        ]
       },
       "post": {
         "operationId": "create_weekly_target_endpoint_api_weekly_targets_post",
@@ -5847,7 +6151,9 @@
           }
         },
         "summary": "Create Weekly Target Endpoint",
-        "tags": ["weekly-targets"]
+        "tags": [
+          "weekly-targets"
+        ]
       }
     },
     "/api/weekly-targets/{target_id}": {
@@ -5880,7 +6186,9 @@
           }
         },
         "summary": "Delete Weekly Target Endpoint",
-        "tags": ["weekly-targets"]
+        "tags": [
+          "weekly-targets"
+        ]
       },
       "patch": {
         "operationId": "update_weekly_target_endpoint_api_weekly_targets__target_id__patch",
@@ -5928,7 +6236,9 @@
           }
         },
         "summary": "Update Weekly Target Endpoint",
-        "tags": ["weekly-targets"]
+        "tags": [
+          "weekly-targets"
+        ]
       }
     },
     "/api/weekly-targets/{target_id}/progress": {
@@ -5968,7 +6278,9 @@
           }
         },
         "summary": "Log Target Progress Endpoint",
-        "tags": ["weekly-targets"]
+        "tags": [
+          "weekly-targets"
+        ]
       }
     }
   }

@@ -4,4347 +4,4329 @@
  */
 
 export interface paths {
-  "/api/appointments": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Appointments Endpoint */
+        get: operations["list_appointments_endpoint_api_appointments_get"];
+        put?: never;
+        /** Create Appointment Endpoint */
+        post: operations["create_appointment_endpoint_api_appointments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Appointments Endpoint */
-    get: operations["list_appointments_endpoint_api_appointments_get"];
-    put?: never;
-    /** Create Appointment Endpoint */
-    post: operations["create_appointment_endpoint_api_appointments_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Appointment Endpoint */
+        get: operations["get_appointment_endpoint_api_appointments__appointment_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Appointment Endpoint */
+        delete: operations["delete_appointment_endpoint_api_appointments__appointment_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Appointment Endpoint */
+        patch: operations["update_appointment_endpoint_api_appointments__appointment_id__patch"];
+        trace?: never;
     };
-    /** Get Appointment Endpoint */
-    get: operations["get_appointment_endpoint_api_appointments__appointment_id__get"];
-    put?: never;
-    post?: never;
-    /** Delete Appointment Endpoint */
-    delete: operations["delete_appointment_endpoint_api_appointments__appointment_id__delete"];
-    options?: never;
-    head?: never;
-    /** Update Appointment Endpoint */
-    patch: operations["update_appointment_endpoint_api_appointments__appointment_id__patch"];
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}/archive": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Appointment Endpoint */
+        post: operations["archive_appointment_endpoint_api_appointments__appointment_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Archive Appointment Endpoint */
-    post: operations["archive_appointment_endpoint_api_appointments__appointment_id__archive_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}/cancel": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel Appointment Endpoint */
+        post: operations["cancel_appointment_endpoint_api_appointments__appointment_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Cancel Appointment Endpoint */
-    post: operations["cancel_appointment_endpoint_api_appointments__appointment_id__cancel_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}/complete": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete Appointment Endpoint */
+        post: operations["complete_appointment_endpoint_api_appointments__appointment_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Complete Appointment Endpoint */
-    post: operations["complete_appointment_endpoint_api_appointments__appointment_id__complete_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}/reopen": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}/reopen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reopen Appointment Endpoint */
+        post: operations["reopen_appointment_endpoint_api_appointments__appointment_id__reopen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Reopen Appointment Endpoint */
-    post: operations["reopen_appointment_endpoint_api_appointments__appointment_id__reopen_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}/reschedule": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}/reschedule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reschedule Appointment Endpoint */
+        post: operations["reschedule_appointment_endpoint_api_appointments__appointment_id__reschedule_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Reschedule Appointment Endpoint */
-    post: operations["reschedule_appointment_endpoint_api_appointments__appointment_id__reschedule_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/appointments/{appointment_id}/restore": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/appointments/{appointment_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Appointment Endpoint */
+        post: operations["restore_appointment_endpoint_api_appointments__appointment_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Restore Appointment Endpoint */
-    post: operations["restore_appointment_endpoint_api_appointments__appointment_id__restore_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/backlog": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/backlog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Backlog Endpoint */
+        get: operations["list_backlog_endpoint_api_backlog_get"];
+        put?: never;
+        /** Create Backlog Endpoint */
+        post: operations["create_backlog_endpoint_api_backlog_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Backlog Endpoint */
-    get: operations["list_backlog_endpoint_api_backlog_get"];
-    put?: never;
-    /** Create Backlog Endpoint */
-    post: operations["create_backlog_endpoint_api_backlog_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/backlog/{item_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/backlog/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Backlog Endpoint */
+        delete: operations["delete_backlog_endpoint_api_backlog__item_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /** Delete Backlog Endpoint */
-    delete: operations["delete_backlog_endpoint_api_backlog__item_id__delete"];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/backlog/{item_id}/archive": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/backlog/{item_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Backlog Endpoint */
+        post: operations["archive_backlog_endpoint_api_backlog__item_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Archive Backlog Endpoint */
-    post: operations["archive_backlog_endpoint_api_backlog__item_id__archive_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/backlog/{item_id}/promote": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/backlog/{item_id}/promote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Promote Backlog Endpoint */
+        post: operations["promote_backlog_endpoint_api_backlog__item_id__promote_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Promote Backlog Endpoint */
-    post: operations["promote_backlog_endpoint_api_backlog__item_id__promote_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/health": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Health
+         * @description Return a simple health status payload.
+         */
+        get: operations["health_api_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Health
-     * @description Return a simple health status payload.
-     */
-    get: operations["health_api_health_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Maintenance Endpoint */
+        get: operations["list_maintenance_endpoint_api_maintenance_get"];
+        put?: never;
+        /** Create Maintenance Endpoint */
+        post: operations["create_maintenance_endpoint_api_maintenance_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Maintenance Endpoint */
-    get: operations["list_maintenance_endpoint_api_maintenance_get"];
-    put?: never;
-    /** Create Maintenance Endpoint */
-    post: operations["create_maintenance_endpoint_api_maintenance_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/history-board": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/history-board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Maintenance History Board Endpoint */
+        get: operations["maintenance_history_board_endpoint_api_maintenance_history_board_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Maintenance History Board Endpoint */
-    get: operations["maintenance_history_board_endpoint_api_maintenance_history_board_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Maintenance Endpoint */
+        get: operations["get_maintenance_endpoint_api_maintenance__maintenance_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Maintenance Endpoint */
+        patch: operations["update_maintenance_endpoint_api_maintenance__maintenance_id__patch"];
+        trace?: never;
     };
-    /** Get Maintenance Endpoint */
-    get: operations["get_maintenance_endpoint_api_maintenance__maintenance_id__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /** Update Maintenance Endpoint */
-    patch: operations["update_maintenance_endpoint_api_maintenance__maintenance_id__patch"];
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/archive": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Maintenance Endpoint */
+        post: operations["archive_maintenance_endpoint_api_maintenance__maintenance_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Archive Maintenance Endpoint */
-    post: operations["archive_maintenance_endpoint_api_maintenance__maintenance_id__archive_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/clear-next-action": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/clear-next-action": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Clear Next Action Endpoint */
+        post: operations["clear_next_action_endpoint_api_maintenance__maintenance_id__clear_next_action_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Clear Next Action Endpoint */
-    post: operations["clear_next_action_endpoint_api_maintenance__maintenance_id__clear_next_action_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/complete": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete Maintenance Endpoint */
+        post: operations["complete_maintenance_endpoint_api_maintenance__maintenance_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Complete Maintenance Endpoint */
-    post: operations["complete_maintenance_endpoint_api_maintenance__maintenance_id__complete_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/completions": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/completions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Historical Completion Endpoint */
+        post: operations["add_historical_completion_endpoint_api_maintenance__maintenance_id__completions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Add Historical Completion Endpoint */
-    post: operations["add_historical_completion_endpoint_api_maintenance__maintenance_id__completions_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/completions/{completion_id}/correct": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/completions/{completion_id}/correct": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Correct Completion Endpoint */
+        post: operations["correct_completion_endpoint_api_maintenance__maintenance_id__completions__completion_id__correct_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Correct Completion Endpoint */
-    post: operations["correct_completion_endpoint_api_maintenance__maintenance_id__completions__completion_id__correct_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/link-appointment": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/link-appointment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Link Appointment Endpoint */
+        post: operations["link_appointment_endpoint_api_maintenance__maintenance_id__link_appointment_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Link Appointment Endpoint */
-    post: operations["link_appointment_endpoint_api_maintenance__maintenance_id__link_appointment_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/reschedule-appointment": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/reschedule-appointment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reschedule Linked Appointment Endpoint */
+        post: operations["reschedule_linked_appointment_endpoint_api_maintenance__maintenance_id__reschedule_appointment_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Reschedule Linked Appointment Endpoint */
-    post: operations["reschedule_linked_appointment_endpoint_api_maintenance__maintenance_id__reschedule_appointment_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/restore": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Maintenance Endpoint */
+        post: operations["restore_maintenance_endpoint_api_maintenance__maintenance_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Restore Maintenance Endpoint */
-    post: operations["restore_maintenance_endpoint_api_maintenance__maintenance_id__restore_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/schedule-appointment": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/schedule-appointment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Schedule Appointment Endpoint */
+        post: operations["schedule_appointment_endpoint_api_maintenance__maintenance_id__schedule_appointment_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Schedule Appointment Endpoint */
-    post: operations["schedule_appointment_endpoint_api_maintenance__maintenance_id__schedule_appointment_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/maintenance/{maintenance_id}/scheduling-reminder": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/maintenance/{maintenance_id}/scheduling-reminder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set Scheduling Reminder Endpoint */
+        post: operations["set_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_post"];
+        /** Clear Scheduling Reminder Endpoint */
+        delete: operations["clear_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Set Scheduling Reminder Endpoint */
-    post: operations["set_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_post"];
-    /** Clear Scheduling Reminder Endpoint */
-    delete: operations["clear_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_delete"];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/packing-lists": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/packing-lists": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Packing Lists Endpoint */
+        get: operations["list_packing_lists_endpoint_api_packing_lists_get"];
+        put?: never;
+        /** Create Packing List Endpoint */
+        post: operations["create_packing_list_endpoint_api_packing_lists_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Packing Lists Endpoint */
-    get: operations["list_packing_lists_endpoint_api_packing_lists_get"];
-    put?: never;
-    /** Create Packing List Endpoint */
-    post: operations["create_packing_list_endpoint_api_packing_lists_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/packing-lists/entries/{entry_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/packing-lists/entries/{entry_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Entry Endpoint */
+        delete: operations["delete_entry_endpoint_api_packing_lists_entries__entry_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Entry Endpoint */
+        patch: operations["update_entry_endpoint_api_packing_lists_entries__entry_id__patch"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /** Delete Entry Endpoint */
-    delete: operations["delete_entry_endpoint_api_packing_lists_entries__entry_id__delete"];
-    options?: never;
-    head?: never;
-    /** Update Entry Endpoint */
-    patch: operations["update_entry_endpoint_api_packing_lists_entries__entry_id__patch"];
-    trace?: never;
-  };
-  "/api/packing-lists/{list_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/packing-lists/{list_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Packing List Endpoint */
+        get: operations["get_packing_list_endpoint_api_packing_lists__list_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Packing List Endpoint */
+        delete: operations["delete_packing_list_endpoint_api_packing_lists__list_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Packing List Endpoint */
+        patch: operations["update_packing_list_endpoint_api_packing_lists__list_id__patch"];
+        trace?: never;
     };
-    /** Get Packing List Endpoint */
-    get: operations["get_packing_list_endpoint_api_packing_lists__list_id__get"];
-    put?: never;
-    post?: never;
-    /** Delete Packing List Endpoint */
-    delete: operations["delete_packing_list_endpoint_api_packing_lists__list_id__delete"];
-    options?: never;
-    head?: never;
-    /** Update Packing List Endpoint */
-    patch: operations["update_packing_list_endpoint_api_packing_lists__list_id__patch"];
-    trace?: never;
-  };
-  "/api/packing-lists/{list_id}/entries": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/packing-lists/{list_id}/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Entry Endpoint */
+        post: operations["create_entry_endpoint_api_packing_lists__list_id__entries_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Create Entry Endpoint */
-    post: operations["create_entry_endpoint_api_packing_lists__list_id__entries_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routine-groups": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routine-groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Groups Endpoint */
+        get: operations["list_groups_endpoint_api_routine_groups_get"];
+        put?: never;
+        /** Create Group Endpoint */
+        post: operations["create_group_endpoint_api_routine_groups_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Groups Endpoint */
-    get: operations["list_groups_endpoint_api_routine_groups_get"];
-    put?: never;
-    /** Create Group Endpoint */
-    post: operations["create_group_endpoint_api_routine_groups_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routine-groups/board": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routine-groups/board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Grouped Routines Endpoint */
+        get: operations["grouped_routines_endpoint_api_routine_groups_board_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Grouped Routines Endpoint */
-    get: operations["grouped_routines_endpoint_api_routine_groups_board_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routine-groups/reorder": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routine-groups/reorder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Reorder Groups Endpoint */
+        put: operations["reorder_groups_endpoint_api_routine_groups_reorder_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /** Reorder Groups Endpoint */
-    put: operations["reorder_groups_endpoint_api_routine_groups_reorder_put"];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routine-groups/routines/{routine_id}/move": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routine-groups/routines/{routine_id}/move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Move Routine Endpoint */
+        post: operations["move_routine_endpoint_api_routine_groups_routines__routine_id__move_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Move Routine Endpoint */
-    post: operations["move_routine_endpoint_api_routine_groups_routines__routine_id__move_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routine-groups/{group_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routine-groups/{group_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Group Endpoint */
+        delete: operations["delete_group_endpoint_api_routine_groups__group_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Group Endpoint */
+        patch: operations["update_group_endpoint_api_routine_groups__group_id__patch"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /** Delete Group Endpoint */
-    delete: operations["delete_group_endpoint_api_routine_groups__group_id__delete"];
-    options?: never;
-    head?: never;
-    /** Update Group Endpoint */
-    patch: operations["update_group_endpoint_api_routine_groups__group_id__patch"];
-    trace?: never;
-  };
-  "/api/routine-groups/{group_id}/routines/reorder": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routine-groups/{group_id}/routines/reorder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Reorder Routines Endpoint */
+        put: operations["reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /** Reorder Routines Endpoint */
-    put: operations["reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put"];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Routines Endpoint */
+        get: operations["list_routines_endpoint_api_routines_get"];
+        put?: never;
+        /** Create Routine Endpoint */
+        post: operations["create_routine_endpoint_api_routines_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Routines Endpoint */
-    get: operations["list_routines_endpoint_api_routines_get"];
-    put?: never;
-    /** Create Routine Endpoint */
-    post: operations["create_routine_endpoint_api_routines_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines/occurrences/{occurrence_id}/complete": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/occurrences/{occurrence_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete Occurrence Endpoint */
+        post: operations["complete_occurrence_endpoint_api_routines_occurrences__occurrence_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Complete Occurrence Endpoint */
-    post: operations["complete_occurrence_endpoint_api_routines_occurrences__occurrence_id__complete_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines/occurrences/{occurrence_id}/skip": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/occurrences/{occurrence_id}/skip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Skip Occurrence Endpoint */
+        post: operations["skip_occurrence_endpoint_api_routines_occurrences__occurrence_id__skip_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Skip Occurrence Endpoint */
-    post: operations["skip_occurrence_endpoint_api_routines_occurrences__occurrence_id__skip_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines/sync-occurrences": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/sync-occurrences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sync Occurrences Endpoint
+         * @description Generate pending routine occurrences within the configured horizon.
+         */
+        post: operations["sync_occurrences_endpoint_api_routines_sync_occurrences_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Sync Occurrences Endpoint
-     * @description Generate pending routine occurrences within the configured horizon.
-     */
-    post: operations["sync_occurrences_endpoint_api_routines_sync_occurrences_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines/{routine_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/{routine_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Routine Endpoint */
+        patch: operations["update_routine_endpoint_api_routines__routine_id__patch"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /** Update Routine Endpoint */
-    patch: operations["update_routine_endpoint_api_routines__routine_id__patch"];
-    trace?: never;
-  };
-  "/api/routines/{routine_id}/archive": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/{routine_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Routine Endpoint */
+        post: operations["archive_routine_endpoint_api_routines__routine_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Archive Routine Endpoint */
-    post: operations["archive_routine_endpoint_api_routines__routine_id__archive_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines/{routine_id}/pause": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/{routine_id}/pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pause Routine Endpoint */
+        post: operations["pause_routine_endpoint_api_routines__routine_id__pause_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Pause Routine Endpoint */
-    post: operations["pause_routine_endpoint_api_routines__routine_id__pause_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routines/{routine_id}/resume": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routines/{routine_id}/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resume Routine Endpoint */
+        post: operations["resume_routine_endpoint_api_routines__routine_id__resume_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Resume Routine Endpoint */
-    post: operations["resume_routine_endpoint_api_routines__routine_id__resume_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/settings": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Settings Endpoint */
+        get: operations["get_settings_endpoint_api_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get Settings Endpoint */
-    get: operations["get_settings_endpoint_api_settings_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/settings/{key}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/settings/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Setting Endpoint */
+        patch: operations["update_setting_endpoint_api_settings__key__patch"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /** Update Setting Endpoint */
-    patch: operations["update_setting_endpoint_api_settings__key__patch"];
-    trace?: never;
-  };
-  "/api/tasks": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Tasks Endpoint
+         * @description List tasks for the local owner.
+         */
+        get: operations["list_tasks_endpoint_api_tasks_get"];
+        put?: never;
+        /**
+         * Create Task Endpoint
+         * @description Create a pending task.
+         */
+        post: operations["create_task_endpoint_api_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * List Tasks Endpoint
-     * @description List tasks for the local owner.
-     */
-    get: operations["list_tasks_endpoint_api_tasks_get"];
-    put?: never;
-    /**
-     * Create Task Endpoint
-     * @description Create a pending task.
-     */
-    post: operations["create_task_endpoint_api_tasks_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tasks/{task_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task Endpoint
+         * @description Return a single task by id.
+         */
+        get: operations["get_task_endpoint_api_tasks__task_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Task Endpoint
+         * @description Permanently delete a task.
+         */
+        delete: operations["delete_task_endpoint_api_tasks__task_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Task Endpoint
+         * @description Update a pending task.
+         */
+        patch: operations["update_task_endpoint_api_tasks__task_id__patch"];
+        trace?: never;
     };
-    /**
-     * Get Task Endpoint
-     * @description Return a single task by id.
-     */
-    get: operations["get_task_endpoint_api_tasks__task_id__get"];
-    put?: never;
-    post?: never;
-    /**
-     * Delete Task Endpoint
-     * @description Permanently delete a task.
-     */
-    delete: operations["delete_task_endpoint_api_tasks__task_id__delete"];
-    options?: never;
-    head?: never;
-    /**
-     * Update Task Endpoint
-     * @description Update a pending task.
-     */
-    patch: operations["update_task_endpoint_api_tasks__task_id__patch"];
-    trace?: never;
-  };
-  "/api/tasks/{task_id}/cancel": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tasks/{task_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel Task Endpoint
+         * @description Mark a task cancelled.
+         */
+        post: operations["cancel_task_endpoint_api_tasks__task_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Cancel Task Endpoint
-     * @description Mark a task cancelled.
-     */
-    post: operations["cancel_task_endpoint_api_tasks__task_id__cancel_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tasks/{task_id}/complete": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tasks/{task_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Complete Task Endpoint
+         * @description Mark a task completed.
+         */
+        post: operations["complete_task_endpoint_api_tasks__task_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Complete Task Endpoint
-     * @description Mark a task completed.
-     */
-    post: operations["complete_task_endpoint_api_tasks__task_id__complete_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tasks/{task_id}/move-to-backlog": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tasks/{task_id}/move-to-backlog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Move Task To Backlog Endpoint
+         * @description Move a pending task into the backlog.
+         */
+        post: operations["move_task_to_backlog_endpoint_api_tasks__task_id__move_to_backlog_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Move Task To Backlog Endpoint
-     * @description Move a pending task into the backlog.
-     */
-    post: operations["move_task_to_backlog_endpoint_api_tasks__task_id__move_to_backlog_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tasks/{task_id}/reopen": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tasks/{task_id}/reopen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reopen Task Endpoint
+         * @description Restore a completed or cancelled task to pending.
+         */
+        post: operations["reopen_task_endpoint_api_tasks__task_id__reopen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Reopen Task Endpoint
-     * @description Restore a completed or cancelled task to pending.
-     */
-    post: operations["reopen_task_endpoint_api_tasks__task_id__reopen_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/views/month": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/views/month": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Month View Endpoint
+         * @description Return the Month view for a YYYY-MM calendar month.
+         */
+        get: operations["month_view_endpoint_api_views_month_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Month View Endpoint
-     * @description Return the Month view for a YYYY-MM calendar month.
-     */
-    get: operations["month_view_endpoint_api_views_month_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/views/today": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/views/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Today View Endpoint
+         * @description Return the Today view for a reference date.
+         */
+        get: operations["today_view_endpoint_api_views_today_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Today View Endpoint
-     * @description Return the Today view for a reference date.
-     */
-    get: operations["today_view_endpoint_api_views_today_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/views/week": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/views/week": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Week View Endpoint
+         * @description Return the Week view for a week starting on the given date.
+         */
+        get: operations["week_view_endpoint_api_views_week_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Week View Endpoint
-     * @description Return the Week view for a week starting on the given date.
-     */
-    get: operations["week_view_endpoint_api_views_week_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/weekly-targets": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/weekly-targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Weekly Targets Endpoint */
+        get: operations["list_weekly_targets_endpoint_api_weekly_targets_get"];
+        put?: never;
+        /** Create Weekly Target Endpoint */
+        post: operations["create_weekly_target_endpoint_api_weekly_targets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Weekly Targets Endpoint */
-    get: operations["list_weekly_targets_endpoint_api_weekly_targets_get"];
-    put?: never;
-    /** Create Weekly Target Endpoint */
-    post: operations["create_weekly_target_endpoint_api_weekly_targets_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/weekly-targets/{target_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/weekly-targets/{target_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Weekly Target Endpoint */
+        delete: operations["delete_weekly_target_endpoint_api_weekly_targets__target_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Weekly Target Endpoint */
+        patch: operations["update_weekly_target_endpoint_api_weekly_targets__target_id__patch"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /** Delete Weekly Target Endpoint */
-    delete: operations["delete_weekly_target_endpoint_api_weekly_targets__target_id__delete"];
-    options?: never;
-    head?: never;
-    /** Update Weekly Target Endpoint */
-    patch: operations["update_weekly_target_endpoint_api_weekly_targets__target_id__patch"];
-    trace?: never;
-  };
-  "/api/weekly-targets/{target_id}/progress": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/weekly-targets/{target_id}/progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Log Target Progress Endpoint */
+        post: operations["log_target_progress_endpoint_api_weekly_targets__target_id__progress_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Log Target Progress Endpoint */
-    post: operations["log_target_progress_endpoint_api_weekly_targets__target_id__progress_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** AppointmentCreateRequest */
-    AppointmentCreateRequest: {
-      /** Category */
-      category?: string | null;
-      /**
-       * End Date
-       * Format: date
-       */
-      end_date: string;
-      /** End Time */
-      end_time?: string | null;
-      /**
-       * Is All Day
-       * @default false
-       */
-      is_all_day: boolean;
-      /** Location */
-      location?: string | null;
-      /** Maintenance Definition Id */
-      maintenance_definition_id?: string | null;
-      /** Notes */
-      notes?: string | null;
-      /** Reminder Minutes */
-      reminder_minutes?: number | null;
-      /**
-       * Start Date
-       * Format: date
-       */
-      start_date: string;
-      /** Start Time */
-      start_time?: string | null;
-      /** Title */
-      title: string;
+    schemas: {
+        /** AppointmentCreateRequest */
+        AppointmentCreateRequest: {
+            /** Category */
+            category?: string | null;
+            /**
+             * End Date
+             * Format: date
+             */
+            end_date: string;
+            /** End Time */
+            end_time?: string | null;
+            /**
+             * Is All Day
+             * @default false
+             */
+            is_all_day: boolean;
+            /** Location */
+            location?: string | null;
+            /** Maintenance Definition Id */
+            maintenance_definition_id?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Reminder Minutes */
+            reminder_minutes?: number | null;
+            /**
+             * Start Date
+             * Format: date
+             */
+            start_date: string;
+            /** Start Time */
+            start_time?: string | null;
+            /** Title */
+            title: string;
+        };
+        /**
+         * AppointmentListFilter
+         * @enum {string}
+         */
+        AppointmentListFilter: "upcoming" | "today" | "past" | "cancelled" | "archived" | "scheduled" | "completed";
+        /** AppointmentRescheduleRequest */
+        AppointmentRescheduleRequest: {
+            /**
+             * End Date
+             * Format: date
+             */
+            end_date: string;
+            /** End Time */
+            end_time?: string | null;
+            /** Is All Day */
+            is_all_day: boolean;
+            /**
+             * Start Date
+             * Format: date
+             */
+            start_date: string;
+            /** Start Time */
+            start_time?: string | null;
+        };
+        /** AppointmentResponse */
+        AppointmentResponse: {
+            /** Category */
+            category: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * End Date
+             * Format: date
+             */
+            end_date: string;
+            /** Ends At */
+            ends_at: string | null;
+            /** Id */
+            id: string;
+            /** Is All Day */
+            is_all_day: boolean;
+            /** Location */
+            location: string | null;
+            /** Maintenance Definition Id */
+            maintenance_definition_id: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Reminder Minutes */
+            reminder_minutes: number | null;
+            /**
+             * Start Date
+             * Format: date
+             */
+            start_date: string;
+            /** Starts At */
+            starts_at: string | null;
+            status: components["schemas"]["AppointmentStatus"];
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * AppointmentStatus
+         * @enum {string}
+         */
+        AppointmentStatus: "scheduled" | "completed" | "cancelled" | "archived";
+        /** AppointmentUpdateRequest */
+        AppointmentUpdateRequest: {
+            /** Category */
+            category?: string | null;
+            /** Location */
+            location?: string | null;
+            /** Maintenance Definition Id */
+            maintenance_definition_id?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Reminder Minutes */
+            reminder_minutes?: number | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** BacklogCreateRequest */
+        BacklogCreateRequest: {
+            /** Notes */
+            notes?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** BacklogItemResponse */
+        BacklogItemResponse: {
+            /** Id */
+            id: string;
+            /** Notes */
+            notes: string | null;
+            /** Promoted Entity Id */
+            promoted_entity_id: string | null;
+            /** Promoted Entity Type */
+            promoted_entity_type: string | null;
+            /** Source Entity Id */
+            source_entity_id: string | null;
+            /** Source Entity Type */
+            source_entity_type: string | null;
+            status: components["schemas"]["BacklogStatus"];
+            /** Title */
+            title: string;
+        };
+        /**
+         * BacklogStatus
+         * @enum {string}
+         */
+        BacklogStatus: "active" | "promoted" | "archived";
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** MaintenanceCompleteRequest */
+        MaintenanceCompleteRequest: {
+            /** Completed On */
+            completed_on?: string | null;
+            /** Notes */
+            notes?: string | null;
+        };
+        /** MaintenanceCompletionResponse */
+        MaintenanceCompletionResponse: {
+            /**
+             * Completed On
+             * Format: date
+             */
+            completed_on: string;
+            /** Id */
+            id: string;
+            /** Is Voided */
+            is_voided: boolean;
+            /** Notes */
+            notes: string | null;
+            /** Superseded By Id */
+            superseded_by_id: string | null;
+        };
+        /** MaintenanceCorrectCompletionRequest */
+        MaintenanceCorrectCompletionRequest: {
+            /**
+             * Completed On
+             * Format: date
+             */
+            completed_on: string;
+            /** Notes */
+            notes?: string | null;
+            /** Void Reason */
+            void_reason?: string | null;
+        };
+        /** MaintenanceCreateRequest */
+        MaintenanceCreateRequest: {
+            /** Category */
+            category?: string | null;
+            /** @default months */
+            interval_unit: components["schemas"]["MaintenanceIntervalUnit"];
+            /**
+             * Interval Value
+             * @default 6
+             */
+            interval_value: number | null;
+            /**
+             * Lead Time Days
+             * @default 30
+             */
+            lead_time_days: number;
+            /** Notes */
+            notes?: string | null;
+            /** Reminder Offset Days */
+            reminder_offset_days?: number | null;
+            /** Title */
+            title: string;
+        };
+        /** MaintenanceDetailResponse */
+        MaintenanceDetailResponse: {
+            /** Category */
+            category: string | null;
+            /** Completions */
+            completions?: components["schemas"]["MaintenanceCompletionResponse"][];
+            /** Id */
+            id: string;
+            interval_unit: components["schemas"]["MaintenanceIntervalUnit"];
+            /** Interval Value */
+            interval_value: number | null;
+            /** Last Completed Date */
+            last_completed_date: string | null;
+            /** Lead Time Days */
+            lead_time_days: number;
+            linked_appointment?: components["schemas"]["AppointmentResponse"] | null;
+            /** Linked Appointment Id */
+            linked_appointment_id: string | null;
+            next_action_status: components["schemas"]["MaintenanceNextActionStatus"];
+            /** Next Due Date */
+            next_due_date: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Reminder Offset Days */
+            reminder_offset_days: number | null;
+            /** Scheduling Reminder Date */
+            scheduling_reminder_date: string | null;
+            status: components["schemas"]["MaintenanceStatus"];
+            /** Title */
+            title: string;
+        };
+        /** MaintenanceHistoricalCompletionRequest */
+        MaintenanceHistoricalCompletionRequest: {
+            /**
+             * Completed On
+             * Format: date
+             */
+            completed_on: string;
+            /** Notes */
+            notes?: string | null;
+        };
+        /** MaintenanceHistoryBoardResponse */
+        MaintenanceHistoryBoardResponse: {
+            /** History Limit */
+            history_limit: number;
+            /** Rows */
+            rows: components["schemas"]["MaintenanceHistoryRowResponse"][];
+        };
+        /** MaintenanceHistoryRowResponse */
+        MaintenanceHistoryRowResponse: {
+            /** Completions */
+            completions: components["schemas"]["MaintenanceCompletionResponse"][];
+            /** Current Next Label */
+            current_next_label: string;
+            linked_appointment?: components["schemas"]["AppointmentResponse"] | null;
+            maintenance: components["schemas"]["MaintenanceResponse"];
+        };
+        /**
+         * MaintenanceIntervalUnit
+         * @enum {string}
+         */
+        MaintenanceIntervalUnit: "days" | "weeks" | "months" | "years" | "manual";
+        /** MaintenanceLinkAppointmentRequest */
+        MaintenanceLinkAppointmentRequest: {
+            /** Appointment Id */
+            appointment_id: string;
+        };
+        /**
+         * MaintenanceListFilter
+         * @enum {string}
+         */
+        MaintenanceListFilter: "overdue" | "due_soon" | "needs_scheduling" | "scheduled_upcoming" | "active" | "archived";
+        /**
+         * MaintenanceNextActionStatus
+         * @enum {string}
+         */
+        MaintenanceNextActionStatus: "scheduled" | "needs_scheduling" | "reminder_set" | "no_next_date" | "not_applicable";
+        /** MaintenanceResponse */
+        MaintenanceResponse: {
+            /** Category */
+            category: string | null;
+            /** Id */
+            id: string;
+            interval_unit: components["schemas"]["MaintenanceIntervalUnit"];
+            /** Interval Value */
+            interval_value: number | null;
+            /** Last Completed Date */
+            last_completed_date: string | null;
+            /** Lead Time Days */
+            lead_time_days: number;
+            /** Linked Appointment Id */
+            linked_appointment_id: string | null;
+            next_action_status: components["schemas"]["MaintenanceNextActionStatus"];
+            /** Next Due Date */
+            next_due_date: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Reminder Offset Days */
+            reminder_offset_days: number | null;
+            /** Scheduling Reminder Date */
+            scheduling_reminder_date: string | null;
+            status: components["schemas"]["MaintenanceStatus"];
+            /** Title */
+            title: string;
+        };
+        /** MaintenanceScheduleAppointmentRequest */
+        MaintenanceScheduleAppointmentRequest: {
+            /**
+             * End Date
+             * Format: date
+             */
+            end_date: string;
+            /** End Time */
+            end_time?: string | null;
+            /**
+             * Is All Day
+             * @default false
+             */
+            is_all_day: boolean;
+            /** Location */
+            location?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /**
+             * Start Date
+             * Format: date
+             */
+            start_date: string;
+            /** Start Time */
+            start_time?: string | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** MaintenanceSchedulingReminderRequest */
+        MaintenanceSchedulingReminderRequest: {
+            /**
+             * Reminder Date
+             * Format: date
+             */
+            reminder_date: string;
+        };
+        /**
+         * MaintenanceStatus
+         * @enum {string}
+         */
+        MaintenanceStatus: "active" | "archived";
+        /** MaintenanceUpdateRequest */
+        MaintenanceUpdateRequest: {
+            /** Category */
+            category?: string | null;
+            interval_unit?: components["schemas"]["MaintenanceIntervalUnit"] | null;
+            /** Interval Value */
+            interval_value?: number | null;
+            /** Lead Time Days */
+            lead_time_days?: number | null;
+            /** Notes */
+            notes?: string | null;
+            /** Reminder Offset Days */
+            reminder_offset_days?: number | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** MonthViewResponse */
+        MonthViewResponse: {
+            /** Days */
+            days: components["schemas"]["WeekDayGroupResponse"][];
+            /** Month */
+            month: string;
+            /**
+             * Month End
+             * Format: date
+             */
+            month_end: string;
+            /**
+             * Month Start
+             * Format: date
+             */
+            month_start: string;
+            /** Week Start Day */
+            week_start_day: string;
+        };
+        /** MoveRoutineRequest */
+        MoveRoutineRequest: {
+            /** Group Id */
+            group_id: string;
+            /** Sort Order */
+            sort_order: number;
+        };
+        /** MoveTaskToBacklogResponse */
+        MoveTaskToBacklogResponse: {
+            backlog_item: components["schemas"]["BacklogItemResponse"];
+            task: components["schemas"]["TaskResponse"];
+        };
+        /** OccurrenceResponse */
+        OccurrenceResponse: {
+            /** Id */
+            id: string;
+            /** Routine Id */
+            routine_id: string;
+            /** Scheduled Date */
+            scheduled_date: string;
+            status: components["schemas"]["OccurrenceStatus"];
+        };
+        /**
+         * OccurrenceStatus
+         * @enum {string}
+         */
+        OccurrenceStatus: "pending" | "completed" | "skipped" | "missed";
+        /** PackingEntryCreateRequest */
+        PackingEntryCreateRequest: {
+            entry_type: components["schemas"]["PackingEntryType"];
+            /** Title */
+            title: string;
+        };
+        /**
+         * PackingEntryType
+         * @enum {string}
+         */
+        PackingEntryType: "item" | "question";
+        /** PackingEntryUpdateRequest */
+        PackingEntryUpdateRequest: {
+            answer?: components["schemas"]["PackingQuestionAnswer"] | null;
+            /**
+             * Clear Answer
+             * @default false
+             */
+            clear_answer: boolean;
+            /** Is Checked */
+            is_checked?: boolean | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** PackingListCreateRequest */
+        PackingListCreateRequest: {
+            /** Notes */
+            notes?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** PackingListDetailResponse */
+        PackingListDetailResponse: {
+            /** Entries */
+            entries: components["schemas"]["PackingListEntryResponse"][];
+            /** Id */
+            id: string;
+            /** Notes */
+            notes: string | null;
+            /** Sort Order */
+            sort_order: number;
+            /** Title */
+            title: string;
+        };
+        /** PackingListEntryResponse */
+        PackingListEntryResponse: {
+            answer: components["schemas"]["PackingQuestionAnswer"] | null;
+            entry_type: components["schemas"]["PackingEntryType"];
+            /** Id */
+            id: string;
+            /** Is Checked */
+            is_checked: boolean;
+            /** List Id */
+            list_id: string;
+            /** Sort Order */
+            sort_order: number;
+            /** Title */
+            title: string;
+        };
+        /** PackingListSummaryResponse */
+        PackingListSummaryResponse: {
+            /** Id */
+            id: string;
+            /** Item Count */
+            item_count: number;
+            /** Notes */
+            notes: string | null;
+            /** Question Count */
+            question_count: number;
+            /** Sort Order */
+            sort_order: number;
+            /** Title */
+            title: string;
+        };
+        /** PackingListUpdateRequest */
+        PackingListUpdateRequest: {
+            /** Notes */
+            notes?: string | null;
+            /** Title */
+            title?: string | null;
+        };
+        /**
+         * PackingQuestionAnswer
+         * @enum {string}
+         */
+        PackingQuestionAnswer: "yes" | "no";
+        /** PromoteBacklogRequest */
+        PromoteBacklogRequest: {
+            /**
+             * Due Date
+             * Format: date
+             */
+            due_date: string;
+        };
+        /** PromoteBacklogResponse */
+        PromoteBacklogResponse: {
+            backlog: components["schemas"]["BacklogItemResponse"];
+            task: components["schemas"]["TaskResponse"];
+        };
+        /** ReorderGroupsRequest */
+        ReorderGroupsRequest: {
+            /** Group Ids */
+            group_ids: string[];
+        };
+        /** ReorderRoutinesRequest */
+        ReorderRoutinesRequest: {
+            /** Routine Ids */
+            routine_ids: string[];
+        };
+        /** RoutineCreateRequest */
+        RoutineCreateRequest: {
+            /** Day Of Month */
+            day_of_month?: number | null;
+            /** Days Of Week */
+            days_of_week?: number[] | null;
+            /**
+             * Interval Weeks
+             * @default 1
+             */
+            interval_weeks: number;
+            /** Notes */
+            notes?: string | null;
+            /**
+             * Schedule Type
+             * @default weekly
+             */
+            schedule_type: string;
+            /** Starts On */
+            starts_on?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** RoutineGroupCreateRequest */
+        RoutineGroupCreateRequest: {
+            /** Name */
+            name: string;
+        };
+        /** RoutineGroupResponse */
+        RoutineGroupResponse: {
+            /** Id */
+            id: string;
+            /** Is System */
+            is_system: boolean;
+            /** Month Visible */
+            month_visible: boolean;
+            /** Name */
+            name: string;
+            /** Sort Order */
+            sort_order: number;
+            /** Week Visible */
+            week_visible: boolean;
+        };
+        /** RoutineGroupUpdateRequest */
+        RoutineGroupUpdateRequest: {
+            /** Month Visible */
+            month_visible?: boolean | null;
+            /** Name */
+            name?: string | null;
+            /** Week Visible */
+            week_visible?: boolean | null;
+        };
+        /** RoutineGroupWithRoutinesResponse */
+        RoutineGroupWithRoutinesResponse: {
+            /** Id */
+            id: string;
+            /** Is System */
+            is_system: boolean;
+            /** Month Visible */
+            month_visible: boolean;
+            /** Name */
+            name: string;
+            /** Routines */
+            routines: components["schemas"]["RoutineResponse"][];
+            /** Sort Order */
+            sort_order: number;
+            /** Week Visible */
+            week_visible: boolean;
+        };
+        /** RoutineResponse */
+        RoutineResponse: {
+            /** Day Of Month */
+            day_of_month: number | null;
+            /** Days Of Week */
+            days_of_week: number[];
+            /** Group Id */
+            group_id: string | null;
+            /** Id */
+            id: string;
+            /** Interval Weeks */
+            interval_weeks: number;
+            /** Notes */
+            notes: string | null;
+            /** Schedule Type */
+            schedule_type: string;
+            /** Sort Order */
+            sort_order: number;
+            /** Starts On */
+            starts_on: string | null;
+            status: components["schemas"]["RoutineStatus"];
+            /** Title */
+            title: string;
+        };
+        /**
+         * RoutineStatus
+         * @enum {string}
+         */
+        RoutineStatus: "active" | "paused" | "archived";
+        /** RoutineUpdateRequest */
+        RoutineUpdateRequest: {
+            /** Day Of Month */
+            day_of_month?: number | null;
+            /** Days Of Week */
+            days_of_week?: number[] | null;
+            /** Interval Weeks */
+            interval_weeks?: number | null;
+            /** Notes */
+            notes?: string | null;
+            /** Schedule Type */
+            schedule_type?: string | null;
+            /** Starts On */
+            starts_on?: string | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** SettingUpdateRequest */
+        SettingUpdateRequest: {
+            /** Value */
+            value: string;
+        };
+        /** SettingsResponse */
+        SettingsResponse: {
+            /** Settings */
+            settings: {
+                [key: string]: string;
+            };
+        };
+        /** TaskCreateRequest */
+        TaskCreateRequest: {
+            /** Due Date */
+            due_date?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** TaskResponse */
+        TaskResponse: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Due Date */
+            due_date: string | null;
+            /** Id */
+            id: string;
+            /** Notes */
+            notes: string | null;
+            status: components["schemas"]["TaskStatus"];
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * TaskStatus
+         * @enum {string}
+         */
+        TaskStatus: "pending" | "completed" | "cancelled" | "moved_to_backlog";
+        /** TaskUpdateRequest */
+        TaskUpdateRequest: {
+            /** Due Date */
+            due_date?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** TodayItemResponse */
+        TodayItemResponse: {
+            /** Due Date */
+            due_date: string | null;
+            /** Ends At */
+            ends_at: string | null;
+            /**
+             * Is All Day
+             * @default false
+             */
+            is_all_day: boolean;
+            /**
+             * Is Completed
+             * @default false
+             */
+            is_completed: boolean;
+            /** Is Overdue */
+            is_overdue: boolean;
+            /** Item Id */
+            item_id: string;
+            kind: components["schemas"]["ViewItemKind"];
+            /** Location */
+            location?: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Occurrence Role */
+            occurrence_role?: string | null;
+            /** Routine Title */
+            routine_title?: string | null;
+            /** Span End Date */
+            span_end_date?: string | null;
+            /** Span Segment */
+            span_segment?: string | null;
+            /** Span Start Date */
+            span_start_date?: string | null;
+            /** Starts At */
+            starts_at: string | null;
+            /** Status */
+            status?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** TodayViewResponse */
+        TodayViewResponse: {
+            /** Items */
+            items: components["schemas"]["TodayItemResponse"][];
+            /**
+             * Reference Date
+             * Format: date
+             */
+            reference_date: string;
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Context */
+            ctx?: Record<string, never>;
+            /** Input */
+            input?: unknown;
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+        };
+        /**
+         * ViewItemKind
+         * @enum {string}
+         */
+        ViewItemKind: "task" | "occurrence" | "appointment" | "maintenance" | "backlog";
+        /** WeekDayGroupResponse */
+        WeekDayGroupResponse: {
+            /** Date */
+            date: string | null;
+            /** Items */
+            items: components["schemas"]["WeekItemResponse"][];
+            /** Label */
+            label?: string | null;
+        };
+        /** WeekItemResponse */
+        WeekItemResponse: {
+            /** Due Date */
+            due_date: string | null;
+            /** Ends At */
+            ends_at: string | null;
+            /**
+             * Is All Day
+             * @default false
+             */
+            is_all_day: boolean;
+            /**
+             * Is Completed
+             * @default false
+             */
+            is_completed: boolean;
+            /** Is Overdue */
+            is_overdue: boolean;
+            /** Item Id */
+            item_id: string;
+            kind: components["schemas"]["ViewItemKind"];
+            /** Location */
+            location?: string | null;
+            /** Occurrence Role */
+            occurrence_role?: string | null;
+            /** Routine Title */
+            routine_title?: string | null;
+            /** Span End Date */
+            span_end_date?: string | null;
+            /** Span Segment */
+            span_segment?: string | null;
+            /** Span Start Date */
+            span_start_date?: string | null;
+            /** Starts At */
+            starts_at: string | null;
+            /** Status */
+            status?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** WeekTargetSummaryResponse */
+        WeekTargetSummaryResponse: {
+            /** Completed Count */
+            completed_count: number;
+            /** Target Count */
+            target_count: number;
+            /** Target Id */
+            target_id: string;
+            /** Title */
+            title: string;
+        };
+        /** WeekViewResponse */
+        WeekViewResponse: {
+            /** Days */
+            days: components["schemas"]["WeekDayGroupResponse"][];
+            /** Targets */
+            targets: components["schemas"]["WeekTargetSummaryResponse"][];
+            /**
+             * Week End
+             * Format: date
+             */
+            week_end: string;
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+        };
+        /** WeeklyTargetCreateRequest */
+        WeeklyTargetCreateRequest: {
+            /**
+             * Target Count
+             * @default 1
+             */
+            target_count: number;
+            /** Title */
+            title: string;
+        };
+        /** WeeklyTargetResponse */
+        WeeklyTargetResponse: {
+            /** Id */
+            id: string;
+            status: components["schemas"]["WeeklyTargetStatus"];
+            /** Target Count */
+            target_count: number;
+            /** Title */
+            title: string;
+        };
+        /**
+         * WeeklyTargetStatus
+         * @enum {string}
+         */
+        WeeklyTargetStatus: "active" | "met" | "unmet";
+        /** WeeklyTargetUpdateRequest */
+        WeeklyTargetUpdateRequest: {
+            /** Target Count */
+            target_count?: number | null;
+            /** Title */
+            title?: string | null;
+        };
     };
-    /**
-     * AppointmentListFilter
-     * @enum {string}
-     */
-    AppointmentListFilter:
-      | "upcoming"
-      | "today"
-      | "past"
-      | "cancelled"
-      | "archived"
-      | "scheduled"
-      | "completed";
-    /** AppointmentRescheduleRequest */
-    AppointmentRescheduleRequest: {
-      /**
-       * End Date
-       * Format: date
-       */
-      end_date: string;
-      /** End Time */
-      end_time?: string | null;
-      /** Is All Day */
-      is_all_day: boolean;
-      /**
-       * Start Date
-       * Format: date
-       */
-      start_date: string;
-      /** Start Time */
-      start_time?: string | null;
-    };
-    /** AppointmentResponse */
-    AppointmentResponse: {
-      /** Category */
-      category: string | null;
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-      /**
-       * End Date
-       * Format: date
-       */
-      end_date: string;
-      /** Ends At */
-      ends_at: string | null;
-      /** Id */
-      id: string;
-      /** Is All Day */
-      is_all_day: boolean;
-      /** Location */
-      location: string | null;
-      /** Maintenance Definition Id */
-      maintenance_definition_id: string | null;
-      /** Notes */
-      notes: string | null;
-      /** Reminder Minutes */
-      reminder_minutes: number | null;
-      /**
-       * Start Date
-       * Format: date
-       */
-      start_date: string;
-      /** Starts At */
-      starts_at: string | null;
-      status: components["schemas"]["AppointmentStatus"];
-      /** Title */
-      title: string;
-      /**
-       * Updated At
-       * Format: date-time
-       */
-      updated_at: string;
-    };
-    /**
-     * AppointmentStatus
-     * @enum {string}
-     */
-    AppointmentStatus: "scheduled" | "completed" | "cancelled" | "archived";
-    /** AppointmentUpdateRequest */
-    AppointmentUpdateRequest: {
-      /** Category */
-      category?: string | null;
-      /** Location */
-      location?: string | null;
-      /** Maintenance Definition Id */
-      maintenance_definition_id?: string | null;
-      /** Notes */
-      notes?: string | null;
-      /** Reminder Minutes */
-      reminder_minutes?: number | null;
-      /** Title */
-      title?: string | null;
-    };
-    /** BacklogCreateRequest */
-    BacklogCreateRequest: {
-      /** Notes */
-      notes?: string | null;
-      /** Title */
-      title: string;
-    };
-    /** BacklogItemResponse */
-    BacklogItemResponse: {
-      /** Id */
-      id: string;
-      /** Notes */
-      notes: string | null;
-      /** Promoted Entity Id */
-      promoted_entity_id: string | null;
-      /** Promoted Entity Type */
-      promoted_entity_type: string | null;
-      /** Source Entity Id */
-      source_entity_id: string | null;
-      /** Source Entity Type */
-      source_entity_type: string | null;
-      status: components["schemas"]["BacklogStatus"];
-      /** Title */
-      title: string;
-    };
-    /**
-     * BacklogStatus
-     * @enum {string}
-     */
-    BacklogStatus: "active" | "promoted" | "archived";
-    /** HTTPValidationError */
-    HTTPValidationError: {
-      /** Detail */
-      detail?: components["schemas"]["ValidationError"][];
-    };
-    /** MaintenanceCompleteRequest */
-    MaintenanceCompleteRequest: {
-      /** Completed On */
-      completed_on?: string | null;
-      /** Notes */
-      notes?: string | null;
-    };
-    /** MaintenanceCompletionResponse */
-    MaintenanceCompletionResponse: {
-      /**
-       * Completed On
-       * Format: date
-       */
-      completed_on: string;
-      /** Id */
-      id: string;
-      /** Is Voided */
-      is_voided: boolean;
-      /** Notes */
-      notes: string | null;
-      /** Superseded By Id */
-      superseded_by_id: string | null;
-    };
-    /** MaintenanceCorrectCompletionRequest */
-    MaintenanceCorrectCompletionRequest: {
-      /**
-       * Completed On
-       * Format: date
-       */
-      completed_on: string;
-      /** Notes */
-      notes?: string | null;
-      /** Void Reason */
-      void_reason?: string | null;
-    };
-    /** MaintenanceCreateRequest */
-    MaintenanceCreateRequest: {
-      /** Category */
-      category?: string | null;
-      /** @default months */
-      interval_unit: components["schemas"]["MaintenanceIntervalUnit"];
-      /**
-       * Interval Value
-       * @default 6
-       */
-      interval_value: number | null;
-      /**
-       * Lead Time Days
-       * @default 30
-       */
-      lead_time_days: number;
-      /** Notes */
-      notes?: string | null;
-      /** Reminder Offset Days */
-      reminder_offset_days?: number | null;
-      /** Title */
-      title: string;
-    };
-    /** MaintenanceDetailResponse */
-    MaintenanceDetailResponse: {
-      /** Category */
-      category: string | null;
-      /** Completions */
-      completions?: components["schemas"]["MaintenanceCompletionResponse"][];
-      /** Id */
-      id: string;
-      interval_unit: components["schemas"]["MaintenanceIntervalUnit"];
-      /** Interval Value */
-      interval_value: number | null;
-      /** Last Completed Date */
-      last_completed_date: string | null;
-      /** Lead Time Days */
-      lead_time_days: number;
-      linked_appointment?: components["schemas"]["AppointmentResponse"] | null;
-      /** Linked Appointment Id */
-      linked_appointment_id: string | null;
-      next_action_status: components["schemas"]["MaintenanceNextActionStatus"];
-      /** Next Due Date */
-      next_due_date: string | null;
-      /** Notes */
-      notes: string | null;
-      /** Reminder Offset Days */
-      reminder_offset_days: number | null;
-      /** Scheduling Reminder Date */
-      scheduling_reminder_date: string | null;
-      status: components["schemas"]["MaintenanceStatus"];
-      /** Title */
-      title: string;
-    };
-    /** MaintenanceHistoricalCompletionRequest */
-    MaintenanceHistoricalCompletionRequest: {
-      /**
-       * Completed On
-       * Format: date
-       */
-      completed_on: string;
-      /** Notes */
-      notes?: string | null;
-    };
-    /** MaintenanceHistoryBoardResponse */
-    MaintenanceHistoryBoardResponse: {
-      /** History Limit */
-      history_limit: number;
-      /** Rows */
-      rows: components["schemas"]["MaintenanceHistoryRowResponse"][];
-    };
-    /** MaintenanceHistoryRowResponse */
-    MaintenanceHistoryRowResponse: {
-      /** Completions */
-      completions: components["schemas"]["MaintenanceCompletionResponse"][];
-      /** Current Next Label */
-      current_next_label: string;
-      linked_appointment?: components["schemas"]["AppointmentResponse"] | null;
-      maintenance: components["schemas"]["MaintenanceResponse"];
-    };
-    /**
-     * MaintenanceIntervalUnit
-     * @enum {string}
-     */
-    MaintenanceIntervalUnit: "days" | "weeks" | "months" | "years" | "manual";
-    /** MaintenanceLinkAppointmentRequest */
-    MaintenanceLinkAppointmentRequest: {
-      /** Appointment Id */
-      appointment_id: string;
-    };
-    /**
-     * MaintenanceListFilter
-     * @enum {string}
-     */
-    MaintenanceListFilter:
-      | "overdue"
-      | "due_soon"
-      | "needs_scheduling"
-      | "scheduled_upcoming"
-      | "active"
-      | "archived";
-    /**
-     * MaintenanceNextActionStatus
-     * @enum {string}
-     */
-    MaintenanceNextActionStatus:
-      | "scheduled"
-      | "needs_scheduling"
-      | "reminder_set"
-      | "no_next_date"
-      | "not_applicable";
-    /** MaintenanceResponse */
-    MaintenanceResponse: {
-      /** Category */
-      category: string | null;
-      /** Id */
-      id: string;
-      interval_unit: components["schemas"]["MaintenanceIntervalUnit"];
-      /** Interval Value */
-      interval_value: number | null;
-      /** Last Completed Date */
-      last_completed_date: string | null;
-      /** Lead Time Days */
-      lead_time_days: number;
-      /** Linked Appointment Id */
-      linked_appointment_id: string | null;
-      next_action_status: components["schemas"]["MaintenanceNextActionStatus"];
-      /** Next Due Date */
-      next_due_date: string | null;
-      /** Notes */
-      notes: string | null;
-      /** Reminder Offset Days */
-      reminder_offset_days: number | null;
-      /** Scheduling Reminder Date */
-      scheduling_reminder_date: string | null;
-      status: components["schemas"]["MaintenanceStatus"];
-      /** Title */
-      title: string;
-    };
-    /** MaintenanceScheduleAppointmentRequest */
-    MaintenanceScheduleAppointmentRequest: {
-      /**
-       * End Date
-       * Format: date
-       */
-      end_date: string;
-      /** End Time */
-      end_time?: string | null;
-      /**
-       * Is All Day
-       * @default false
-       */
-      is_all_day: boolean;
-      /** Location */
-      location?: string | null;
-      /** Notes */
-      notes?: string | null;
-      /**
-       * Start Date
-       * Format: date
-       */
-      start_date: string;
-      /** Start Time */
-      start_time?: string | null;
-      /** Title */
-      title?: string | null;
-    };
-    /** MaintenanceSchedulingReminderRequest */
-    MaintenanceSchedulingReminderRequest: {
-      /**
-       * Reminder Date
-       * Format: date
-       */
-      reminder_date: string;
-    };
-    /**
-     * MaintenanceStatus
-     * @enum {string}
-     */
-    MaintenanceStatus: "active" | "archived";
-    /** MaintenanceUpdateRequest */
-    MaintenanceUpdateRequest: {
-      /** Category */
-      category?: string | null;
-      interval_unit?: components["schemas"]["MaintenanceIntervalUnit"] | null;
-      /** Interval Value */
-      interval_value?: number | null;
-      /** Lead Time Days */
-      lead_time_days?: number | null;
-      /** Notes */
-      notes?: string | null;
-      /** Reminder Offset Days */
-      reminder_offset_days?: number | null;
-      /** Title */
-      title?: string | null;
-    };
-    /** MonthViewResponse */
-    MonthViewResponse: {
-      /** Days */
-      days: components["schemas"]["WeekDayGroupResponse"][];
-      /** Month */
-      month: string;
-      /**
-       * Month End
-       * Format: date
-       */
-      month_end: string;
-      /**
-       * Month Start
-       * Format: date
-       */
-      month_start: string;
-      /** Week Start Day */
-      week_start_day: string;
-    };
-    /** MoveRoutineRequest */
-    MoveRoutineRequest: {
-      /** Group Id */
-      group_id: string;
-      /** Sort Order */
-      sort_order: number;
-    };
-    /** MoveTaskToBacklogResponse */
-    MoveTaskToBacklogResponse: {
-      backlog_item: components["schemas"]["BacklogItemResponse"];
-      task: components["schemas"]["TaskResponse"];
-    };
-    /** OccurrenceResponse */
-    OccurrenceResponse: {
-      /** Id */
-      id: string;
-      /** Routine Id */
-      routine_id: string;
-      /** Scheduled Date */
-      scheduled_date: string;
-      status: components["schemas"]["OccurrenceStatus"];
-    };
-    /**
-     * OccurrenceStatus
-     * @enum {string}
-     */
-    OccurrenceStatus: "pending" | "completed" | "skipped" | "missed";
-    /** PackingEntryCreateRequest */
-    PackingEntryCreateRequest: {
-      entry_type: components["schemas"]["PackingEntryType"];
-      /** Title */
-      title: string;
-    };
-    /**
-     * PackingEntryType
-     * @enum {string}
-     */
-    PackingEntryType: "item" | "question";
-    /** PackingEntryUpdateRequest */
-    PackingEntryUpdateRequest: {
-      answer?: components["schemas"]["PackingQuestionAnswer"] | null;
-      /**
-       * Clear Answer
-       * @default false
-       */
-      clear_answer: boolean;
-      /** Is Checked */
-      is_checked?: boolean | null;
-      /** Title */
-      title?: string | null;
-    };
-    /** PackingListCreateRequest */
-    PackingListCreateRequest: {
-      /** Notes */
-      notes?: string | null;
-      /** Title */
-      title: string;
-    };
-    /** PackingListDetailResponse */
-    PackingListDetailResponse: {
-      /** Entries */
-      entries: components["schemas"]["PackingListEntryResponse"][];
-      /** Id */
-      id: string;
-      /** Notes */
-      notes: string | null;
-      /** Sort Order */
-      sort_order: number;
-      /** Title */
-      title: string;
-    };
-    /** PackingListEntryResponse */
-    PackingListEntryResponse: {
-      answer: components["schemas"]["PackingQuestionAnswer"] | null;
-      entry_type: components["schemas"]["PackingEntryType"];
-      /** Id */
-      id: string;
-      /** Is Checked */
-      is_checked: boolean;
-      /** List Id */
-      list_id: string;
-      /** Sort Order */
-      sort_order: number;
-      /** Title */
-      title: string;
-    };
-    /** PackingListSummaryResponse */
-    PackingListSummaryResponse: {
-      /** Id */
-      id: string;
-      /** Item Count */
-      item_count: number;
-      /** Notes */
-      notes: string | null;
-      /** Question Count */
-      question_count: number;
-      /** Sort Order */
-      sort_order: number;
-      /** Title */
-      title: string;
-    };
-    /** PackingListUpdateRequest */
-    PackingListUpdateRequest: {
-      /** Notes */
-      notes?: string | null;
-      /** Title */
-      title?: string | null;
-    };
-    /**
-     * PackingQuestionAnswer
-     * @enum {string}
-     */
-    PackingQuestionAnswer: "yes" | "no";
-    /** PromoteBacklogRequest */
-    PromoteBacklogRequest: {
-      /**
-       * Due Date
-       * Format: date
-       */
-      due_date: string;
-    };
-    /** PromoteBacklogResponse */
-    PromoteBacklogResponse: {
-      backlog: components["schemas"]["BacklogItemResponse"];
-      task: components["schemas"]["TaskResponse"];
-    };
-    /** ReorderGroupsRequest */
-    ReorderGroupsRequest: {
-      /** Group Ids */
-      group_ids: string[];
-    };
-    /** ReorderRoutinesRequest */
-    ReorderRoutinesRequest: {
-      /** Routine Ids */
-      routine_ids: string[];
-    };
-    /** RoutineCreateRequest */
-    RoutineCreateRequest: {
-      /** Day Of Month */
-      day_of_month?: number | null;
-      /** Days Of Week */
-      days_of_week?: number[] | null;
-      /**
-       * Interval Weeks
-       * @default 1
-       */
-      interval_weeks: number;
-      /** Notes */
-      notes?: string | null;
-      /**
-       * Schedule Type
-       * @default weekly
-       */
-      schedule_type: string;
-      /** Starts On */
-      starts_on?: string | null;
-      /** Title */
-      title: string;
-    };
-    /** RoutineGroupCreateRequest */
-    RoutineGroupCreateRequest: {
-      /** Name */
-      name: string;
-    };
-    /** RoutineGroupResponse */
-    RoutineGroupResponse: {
-      /** Id */
-      id: string;
-      /** Is System */
-      is_system: boolean;
-      /** Month Visible */
-      month_visible: boolean;
-      /** Name */
-      name: string;
-      /** Sort Order */
-      sort_order: number;
-      /** Week Visible */
-      week_visible: boolean;
-    };
-    /** RoutineGroupUpdateRequest */
-    RoutineGroupUpdateRequest: {
-      /** Month Visible */
-      month_visible?: boolean | null;
-      /** Name */
-      name?: string | null;
-      /** Week Visible */
-      week_visible?: boolean | null;
-    };
-    /** RoutineGroupWithRoutinesResponse */
-    RoutineGroupWithRoutinesResponse: {
-      /** Id */
-      id: string;
-      /** Is System */
-      is_system: boolean;
-      /** Month Visible */
-      month_visible: boolean;
-      /** Name */
-      name: string;
-      /** Routines */
-      routines: components["schemas"]["RoutineResponse"][];
-      /** Sort Order */
-      sort_order: number;
-      /** Week Visible */
-      week_visible: boolean;
-    };
-    /** RoutineResponse */
-    RoutineResponse: {
-      /** Day Of Month */
-      day_of_month: number | null;
-      /** Days Of Week */
-      days_of_week: number[];
-      /** Group Id */
-      group_id: string | null;
-      /** Id */
-      id: string;
-      /** Interval Weeks */
-      interval_weeks: number;
-      /** Notes */
-      notes: string | null;
-      /** Schedule Type */
-      schedule_type: string;
-      /** Sort Order */
-      sort_order: number;
-      /** Starts On */
-      starts_on: string | null;
-      status: components["schemas"]["RoutineStatus"];
-      /** Title */
-      title: string;
-    };
-    /**
-     * RoutineStatus
-     * @enum {string}
-     */
-    RoutineStatus: "active" | "paused" | "archived";
-    /** RoutineUpdateRequest */
-    RoutineUpdateRequest: {
-      /** Day Of Month */
-      day_of_month?: number | null;
-      /** Days Of Week */
-      days_of_week?: number[] | null;
-      /** Interval Weeks */
-      interval_weeks?: number | null;
-      /** Notes */
-      notes?: string | null;
-      /** Schedule Type */
-      schedule_type?: string | null;
-      /** Starts On */
-      starts_on?: string | null;
-      /** Title */
-      title?: string | null;
-    };
-    /** SettingUpdateRequest */
-    SettingUpdateRequest: {
-      /** Value */
-      value: string;
-    };
-    /** SettingsResponse */
-    SettingsResponse: {
-      /** Settings */
-      settings: {
-        [key: string]: string;
-      };
-    };
-    /** TaskCreateRequest */
-    TaskCreateRequest: {
-      /** Due Date */
-      due_date?: string | null;
-      /** Notes */
-      notes?: string | null;
-      /** Title */
-      title: string;
-    };
-    /** TaskResponse */
-    TaskResponse: {
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-      /** Due Date */
-      due_date: string | null;
-      /** Id */
-      id: string;
-      /** Notes */
-      notes: string | null;
-      status: components["schemas"]["TaskStatus"];
-      /** Title */
-      title: string;
-      /**
-       * Updated At
-       * Format: date-time
-       */
-      updated_at: string;
-    };
-    /**
-     * TaskStatus
-     * @enum {string}
-     */
-    TaskStatus: "pending" | "completed" | "cancelled" | "moved_to_backlog";
-    /** TaskUpdateRequest */
-    TaskUpdateRequest: {
-      /** Due Date */
-      due_date?: string | null;
-      /** Notes */
-      notes?: string | null;
-      /** Title */
-      title?: string | null;
-    };
-    /** TodayItemResponse */
-    TodayItemResponse: {
-      /** Due Date */
-      due_date: string | null;
-      /** Ends At */
-      ends_at: string | null;
-      /**
-       * Is All Day
-       * @default false
-       */
-      is_all_day: boolean;
-      /**
-       * Is Completed
-       * @default false
-       */
-      is_completed: boolean;
-      /** Is Overdue */
-      is_overdue: boolean;
-      /** Item Id */
-      item_id: string;
-      kind: components["schemas"]["ViewItemKind"];
-      /** Location */
-      location?: string | null;
-      /** Notes */
-      notes: string | null;
-      /** Occurrence Role */
-      occurrence_role?: string | null;
-      /** Routine Title */
-      routine_title?: string | null;
-      /** Span End Date */
-      span_end_date?: string | null;
-      /** Span Segment */
-      span_segment?: string | null;
-      /** Span Start Date */
-      span_start_date?: string | null;
-      /** Starts At */
-      starts_at: string | null;
-      /** Status */
-      status?: string | null;
-      /** Title */
-      title: string;
-    };
-    /** TodayViewResponse */
-    TodayViewResponse: {
-      /** Items */
-      items: components["schemas"]["TodayItemResponse"][];
-      /**
-       * Reference Date
-       * Format: date
-       */
-      reference_date: string;
-    };
-    /** ValidationError */
-    ValidationError: {
-      /** Context */
-      ctx?: Record<string, never>;
-      /** Input */
-      input?: unknown;
-      /** Location */
-      loc: (string | number)[];
-      /** Message */
-      msg: string;
-      /** Error Type */
-      type: string;
-    };
-    /**
-     * ViewItemKind
-     * @enum {string}
-     */
-    ViewItemKind: "task" | "occurrence" | "appointment" | "maintenance" | "backlog";
-    /** WeekDayGroupResponse */
-    WeekDayGroupResponse: {
-      /** Date */
-      date: string | null;
-      /** Items */
-      items: components["schemas"]["WeekItemResponse"][];
-      /** Label */
-      label?: string | null;
-    };
-    /** WeekItemResponse */
-    WeekItemResponse: {
-      /** Due Date */
-      due_date: string | null;
-      /** Ends At */
-      ends_at: string | null;
-      /**
-       * Is All Day
-       * @default false
-       */
-      is_all_day: boolean;
-      /**
-       * Is Completed
-       * @default false
-       */
-      is_completed: boolean;
-      /** Is Overdue */
-      is_overdue: boolean;
-      /** Item Id */
-      item_id: string;
-      kind: components["schemas"]["ViewItemKind"];
-      /** Location */
-      location?: string | null;
-      /** Occurrence Role */
-      occurrence_role?: string | null;
-      /** Routine Title */
-      routine_title?: string | null;
-      /** Span End Date */
-      span_end_date?: string | null;
-      /** Span Segment */
-      span_segment?: string | null;
-      /** Span Start Date */
-      span_start_date?: string | null;
-      /** Starts At */
-      starts_at: string | null;
-      /** Status */
-      status?: string | null;
-      /** Title */
-      title: string;
-    };
-    /** WeekTargetSummaryResponse */
-    WeekTargetSummaryResponse: {
-      /** Completed Count */
-      completed_count: number;
-      /** Target Count */
-      target_count: number;
-      /** Target Id */
-      target_id: string;
-      /** Title */
-      title: string;
-    };
-    /** WeekViewResponse */
-    WeekViewResponse: {
-      /** Days */
-      days: components["schemas"]["WeekDayGroupResponse"][];
-      /** Targets */
-      targets: components["schemas"]["WeekTargetSummaryResponse"][];
-      /**
-       * Week End
-       * Format: date
-       */
-      week_end: string;
-      /**
-       * Week Start
-       * Format: date
-       */
-      week_start: string;
-    };
-    /** WeeklyTargetCreateRequest */
-    WeeklyTargetCreateRequest: {
-      /**
-       * Target Count
-       * @default 1
-       */
-      target_count: number;
-      /** Title */
-      title: string;
-    };
-    /** WeeklyTargetResponse */
-    WeeklyTargetResponse: {
-      /** Id */
-      id: string;
-      status: components["schemas"]["WeeklyTargetStatus"];
-      /** Target Count */
-      target_count: number;
-      /** Title */
-      title: string;
-    };
-    /**
-     * WeeklyTargetStatus
-     * @enum {string}
-     */
-    WeeklyTargetStatus: "active" | "met" | "unmet";
-    /** WeeklyTargetUpdateRequest */
-    WeeklyTargetUpdateRequest: {
-      /** Target Count */
-      target_count?: number | null;
-      /** Title */
-      title?: string | null;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  list_appointments_endpoint_api_appointments_get: {
-    parameters: {
-      query?: {
-        filter?: components["schemas"]["AppointmentListFilter"] | null;
-        status?: components["schemas"]["AppointmentStatus"] | null;
-        search?: string | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"][];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  create_appointment_endpoint_api_appointments_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AppointmentCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_appointment_endpoint_api_appointments__appointment_id__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_appointment_endpoint_api_appointments__appointment_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_appointment_endpoint_api_appointments__appointment_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AppointmentUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  archive_appointment_endpoint_api_appointments__appointment_id__archive_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  cancel_appointment_endpoint_api_appointments__appointment_id__cancel_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  complete_appointment_endpoint_api_appointments__appointment_id__complete_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reopen_appointment_endpoint_api_appointments__appointment_id__reopen_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reschedule_appointment_endpoint_api_appointments__appointment_id__reschedule_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AppointmentRescheduleRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  restore_appointment_endpoint_api_appointments__appointment_id__restore_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        appointment_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["AppointmentResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_backlog_endpoint_api_backlog_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["BacklogItemResponse"][];
-        };
-      };
-    };
-  };
-  create_backlog_endpoint_api_backlog_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["BacklogCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["BacklogItemResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_backlog_endpoint_api_backlog__item_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        item_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  archive_backlog_endpoint_api_backlog__item_id__archive_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        item_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["BacklogItemResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  promote_backlog_endpoint_api_backlog__item_id__promote_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        item_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PromoteBacklogRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PromoteBacklogResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  health_api_health_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            [key: string]: string;
-          };
-        };
-      };
-    };
-  };
-  list_maintenance_endpoint_api_maintenance_get: {
-    parameters: {
-      query?: {
-        filter?: components["schemas"]["MaintenanceListFilter"] | null;
-        status?: components["schemas"]["MaintenanceStatus"] | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"][];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  create_maintenance_endpoint_api_maintenance_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  maintenance_history_board_endpoint_api_maintenance_history_board_get: {
-    parameters: {
-      query?: {
-        history_limit?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceHistoryBoardResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_maintenance_endpoint_api_maintenance__maintenance_id__get: {
-    parameters: {
-      query?: {
-        history_limit?: number;
-      };
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceDetailResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_maintenance_endpoint_api_maintenance__maintenance_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  archive_maintenance_endpoint_api_maintenance__maintenance_id__archive_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  clear_next_action_endpoint_api_maintenance__maintenance_id__clear_next_action_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  complete_maintenance_endpoint_api_maintenance__maintenance_id__complete_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceCompleteRequest"] | null;
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  add_historical_completion_endpoint_api_maintenance__maintenance_id__completions_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceHistoricalCompletionRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceCompletionResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  correct_completion_endpoint_api_maintenance__maintenance_id__completions__completion_id__correct_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-        completion_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceCorrectCompletionRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceCompletionResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  link_appointment_endpoint_api_maintenance__maintenance_id__link_appointment_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceLinkAppointmentRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reschedule_linked_appointment_endpoint_api_maintenance__maintenance_id__reschedule_appointment_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceScheduleAppointmentRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  restore_maintenance_endpoint_api_maintenance__maintenance_id__restore_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  schedule_appointment_endpoint_api_maintenance__maintenance_id__schedule_appointment_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceScheduleAppointmentRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceDetailResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  set_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MaintenanceSchedulingReminderRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  clear_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        maintenance_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_packing_lists_endpoint_api_packing_lists_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PackingListSummaryResponse"][];
-        };
-      };
-    };
-  };
-  create_packing_list_endpoint_api_packing_lists_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PackingListCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PackingListDetailResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_entry_endpoint_api_packing_lists_entries__entry_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        entry_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_entry_endpoint_api_packing_lists_entries__entry_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        entry_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PackingEntryUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PackingListEntryResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_packing_list_endpoint_api_packing_lists__list_id__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        list_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PackingListDetailResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_packing_list_endpoint_api_packing_lists__list_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        list_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_packing_list_endpoint_api_packing_lists__list_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        list_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PackingListUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PackingListDetailResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  create_entry_endpoint_api_packing_lists__list_id__entries_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        list_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PackingEntryCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["PackingListEntryResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_groups_endpoint_api_routine_groups_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineGroupResponse"][];
-        };
-      };
-    };
-  };
-  create_group_endpoint_api_routine_groups_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RoutineGroupCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineGroupResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  grouped_routines_endpoint_api_routine_groups_board_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineGroupWithRoutinesResponse"][];
-        };
-      };
-    };
-  };
-  reorder_groups_endpoint_api_routine_groups_reorder_put: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReorderGroupsRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineGroupResponse"][];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  move_routine_endpoint_api_routine_groups_routines__routine_id__move_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        routine_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MoveRoutineRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_group_endpoint_api_routine_groups__group_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        group_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_group_endpoint_api_routine_groups__group_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        group_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RoutineGroupUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineGroupResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        group_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReorderRoutinesRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"][];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_routines_endpoint_api_routines_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"][];
-        };
-      };
-    };
-  };
-  create_routine_endpoint_api_routines_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RoutineCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  complete_occurrence_endpoint_api_routines_occurrences__occurrence_id__complete_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        occurrence_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["OccurrenceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  skip_occurrence_endpoint_api_routines_occurrences__occurrence_id__skip_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        occurrence_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["OccurrenceResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  sync_occurrences_endpoint_api_routines_sync_occurrences_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  update_routine_endpoint_api_routines__routine_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        routine_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RoutineUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  archive_routine_endpoint_api_routines__routine_id__archive_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        routine_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  pause_routine_endpoint_api_routines__routine_id__pause_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        routine_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  resume_routine_endpoint_api_routines__routine_id__resume_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        routine_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RoutineResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_settings_endpoint_api_settings_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["SettingsResponse"];
-        };
-      };
-    };
-  };
-  update_setting_endpoint_api_settings__key__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        key: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SettingUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["SettingsResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_tasks_endpoint_api_tasks_get: {
-    parameters: {
-      query?: {
-        status?: components["schemas"]["TaskStatus"] | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"][];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  create_task_endpoint_api_tasks_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TaskCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_task_endpoint_api_tasks__task_id__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_task_endpoint_api_tasks__task_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_task_endpoint_api_tasks__task_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TaskUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  cancel_task_endpoint_api_tasks__task_id__cancel_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  complete_task_endpoint_api_tasks__task_id__complete_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  move_task_to_backlog_endpoint_api_tasks__task_id__move_to_backlog_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MoveTaskToBacklogResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reopen_task_endpoint_api_tasks__task_id__reopen_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        task_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TaskResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  month_view_endpoint_api_views_month_get: {
-    parameters: {
-      query?: {
-        month?: string | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MonthViewResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  today_view_endpoint_api_views_today_get: {
-    parameters: {
-      query?: {
-        date?: string | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TodayViewResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  week_view_endpoint_api_views_week_get: {
-    parameters: {
-      query?: {
-        week_start?: string | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["WeekViewResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_weekly_targets_endpoint_api_weekly_targets_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["WeeklyTargetResponse"][];
-        };
-      };
-    };
-  };
-  create_weekly_target_endpoint_api_weekly_targets_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["WeeklyTargetCreateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["WeeklyTargetResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  delete_weekly_target_endpoint_api_weekly_targets__target_id__delete: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        target_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  update_weekly_target_endpoint_api_weekly_targets__target_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        target_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["WeeklyTargetUpdateRequest"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["WeeklyTargetResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  log_target_progress_endpoint_api_weekly_targets__target_id__progress_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        target_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["WeeklyTargetResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
+    list_appointments_endpoint_api_appointments_get: {
+        parameters: {
+            query?: {
+                filter?: components["schemas"]["AppointmentListFilter"] | null;
+                status?: components["schemas"]["AppointmentStatus"] | null;
+                search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_appointment_endpoint_api_appointments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_appointment_endpoint_api_appointments__appointment_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_appointment_endpoint_api_appointments__appointment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_appointment_endpoint_api_appointments__appointment_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_appointment_endpoint_api_appointments__appointment_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_appointment_endpoint_api_appointments__appointment_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_appointment_endpoint_api_appointments__appointment_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reopen_appointment_endpoint_api_appointments__appointment_id__reopen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reschedule_appointment_endpoint_api_appointments__appointment_id__reschedule_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentRescheduleRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_appointment_endpoint_api_appointments__appointment_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppointmentResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_backlog_endpoint_api_backlog_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BacklogItemResponse"][];
+                };
+            };
+        };
+    };
+    create_backlog_endpoint_api_backlog_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BacklogCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BacklogItemResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_backlog_endpoint_api_backlog__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_backlog_endpoint_api_backlog__item_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BacklogItemResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    promote_backlog_endpoint_api_backlog__item_id__promote_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PromoteBacklogRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoteBacklogResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    health_api_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+        };
+    };
+    list_maintenance_endpoint_api_maintenance_get: {
+        parameters: {
+            query?: {
+                filter?: components["schemas"]["MaintenanceListFilter"] | null;
+                status?: components["schemas"]["MaintenanceStatus"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_maintenance_endpoint_api_maintenance_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    maintenance_history_board_endpoint_api_maintenance_history_board_get: {
+        parameters: {
+            query?: {
+                history_limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceHistoryBoardResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_maintenance_endpoint_api_maintenance__maintenance_id__get: {
+        parameters: {
+            query?: {
+                history_limit?: number;
+            };
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_maintenance_endpoint_api_maintenance__maintenance_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_maintenance_endpoint_api_maintenance__maintenance_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    clear_next_action_endpoint_api_maintenance__maintenance_id__clear_next_action_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_maintenance_endpoint_api_maintenance__maintenance_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceCompleteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_historical_completion_endpoint_api_maintenance__maintenance_id__completions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceHistoricalCompletionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceCompletionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    correct_completion_endpoint_api_maintenance__maintenance_id__completions__completion_id__correct_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+                completion_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceCorrectCompletionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceCompletionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    link_appointment_endpoint_api_maintenance__maintenance_id__link_appointment_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceLinkAppointmentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reschedule_linked_appointment_endpoint_api_maintenance__maintenance_id__reschedule_appointment_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceScheduleAppointmentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_maintenance_endpoint_api_maintenance__maintenance_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    schedule_appointment_endpoint_api_maintenance__maintenance_id__schedule_appointment_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceScheduleAppointmentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceSchedulingReminderRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    clear_scheduling_reminder_endpoint_api_maintenance__maintenance_id__scheduling_reminder_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                maintenance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_packing_lists_endpoint_api_packing_lists_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackingListSummaryResponse"][];
+                };
+            };
+        };
+    };
+    create_packing_list_endpoint_api_packing_lists_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackingListCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackingListDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_entry_endpoint_api_packing_lists_entries__entry_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_entry_endpoint_api_packing_lists_entries__entry_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackingEntryUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackingListEntryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_packing_list_endpoint_api_packing_lists__list_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                list_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackingListDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_packing_list_endpoint_api_packing_lists__list_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                list_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_packing_list_endpoint_api_packing_lists__list_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                list_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackingListUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackingListDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_entry_endpoint_api_packing_lists__list_id__entries_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                list_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackingEntryCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackingListEntryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_groups_endpoint_api_routine_groups_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineGroupResponse"][];
+                };
+            };
+        };
+    };
+    create_group_endpoint_api_routine_groups_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoutineGroupCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineGroupResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    grouped_routines_endpoint_api_routine_groups_board_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineGroupWithRoutinesResponse"][];
+                };
+            };
+        };
+    };
+    reorder_groups_endpoint_api_routine_groups_reorder_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderGroupsRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineGroupResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    move_routine_endpoint_api_routine_groups_routines__routine_id__move_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                routine_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MoveRoutineRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_group_endpoint_api_routine_groups__group_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_group_endpoint_api_routine_groups__group_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoutineGroupUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineGroupResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reorder_routines_endpoint_api_routine_groups__group_id__routines_reorder_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderRoutinesRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_routines_endpoint_api_routines_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"][];
+                };
+            };
+        };
+    };
+    create_routine_endpoint_api_routines_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoutineCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_occurrence_endpoint_api_routines_occurrences__occurrence_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                occurrence_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OccurrenceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    skip_occurrence_endpoint_api_routines_occurrences__occurrence_id__skip_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                occurrence_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OccurrenceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sync_occurrences_endpoint_api_routines_sync_occurrences_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    update_routine_endpoint_api_routines__routine_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                routine_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoutineUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_routine_endpoint_api_routines__routine_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                routine_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    pause_routine_endpoint_api_routines__routine_id__pause_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                routine_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    resume_routine_endpoint_api_routines__routine_id__resume_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                routine_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutineResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_settings_endpoint_api_settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettingsResponse"];
+                };
+            };
+        };
+    };
+    update_setting_endpoint_api_settings__key__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SettingUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettingsResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tasks_endpoint_api_tasks_get: {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["TaskStatus"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_task_endpoint_api_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_task_endpoint_api_tasks__task_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_task_endpoint_api_tasks__task_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_task_endpoint_api_tasks__task_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_task_endpoint_api_tasks__task_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_task_endpoint_api_tasks__task_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    move_task_to_backlog_endpoint_api_tasks__task_id__move_to_backlog_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MoveTaskToBacklogResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reopen_task_endpoint_api_tasks__task_id__reopen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    month_view_endpoint_api_views_month_get: {
+        parameters: {
+            query?: {
+                month?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MonthViewResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    today_view_endpoint_api_views_today_get: {
+        parameters: {
+            query?: {
+                date?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TodayViewResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    week_view_endpoint_api_views_week_get: {
+        parameters: {
+            query?: {
+                week_start?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeekViewResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_weekly_targets_endpoint_api_weekly_targets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeeklyTargetResponse"][];
+                };
+            };
+        };
+    };
+    create_weekly_target_endpoint_api_weekly_targets_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WeeklyTargetCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeeklyTargetResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_weekly_target_endpoint_api_weekly_targets__target_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_weekly_target_endpoint_api_weekly_targets__target_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WeeklyTargetUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeeklyTargetResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    log_target_progress_endpoint_api_weekly_targets__target_id__progress_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeeklyTargetResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
 }

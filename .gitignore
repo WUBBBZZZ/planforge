@@ -21,6 +21,7 @@ coverage.xml
 node_modules/
 dist/
 build/
+coverage/
 *.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
@@ -46,12 +47,6 @@ backups/
 *.p12
 *.crt
 *.cer
-
-# === Local documentation (not published) ===
-docs/
-
-# === Personal local seed scripts (machine-specific data) ===
-backend/scripts/local/
 
 # === OS and editor noise ===
 Thumbs.db

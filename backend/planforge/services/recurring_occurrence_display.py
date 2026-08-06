@@ -10,7 +10,44 @@ from planforge.domain.recurring_display import (
 )
 from planforge.models.occurrence import Occurrence
 from planforge.models.routine import Routine
-from planforge.services.display_date import is_item_overdue, rolled_display_date
+from planforge.services.display_date import is_item_overdue
+
+
+def routine_rolled_display_date(
+    *,
+    scheduled: LocalDate,
+    today: LocalDate,
+    next_scheduled: LocalDate | None,
+) -> LocalDate | None:
+    """Return where a routine occurrence should appear, or None to suppress it.
+
+    Pending occurrences keep their scheduled date. Overdue occurrences roll
+    forward to ``today`` only while that day is still before the routine's next
+    pending scheduled occurrence. When the next occurrence is due on or before
+    ``today``, the rolled-over copy is hidden so the scheduled instance carries
+    the obligation.
+    """
+    if not is_item_overdue(scheduled=scheduled, today=today):
+        return scheduled
+    if next_scheduled is not None and today >= next_scheduled:
+        return None
+    return today
+
+
+def _group_routine_members(
+    rows: list[tuple[Occurrence, Routine]],
+    *,
+    horizon_end: LocalDate | None = None,
+) -> dict[str, list[tuple[Occurrence, Routine, LocalDate]]]:
+    grouped: dict[str, list[tuple[Occurrence, Routine, LocalDate]]] = {}
+    for occurrence, routine in rows:
+        scheduled = LocalDate.from_date(occurrence.scheduled_date)
+        if horizon_end is not None and scheduled > horizon_end:
+            continue
+        grouped.setdefault(routine.id, []).append((occurrence, routine, scheduled))
+    for members in grouped.values():
+        members.sort(key=lambda item: item[2])
+    return grouped
 
 
 @dataclass(frozen=True)
@@ -46,23 +83,31 @@ def list_routine_occurrences_for_calendar_window(
     """Return routine occurrences whose rolled display date falls in the view window."""
     include_overdue = missed_behavior in {"prompt", "roll_forward"}
     items: list[CalendarRoutineOccurrence] = []
-    for occurrence, routine in rows:
-        scheduled = LocalDate.from_date(occurrence.scheduled_date)
-        is_overdue = is_item_overdue(scheduled=scheduled, today=today)
-        if is_overdue and not include_overdue:
-            continue
-        display = rolled_display_date(due=scheduled, today=today)
-        if display < window_start or display > window_end:
-            continue
-        items.append(
-            CalendarRoutineOccurrence(
-                occurrence=occurrence,
-                routine=routine,
+    grouped = _group_routine_members(rows)
+    for members in grouped.values():
+        for index, (occurrence, routine, scheduled) in enumerate(members):
+            is_overdue = is_item_overdue(scheduled=scheduled, today=today)
+            if is_overdue and not include_overdue:
+                continue
+            next_scheduled = members[index + 1][2] if index + 1 < len(members) else None
+            display = routine_rolled_display_date(
                 scheduled=scheduled,
-                display=display,
-                is_overdue=is_overdue,
+                today=today,
+                next_scheduled=next_scheduled,
             )
-        )
+            if display is None:
+                continue
+            if display < window_start or display > window_end:
+                continue
+            items.append(
+                CalendarRoutineOccurrence(
+                    occurrence=occurrence,
+                    routine=routine,
+                    scheduled=scheduled,
+                    display=display,
+                    is_overdue=is_overdue,
+                )
+            )
     items.sort(key=lambda item: (item.display, item.routine.title.lower()))
     return items
 
@@ -77,12 +122,7 @@ def select_visible_routine_occurrences(
     missed_behavior: str = "prompt",
 ) -> list[VisibleRoutineOccurrence]:
     """Return the pending occurrences that should appear for each routine."""
-    grouped: dict[str, list[tuple[Occurrence, Routine, LocalDate]]] = {}
-    for occurrence, routine in rows:
-        scheduled = LocalDate.from_date(occurrence.scheduled_date)
-        if scheduled > horizon_end:
-            continue
-        grouped.setdefault(routine.id, []).append((occurrence, routine, scheduled))
+    grouped = _group_routine_members(rows, horizon_end=horizon_end)
 
     visible: list[VisibleRoutineOccurrence] = []
     include_overdue = missed_behavior in {"prompt", "roll_forward"}
@@ -113,16 +153,27 @@ def _select_for_routine(
     overdue: VisibleRoutineOccurrence | None = None
     pending_current: list[tuple[Occurrence, Routine, LocalDate]] = []
 
-    for occurrence, routine, scheduled in members:
+    for index, (occurrence, routine, scheduled) in enumerate(members):
         if is_item_overdue(scheduled=scheduled, today=today):
-            if include_overdue and overdue is None:
-                overdue = VisibleRoutineOccurrence(
-                    occurrence=occurrence,
-                    routine=routine,
-                    scheduled=scheduled,
-                    is_overdue=True,
-                    role=OccurrenceDisplayRole.OVERDUE,
+            if include_overdue:
+                next_scheduled = (
+                    members[index + 1][2] if index + 1 < len(members) else None
                 )
+                if (
+                    routine_rolled_display_date(
+                        scheduled=scheduled,
+                        today=today,
+                        next_scheduled=next_scheduled,
+                    )
+                    is not None
+                ):
+                    overdue = VisibleRoutineOccurrence(
+                        occurrence=occurrence,
+                        routine=routine,
+                        scheduled=scheduled,
+                        is_overdue=True,
+                        role=OccurrenceDisplayRole.OVERDUE,
+                    )
             continue
         if scheduled < horizon_start:
             continue

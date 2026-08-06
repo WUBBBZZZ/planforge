@@ -9,12 +9,136 @@ from planforge.domain.recurring_display import (
 from planforge.services import routine_group_service, routine_service
 from planforge.services.month_view import assemble_month_view
 from planforge.services.recurring_occurrence_display import (
+    routine_rolled_display_date,
     select_visible_routine_occurrences,
 )
 from planforge.services.settings_service import PolicySnapshot
 from planforge.services.today_view import assemble_today_view
 from planforge.services.week_bounds import week_bounds
 from planforge.services.week_view import assemble_week_view
+
+
+def test_routine_rolled_display_date_suppresses_when_next_occurrence_is_today() -> None:
+    scheduled = LocalDate.from_iso("2026-07-27")
+    today = LocalDate.from_iso("2026-07-28")
+    next_scheduled = LocalDate.from_iso("2026-07-28")
+    assert (
+        routine_rolled_display_date(
+            scheduled=scheduled,
+            today=today,
+            next_scheduled=next_scheduled,
+        )
+        is None
+    )
+
+
+def test_routine_rolled_display_date_rolls_until_day_before_next_occurrence() -> None:
+    scheduled = LocalDate.from_iso("2026-07-22")
+    today = LocalDate.from_iso("2026-07-25")
+    next_scheduled = LocalDate.from_iso("2026-07-26")
+    assert (
+        routine_rolled_display_date(
+            scheduled=scheduled,
+            today=today,
+            next_scheduled=next_scheduled,
+        )
+        == today
+    )
+
+
+def test_daily_missed_yesterday_shows_only_todays_occurrence(db_session) -> None:
+    today = LocalDate.from_iso("2026-07-28")
+    week_start, _ = week_bounds(reference_date=today, week_start_day="monday")
+    routine_service.create_routine(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Make bed",
+        days_of_week=[0, 1, 2, 3, 4, 5, 6],
+        clock_today=today.add_days(-1),
+    )
+    routine_service.ensure_occurrences(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        clock_today=today,
+        policies=PolicySnapshot(routine_horizon_days=14),
+    )
+    _show_all_routine_groups(db_session)
+
+    view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=today,
+        policies=PolicySnapshot(),
+    )
+
+    tuesday_items = [
+        item
+        for group in view.days
+        if group.date is not None and group.date.to_iso() == "2026-07-28"
+        for item in group.items
+        if item.kind.value == "occurrence" and item.title == "Make bed"
+    ]
+    assert len(tuesday_items) == 1
+    assert tuesday_items[0].is_overdue is False
+
+
+def test_twice_weekly_missed_first_rolls_until_day_before_second(db_session) -> None:
+    clock_start = LocalDate.from_iso("2026-07-13")
+    routine_service.create_routine(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        title="Check pantry",
+        days_of_week=[2, 6],
+        clock_today=clock_start,
+    )
+    routine_service.ensure_occurrences(
+        db_session,
+        owner_id=LOCAL_OWNER_ID,
+        clock_today=clock_start,
+        policies=PolicySnapshot(routine_horizon_days=30),
+    )
+    _show_all_routine_groups(db_session)
+
+    saturday = LocalDate.from_iso("2026-07-25")
+    week_start, _ = week_bounds(reference_date=saturday, week_start_day="monday")
+    saturday_view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=week_start,
+        today=saturday,
+        policies=PolicySnapshot(),
+    )
+    saturday_items = [
+        item
+        for group in saturday_view.days
+        if group.date is not None and group.date.to_iso() == "2026-07-25"
+        for item in group.items
+        if item.kind.value == "occurrence" and item.title == "Check pantry"
+    ]
+    assert len(saturday_items) == 1
+    assert saturday_items[0].is_overdue is True
+    assert saturday_items[0].due_date.to_iso() == "2026-07-22"
+
+    sunday = LocalDate.from_iso("2026-07-26")
+    sunday_week_start, _ = week_bounds(reference_date=sunday, week_start_day="monday")
+    sunday_view = assemble_week_view(
+        session=db_session,
+        owner_id=LOCAL_OWNER_ID,
+        week_start=sunday_week_start,
+        today=sunday,
+        policies=PolicySnapshot(),
+    )
+    sunday_items = [
+        item
+        for group in sunday_view.days
+        if group.date is not None and group.date.to_iso() == "2026-07-26"
+        for item in group.items
+        if item.kind.value == "occurrence" and item.title == "Check pantry"
+    ]
+    assert len(sunday_items) == 1
+    assert sunday_items[0].is_overdue is False
+    assert sunday_items[0].due_date.to_iso() == "2026-07-26"
 
 
 def _show_all_routine_groups(db_session) -> None:
@@ -139,6 +263,7 @@ def test_overdue_plus_future_limits_to_three_slots(db_session) -> None:
     sheets = [item for item in visible if item.routine.id == routine.id]
     assert len(sheets) == 3
     assert sheets[0].role is OccurrenceDisplayRole.OVERDUE
+    assert sheets[0].scheduled.to_iso() == "2026-07-16"
     assert sheets[1].role is OccurrenceDisplayRole.CURRENT
     assert sheets[2].role is OccurrenceDisplayRole.NEXT
 
